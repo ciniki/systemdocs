@@ -1,0 +1,5 @@
+The documentation module is designed to parse and understand the API
+code, extract the document and present it in a readable way.  This 
+documentation should be the standard for API documentation for Ciniki modules.
+
+This module does not currently handle any documentation for ciniki-manage.
