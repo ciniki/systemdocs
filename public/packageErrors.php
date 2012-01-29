@@ -35,8 +35,8 @@ function ciniki_systemdocs_packageErrors($ciniki) {
 	// Make suee this module is activated, and
 	// check permission to run this function for this business
 	//
-	require_once($ciniki['config']['core']['modules_dir'] . '/documentation/private/checkAccess.php');
-	$rc = ciniki_systemdocs_checkAccess($ciniki, 'ciniki.documentation.packageErrors');
+	require_once($ciniki['config']['core']['modules_dir'] . '/systemdocs/private/checkAccess.php');
+	$rc = ciniki_systemdocs_checkAccess($ciniki, 'ciniki.systemdocs.packageErrors');
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
 	}
@@ -44,7 +44,7 @@ function ciniki_systemdocs_packageErrors($ciniki) {
 	//
 	// FIXME: Add code to check for other packages, and parse them as well
 	//
-	require_once($ciniki['config']['core']['modules_dir'] . '/documentation/private/parsePackageCode.php');
+	require_once($ciniki['config']['core']['modules_dir'] . '/systemdocs/private/parsePackageCode.php');
 	$rc = ciniki_systemdocs_parsePackageCode($ciniki, $args['package']);
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
