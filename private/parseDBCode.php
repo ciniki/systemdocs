@@ -82,7 +82,10 @@ function ciniki_systemdocs_parseDBCode($ciniki, $package, $module, $table) {
 				continue;
 			}
 
-			if( preg_match('/\s*(?P<field>\S+)\s+(?P<type>blob|int|tinyint|smallint|text|date|datetime|numeric\(.*\)|char\([0-9]+\)|varchar\([0-9]+\)|decimal\(.*\))\s*(?P<unsigned>unsigned)?\s*(?P<null>\s|not null)?(?P<extras>.*)?,/', $lines[$i], $matches) ) {
+			if( preg_match('/\s*(?P<field>\S+)\s+(?P<type>blob|bigint|int|tinyint|smallint|text|datetime|date|numeric\(.*\)|char\([0-9]+\)|varchar\([0-9]+\)|decimal\(.*\))\s*(?P<unsigned>unsigned)?\s*(?P<null>\s|not null)?(?P<extras>.*)?,/', $lines[$i], $matches) ) {
+				if( !isset($fields[$matches['field']]['name']) ) {
+					$fields[$matches['field']]['name'] = $matches['field'];
+				}
 				if( $matches['null'] == 'not null' ) {
 					$fields[$matches['field']]['null'] = 'N';
 				} else {
@@ -120,6 +123,11 @@ function ciniki_systemdocs_parseDBCode($ciniki, $package, $module, $table) {
 
 	$rsp['sql'] = $create_statement;
 	$rsp['description'] = implode($description);
+	$rsp['version'] = '';
+	if( preg_match('/COMMENT.*\'(v[0-9]+\.[0-9]+)\'/', $create_statement, $matches) ) {
+		$rsp['version'] = $matches[1];
+	}
+
 	//
 	// put the fields array into a proper XML structure
 	//

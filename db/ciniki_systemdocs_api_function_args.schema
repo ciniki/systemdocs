@@ -1,0 +1,24 @@
+#
+# Description
+# -----------
+# This table stores the arguments for a function, and their descriptions.
+#
+# Fields
+# ------
+# id:				The database ID for the argument.
+#
+# function_id:		The database id for each function.
+#
+# name:				The name of the argument.
+# options:			This may contain extra options for the argument like, (optional).  Used mainly for public methods.
+# description:		The description for the argument.
+#
+create table ciniki_systemdocs_api_function_args (
+	id int not null auto_increment,
+	function_id int not null,
+	name varchar(50) not null,
+	options varchar(100) not null,
+	description varchar(6000) not null,
+	primary key (id),
+	index (function_id, name)
+) ENGINE='InnoDB', COMMENT='v1.01';

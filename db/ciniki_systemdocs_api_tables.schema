@@ -1,0 +1,33 @@
+#
+# Description
+# -----------
+#
+# Fields
+# ------
+# id: 				The module database id for each table.
+#
+# package:			The package that contains the table, typically 'ciniki'.
+# module:			The module within the package.
+# name:				The full name of the table, eg: ciniki_systemdocs_api_tables.
+#
+# description:		The function description.
+#
+# create_sql:		The SQL used to create the database table.
+#
+# version:			What is current version of the table.
+#
+# last_updated:		The UTC date and time the file was last updated.
+# 
+create table ciniki_systemdocs_api_tables (
+	id int not null auto_increment,
+	package varchar(100) not null,
+	module varchar(100) not null,
+	name varchar(100) not null,
+	description varchar(6000) not null,
+	create_sql varchar(6000) not null,
+	version varchar(10) not null,
+	last_updated datetime not null,
+	primary key (id),
+	unique index (name),
+	index (package, module)
+) ENGINE='InnoDB', COMMENT='v1.01';

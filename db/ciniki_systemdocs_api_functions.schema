@@ -1,0 +1,38 @@
+#
+# Description
+# -----------
+#
+# Fields
+# ------
+# id: 				The database id for each function.
+#
+# status:			0 - unknown
+#					1 - active
+#					60 - deprecated
+#
+# package:			The package that contains the function, typically 'ciniki'.
+# module:			The module within the package.
+# type:				The type of method which also is where it's located, (script/private/public/web/cron).
+# name:				The name of the file.
+# suffix:			The suffix of the file, typically .php, but available incase future modules are other.
+#
+# description:		The function description.
+#
+# returns:			What is returned from the function, typically described as an XML structure.
+#
+# last_updated:		The UTC date and time the file was last updated.
+# 
+create table ciniki_systemdocs_api_functions (
+	id int not null auto_increment,
+	status tinyint unsigned not null,
+	package varchar(100) not null,
+	module varchar(100) not null,
+	type varchar(100) not null,
+	name varchar(100) not null,
+	suffix varchar(50) not null,
+	description varchar(6000) not null,
+	returns varchar(6000) not null,
+	last_updated datetime not null,
+	primary key (id),
+	unique index (package, module, type, name, suffix)
+) ENGINE='InnoDB', COMMENT='v1.01';

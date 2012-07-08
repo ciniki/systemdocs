@@ -1,0 +1,27 @@
+#
+# Description
+# -----------
+# This table stores the call a function makes to other API functions.
+#
+# Fields
+# ------
+# id: 						The database id for each function.
+#
+# function_id:				The function making the call.
+#
+# package:					The package that contains the function, typically 'ciniki'.
+# module:					The module within the package.
+# type:						The type of method which also is where it's located, (script/private/public/web/cron).
+# function:					The name of the function called.
+#
+create table ciniki_systemdocs_api_function_calls (
+	id int not null auto_increment,
+	function_id int not null,
+	package varchar(100) not null,
+	module varchar(100) not null,
+	type varchar(100) not null,
+	name varchar(100) not null,
+	args varchar(250) not null,
+	primary key (id),
+	unique index (function_id, package, module, type, name)
+) ENGINE='InnoDB', COMMENT='v1.01';
