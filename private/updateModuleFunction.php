@@ -125,7 +125,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 			}
 			$function_id = $rc['insert_id'];
 		} else {
-			print "Updating: " . $mod_function['package'] . "_" . $mod_function['module'] . "_" . $mod_function['type'] . "_" . $mod_function['name'] . "\n";
+//			print "Updating: " . $mod_function['package'] . "_" . $mod_function['module'] . "_" . $mod_function['type'] . "_" . $mod_function['name'] . "\n";
 			$function_id = $db_function['id'];
 			$strsql = "";
 			if( $mod_function['description'] != $db_function['description'] ) {
