@@ -1,0 +1,103 @@
+<?php
+//
+// Description
+// -----------
+// This method will return a list of attributed for a module.  The list of tables, functions and errors.
+// 
+// Returns
+// -------
+// <module name='artcatalog'>
+//	<tables>
+//		<table name="ciniki_artcatalog" />
+//	</tables>
+//	<scripts>
+//		<script name='index' package="ciniki" module="core" type="scripts" file="rest" suffix="php" />
+//	</scripts>
+//	<public>
+//		<function name="ciniki_artcatalog_get" package="ciniki" module="artcatalog" type="public" file="get" suffix="php" />
+//	</public>
+//	<private>
+//		<function name="ciniki_artcatalog_checkAccess" package="ciniki" module="artcatalog" type="private" file="checkAccess" suffix="php" />
+//	</private>
+//	<cron>
+//		<function name="ciniki_artcatalog_cron_emailXLSBackup" package="ciniki" module="artcatalog" type="cron" file="get" suffix="php" />
+//	</cron>
+//	<web>
+//		<function name="ciniki_artcatalog_web_list" package="ciniki" module="artcatalog" type="web" file="list" suffix="php" />
+//	</web>
+// </module>
+//
+function ciniki_systemdocs_module($ciniki) {
+
+    //  
+    // Find all the required and optional arguments
+    //  
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
+    $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
+        'package'=>array('required'=>'yes', 'blank'=>'no', 'errmsg'=>'No package specified'), 
+        'module'=>array('required'=>'yes', 'blank'=>'no', 'errmsg'=>'No module specified'), 
+        )); 
+    if( $rc['stat'] != 'ok' ) { 
+        return $rc;
+    }   
+    $args = $rc['args'];	
+
+	//
+	// Make sure this module is activated, and
+	// check permission to run this function for this business
+	//
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'checkAccess');
+	$rc = ciniki_systemdocs_checkAccess($ciniki, 'ciniki.systemdocs.module');
+	if( $rc['stat'] != 'ok' ) {
+		return $rc;
+	}
+
+	$rsp = array('stat'=>'ok', 'tables'=>array(), 'public'=>array(), 'private'=>array());
+
+	//
+	// Get the list of tables for this module
+	//
+	$strsql = "SELECT id, name "
+		. "FROM ciniki_systemdocs_api_tables "
+		. "WHERE package = '" . ciniki_core_dbQuote($ciniki, $args['package']) . "' "
+		. "AND module = '" . ciniki_core_dbQuote($ciniki, $args['module']) . "' "
+		. "";
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+		array('container'=>'tables', 'fname'=>'id', 'name'=>'table',
+			'fields'=>array('id', 'name')),
+		));
+	if( $rc['stat'] != 'ok' ) {
+		return $rc;
+	}
+	if( isset($rc['tables']) ) {
+		$rsp['tables'] = $rc['tables'];
+	}
+
+	//
+	// Get the list of functions for this module
+	//
+	$strsql = "SELECT id, name, package, module, type, file, suffix "
+		. "FROM ciniki_systemdocs_api_functions "
+		. "WHERE package = '" . ciniki_core_dbQuote($ciniki, $args['package']) . "' "
+		. "AND module = '" . ciniki_core_dbQuote($ciniki, $args['module']) . "' "
+		. "AND type <> 'scripts' "
+		. "";
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+		array('container'=>'types', 'fname'=>'type', 'name'=>'type',
+			'fields'=>array('name'=>'type')),
+		array('container'=>'functions', 'fname'=>'id', 'name'=>'function',
+			'fields'=>array('id', 'name', 'package', 'module', 'type', 'file', 'suffix')),
+		));
+	if( $rc['stat'] != 'ok' ) {
+		return $rc;
+	}
+	if( isset($rc['types']) ) {
+		foreach($rc['types'] as $tnum => $type) {
+			$rsp[$type['type']['name']] = $type['type']['functions'];
+		}
+	}
+
+	return $rsp;
+}
+?>

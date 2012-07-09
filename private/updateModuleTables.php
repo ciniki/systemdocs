@@ -30,7 +30,7 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 		. "UNIX_TIMESTAMP(ciniki_systemdocs_api_tables.last_updated) AS table_last_updated, "
 		. "ciniki_systemdocs_api_table_fields.id AS field_id, "
 		. "ciniki_systemdocs_api_table_fields.name AS field_name, ciniki_systemdocs_api_table_fields.description AS field_description, "
-		. "ciniki_systemdocs_api_table_fields.type, ciniki_systemdocs_api_table_fields.indexed "
+		. "ciniki_systemdocs_api_table_fields.type, ciniki_systemdocs_api_table_fields.indexed, sequence "
 		. "FROM ciniki_systemdocs_api_tables "
 		. "LEFT JOIN ciniki_systemdocs_api_table_fields ON (ciniki_systemdocs_api_tables.id = ciniki_systemdocs_api_table_fields.table_id ) "
 		. "WHERE ciniki_systemdocs_api_tables.package = '" . ciniki_core_dbQuote($ciniki, $package) . "' " 
@@ -41,7 +41,7 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 			'fields'=>array('id'=>'table_id', 'package', 'module', 'name'=>'table_name', 
 				'description'=>'table_description', 'create_sql', 'version', 'last_updated'=>'table_last_updated')),
 		array('container'=>'fields', 'fname'=>'field_id', 'name'=>'field',
-			'fields'=>array('id'=>'field_id', 'name'=>'field_name', 'description'=>'field_description', 'type', 'indexed')),
+			'fields'=>array('id'=>'field_id', 'name'=>'field_name', 'description'=>'field_description', 'type', 'indexed', 'sequence')),
 		));
 	if( $rc['stat'] != 'ok' ) {
 		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'785', 'msg'=>'Unable to locate tables', 'err'=>$rc['err']));
@@ -171,8 +171,9 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 			}
 			if( $dt == NULL || !isset($dt['fields'][$ff['name']]) ) {
 				$strsql = "INSERT INTO ciniki_systemdocs_api_table_fields (table_id, "
-					. "name, description, type, indexed) VALUES ("
+					. "sequence, name, description, type, indexed) VALUES ("
 					. "'" . ciniki_core_dbQuote($ciniki, $table_id) . "', "
+					. "'" . ciniki_core_dbQuote($ciniki, $ff['sequence']) . "', "
 					. "'" . ciniki_core_dbQuote($ciniki, $ff['name']) . "', "
 					. "'" . ciniki_core_dbQuote($ciniki, $ff['description']) . "', "
 					. "'" . ciniki_core_dbQuote($ciniki, $ff['type']) . "', "
@@ -186,6 +187,9 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 			} else {
 				$df = $dt['fields'][$ff['name']];
 				$strsql = "";
+				if( $ff['sequence'] != $df['sequence'] ) {
+					$strsql .= ", sequence = '" . ciniki_core_dbQuote($ciniki, $ff['sequence']) . "' ";
+				}
 				if( $ff['description'] != $df['description'] ) {
 					$strsql .= ", description = '" . ciniki_core_dbQuote($ciniki, $ff['description']) . "' ";
 				}

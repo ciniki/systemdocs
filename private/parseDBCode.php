@@ -67,7 +67,7 @@ function ciniki_systemdocs_parseDBCode($ciniki, $package, $module, $table) {
 					$split_line[1] = preg_replace('/\s+$/','', $split_line[1]);
 					$fields[$cur_field]['name'] = $cur_field;
 					$fields[$cur_field]['description'] = $split_line[1];
-					// $fields[$cur_field]['order'] = $num_fields++;
+					$fields[$cur_field]['sequence'] = $num_fields++;
 				} elseif( $cur_field != '' ) {
 					$fields[$cur_field]['description'] .= "\n" . $cur_line;
 				}
@@ -96,7 +96,7 @@ function ciniki_systemdocs_parseDBCode($ciniki, $package, $module, $table) {
 				if( $matches['unsigned'] != '' ) {
 					$fields[$matches['field']]['extras'] .= $matches['unsigned'];
 				}
-				$fields[$matches['field']]['order'] = $num_fields++;
+				$fields[$matches['field']]['sequence'] = $num_fields++;
 			}
 
 			if( preg_match('/\s*\((?P<pks>.*)\)/', $lines[$i], $matches) ) {

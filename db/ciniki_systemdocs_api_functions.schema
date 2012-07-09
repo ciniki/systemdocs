@@ -13,8 +13,10 @@
 # package:			The package that contains the function, typically 'ciniki'.
 # module:			The module within the package.
 # type:				The type of method which also is where it's located, (script/private/public/web/cron).
-# name:				The name of the file.
+# file:				The name of the file.
 # suffix:			The suffix of the file, typically .php, but available incase future modules are other.
+#
+# name:				The complete name of the function (ciniki_core_dbQuote).
 #
 # description:		The function description.
 #
@@ -28,11 +30,14 @@ create table ciniki_systemdocs_api_functions (
 	package varchar(100) not null,
 	module varchar(100) not null,
 	type varchar(100) not null,
-	name varchar(100) not null,
+	file varchar(100) not null,
 	suffix varchar(50) not null,
+	name varchar(150) not null,
 	description varchar(6000) not null,
 	returns varchar(6000) not null,
+	fsize int not null,
+	flines int not null,
 	last_updated datetime not null,
 	primary key (id),
-	unique index (package, module, type, name, suffix)
+	unique index (package, module, type, file, suffix)
 ) ENGINE='InnoDB', COMMENT='v1.01';

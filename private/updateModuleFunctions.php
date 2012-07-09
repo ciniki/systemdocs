@@ -25,8 +25,8 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 	//
 	// Load the table information from the database for this module
 	//
-	$strsql = "SELECT id, package, module, type, name, "
-		. "CONCAT_WS('_', package, module, type, name) AS full_name, "
+	$strsql = "SELECT id, package, module, type, file, name, "
+		. "CONCAT_WS('_', package, module, type, file) AS full_name, "
 		. "UNIX_TIMESTAMP(last_updated) AS last_updated "
 		. "FROM ciniki_systemdocs_api_functions "
 		. "WHERE ciniki_systemdocs_api_functions.package = '" . ciniki_core_dbQuote($ciniki, $package) . "' " 
@@ -56,10 +56,10 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 			$fp = opendir($path);
 			while( $file = readdir($fp) ) {
 				if( preg_match('/(.*)\.php$/', $file, $matches) ) {
-					$name = $matches[1];
-					$full_name = "{$package}_{$module}_{$type}_" . $name;
-					$mtime = filemtime("$path/$name.php") - $tz_offset;
-					$mod_functions[$full_name] = array('package'=>$package, 'module'=>$module, 'type'=>$type, 'name'=>$name,
+					$file = $matches[1];
+					$full_name = "{$package}_{$module}_{$type}_" . $file;
+					$mtime = filemtime("$path/$file.php") - $tz_offset;
+					$mod_functions[$full_name] = array('package'=>$package, 'module'=>$module, 'type'=>$type, 'file'=>$file,
 						'last_updated'=>$mtime);
 				}
 			}
@@ -77,7 +77,7 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 		//
 		if( !isset($db_functions[$full_name]) 
 			|| $db_functions[$full_name]['last_updated'] < $mod_function['last_updated'] ) {
-			$rc = ciniki_systemdocs_updateModuleFunction($ciniki, $mod_function['package'], $mod_function['module'], $mod_function['type'], $mod_function['name'], 'php');
+			$rc = ciniki_systemdocs_updateModuleFunction($ciniki, $mod_function['package'], $mod_function['module'], $mod_function['type'], $mod_function['file'], 'php');
 			if( $rc['stat'] != 'ok' ) {	
 				return $rc;
 			}

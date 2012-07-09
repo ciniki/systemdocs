@@ -30,16 +30,17 @@
 //			</errors>
 //		</method>
 // </methods>
-function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, $name, $suffix) {
+function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, $file, $suffix) {
 	
-	$filename = $ciniki['config']['core']['root_dir'] . '/' . $package . '-api/' . $module . '/' . $type . '/' . $name . '.' . $suffix;
+	$filename = $ciniki['config']['core']['root_dir'] . '/' . $package . '-api/' . $module . '/' . $type . '/' . $file . '.' . $suffix;
 
-	$rsp = array('filename'=>'/' . $package . '-api/' . $module . '/' . $type . '/' . $name . '.' . $suffix, 
+	$rsp = array('filename'=>'/' . $package . '-api/' . $module . '/' . $type . '/' . $file . '.' . $suffix, 
 		'package'=>$package, 
 		'module'=>$module, 
 		'type'=>$type,
-		'name'=>$name,
+		'file'=>$file,
 		'suffix'=>$suffix,
+		'name'=>'',
 		'description'=>'',
 		'returns'=>'',
 		'size'=>0,
@@ -110,6 +111,7 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 		// Check if we've reached the end of the header
 		//
 		if( preg_match('/^\s*function\s+(.*)\((.*)\)/', $lines[$i], $matches) ) {
+			$rsp['name'] = $matches[1];
 			// Only add arguments for non-public calls
 			if( $type != 'public' ) {
 				$arguments = explode(',', $matches[2]);
@@ -177,7 +179,6 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 			}
 			$call = $val[2] . "_" . $val[3] . "_" . $ctype . "_" . $val[6];
 			if( !isset($calls[$call]) ) {
-//	print "Call: $package.$module.$type.$name -> $call\n";
 				$rsp['calls'][$call] = array(
 					'call'=>$call,
 					'package'=>$val[2],
