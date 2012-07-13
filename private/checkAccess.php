@@ -2,7 +2,8 @@
 //
 // Description
 // -----------
-// This function will check 
+// This method is a placeholder for checking the access permissions
+// to the systemdocs module.  Currently only sysadmins are allowed access.
 //
 // Arguments
 // ---------
@@ -11,6 +12,7 @@
 // 
 // Returns
 // -------
+// <rsp stat="ok" />
 //
 function ciniki_systemdocs_checkAccess($ciniki, $method) {
 
