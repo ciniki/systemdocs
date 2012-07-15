@@ -51,7 +51,7 @@ function ciniki_systemdocs_function($ciniki) {
 	//
 	// Get the base details for the function
 	//
-	$strsql = "SELECT id, name, package, module, type, file, suffix, description, returns, fsize, flines "
+	$strsql = "SELECT id, name, package, module, type, file, suffix, html_description, returns, fsize, flines "
 		. "FROM ciniki_systemdocs_api_functions "
 		. "WHERE id = '" . ciniki_core_dbQuote($ciniki, $args['function_id']) . "' "
 		. "";
@@ -59,7 +59,7 @@ function ciniki_systemdocs_function($ciniki) {
 	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
 		array('container'=>'functions', 'fname'=>'id', 'name'=>'function',
 			'fields'=>array('id', 'name', 'package', 'module', 'type', 'file', 'suffix', 
-				'description', 'returns', 'size'=>'fsize', 'lines'=>'flines')),
+				'description'=>'html_description', 'returns', 'size'=>'fsize', 'lines'=>'flines')),
 		));
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
@@ -72,13 +72,14 @@ function ciniki_systemdocs_function($ciniki) {
 	//
 	// Get the args for the function
 	//
-	$strsql = "SELECT id, name, options, description "
+	$strsql = "SELECT id, name, options, html_description "
 		. "FROM ciniki_systemdocs_api_function_args "
 		. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $args['function_id']) . "' "
+		. "ORDER BY sequence "
 		. "";
 	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
 		array('container'=>'args', 'fname'=>'id', 'name'=>'argument',
-			'fields'=>array('id', 'name', 'options', 'description')),
+			'fields'=>array('id', 'name', 'options', 'description'=>'html_description')),
 		));
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
@@ -123,7 +124,7 @@ function ciniki_systemdocs_function($ciniki) {
 	}
 
 	//
-	// Get the errors for the function
+	// Get the function errors
 	//
 	$strsql = "SELECT id, package, code, msg, pmsg "
 		. "FROM ciniki_systemdocs_api_function_errors "
@@ -141,6 +142,21 @@ function ciniki_systemdocs_function($ciniki) {
 		$function['errors'] = $rc['errors'];
 	} else {
 		$function['errors'] = array();
+	}
+
+	//
+	// Get the extended errors from all the functions which may be referenced directly 
+	// or indirectly by the function
+	//
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'getErrorsRecursive');
+	$rc = ciniki_systemdocs_getErrorsRecursive($ciniki, $args['function_id'], 'yes');
+	if( $rc['stat'] != 'ok' ) {
+		return $rc;
+	}
+	if( isset($rc['errors']) ) {
+		$function['extended_errors'] = $rc['errors'];
+	} else {
+		$function['extended_errors'] = array();
 	}
 
 	return array('stat'=>'ok', 'function'=>$function);

@@ -32,6 +32,8 @@ function ciniki_systemdocs_update($ciniki) {
 		return $rc;
 	}
 
+	$duperrors = array();
+
 	//
 	// Update all packages, unless a specific package is an argument
 	//
@@ -44,6 +46,7 @@ function ciniki_systemdocs_update($ciniki) {
 			if( $rc['stat'] != 'ok' ) {
 				return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'799', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
 			}
+			$duperrors = array_merge($duperrors, $rc['duplicate_errors']);
 			$rc = ciniki_systemdocs_updatePackageTables($ciniki, $package);
 			if( $rc['stat'] != 'ok' ) {
 				return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'803', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
@@ -58,12 +61,16 @@ function ciniki_systemdocs_update($ciniki) {
 		if( $rc['stat'] != 'ok' ) {
 			return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'800', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
 		}
+		$duperrors = array_merge($duperrors, $rc['duplicate_errors']);
 		$rc = ciniki_systemdocs_updatePackageTables($ciniki, $package);
 		if( $rc['stat'] != 'ok' ) {
 			return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'801', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
 		}
 	}
 
+	if( count($duperrors) > 0 ) {
+		return array('stat'=>'ok', 'duplicate_errors'=>$duperrors);
+	}
 	return array('stat'=>'ok');
 }
 ?>

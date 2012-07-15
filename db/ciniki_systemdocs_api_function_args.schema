@@ -9,16 +9,21 @@
 #
 # function_id:		The database id for each function.
 #
+# sequence:			The order of the arguments.
+#
 # name:				The name of the argument.
 # options:			This may contain extra options for the argument like, (optional).  Used mainly for public methods.
 # description:		The description for the argument.
+# html_description:	The description for the argument, processed into html.
 #
 create table ciniki_systemdocs_api_function_args (
 	id int not null auto_increment,
 	function_id int not null,
+	sequence int not null,
 	name varchar(50) not null,
 	options varchar(100) not null,
 	description varchar(6000) not null,
+	html_description varchar(6000) not null,
 	primary key (id),
 	index (function_id, name)
 ) ENGINE='InnoDB', COMMENT='v1.01';

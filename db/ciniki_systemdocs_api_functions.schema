@@ -1,6 +1,7 @@
 #
 # Description
 # -----------
+# This table stores the information about a function in the database.
 #
 # Fields
 # ------
@@ -18,9 +19,19 @@
 #
 # name:				The complete name of the function (ciniki_core_dbQuote).
 #
-# description:		The function description.
+# description:		The function description, which will be displayed publically on the API documentation.
+# html_description:	The function description, processes into html.
+#
+# notes:			Internal function notes for developers, this will not be displayed on the public API docs.
+# html_notes:		Same as notes, but formatted in html.
 #
 # returns:			What is returned from the function, typically described as an XML structure.
+#
+# fsize:			The size of the file in bytes.
+# flines:			The number of lines in the file.
+# blines:			The number of blank lines in the file.
+# clines:			The number of comment lines in the file.
+# plines:			The number of lines of code in the file.
 #
 # last_updated:		The UTC date and time the file was last updated.
 # 
@@ -34,9 +45,15 @@ create table ciniki_systemdocs_api_functions (
 	suffix varchar(50) not null,
 	name varchar(150) not null,
 	description varchar(6000) not null,
+	html_description varchar(6000) not null,
+	notes varchar(6000) not null,
+	html_notes varchar(6000) not null,
 	returns varchar(6000) not null,
 	fsize int not null,
 	flines int not null,
+	blines int not null,
+	clines int not null,
+	plines int not null,
 	last_updated datetime not null,
 	primary key (id),
 	unique index (package, module, type, file, suffix)

@@ -41,10 +41,10 @@ function ciniki_systemdocs_table($ciniki) {
 	//
 	$strsql = "SELECT ciniki_systemdocs_api_tables.id AS table_id, "
 		. "package, module, ciniki_systemdocs_api_tables.name AS table_name, "
-		. "ciniki_systemdocs_api_tables.description AS table_description, create_sql, version, "
+		. "ciniki_systemdocs_api_tables.html_description AS table_description, create_sql, version, "
 		. "ciniki_systemdocs_api_table_fields.id AS field_id, "
 		. "ciniki_systemdocs_api_table_fields.name AS field_name, "
-		. "ciniki_systemdocs_api_table_fields.description AS field_description, "
+		. "ciniki_systemdocs_api_table_fields.html_description AS field_description, "
 		. "ciniki_systemdocs_api_table_fields.type, "
 		. "ciniki_systemdocs_api_table_fields.indexed "
 		. "FROM ciniki_systemdocs_api_tables "

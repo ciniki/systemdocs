@@ -22,10 +22,13 @@ function ciniki_systemdocs_updatePackageFunctions($ciniki, $package) {
 		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'790', 'msg'=>'Package does not exist'));
 	}
 
+	$duperrors = array();
+
 	//
 	// Find all the modules for the package
 	//
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'updateModuleFunctions');
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'updateModuleDetails');
 	$fp = opendir($ciniki['config']['core']['root_dir'] . "/{$package}-api");
 	while( $file = readdir($fp) ) {
 		if($file[0] == '.' ) {
@@ -36,9 +39,14 @@ function ciniki_systemdocs_updatePackageFunctions($ciniki, $package) {
 			if( $rc['stat'] != 'ok' ) {
 				return $rc;
 			}
+			$duperrors = array_merge($duperrors, $rc['duplicate_errors']);
+			$rc = ciniki_systemdocs_updateModuleDetails($ciniki, $package, $file);
+			if( $rc['stat'] != 'ok' ) {
+				return $rc;
+			}
 		}
 	}
 
-	return array('stat'=>'ok');
+	return array('stat'=>'ok', 'duplicate_errors'=>$duperrors);
 }
 ?>

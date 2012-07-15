@@ -22,6 +22,8 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbDelete');
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'updateModuleFunction');
 
+	$duperrors = array();
+
 	//
 	// Load the table information from the database for this module
 	//
@@ -45,7 +47,7 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 	// Check for database schema and upgrade files
 	//
 	$mod_functions = array();
-	$dirs = array('public', 'private', 'cron', 'web');
+	$dirs = array('scripts', 'public', 'private', 'cron', 'web');
 	$tz_offset = date('Z');
 	foreach($dirs as $type) {
 		$path = $ciniki['config']['core']['root_dir'] . '/' . $package . '-api/' . $module . '/' . $type;
@@ -81,6 +83,7 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 			if( $rc['stat'] != 'ok' ) {	
 				return $rc;
 			}
+			$duperrors = array_merge($duperrors, $rc['duplicate_errors']);
 		}
 	}
 
@@ -135,6 +138,6 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 		}
 	}
 
-	return array('stat'=>'ok');
+	return array('stat'=>'ok', 'duplicate_errors'=>$duperrors);
 }
 ?>

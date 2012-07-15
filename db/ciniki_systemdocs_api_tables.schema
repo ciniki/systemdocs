@@ -10,7 +10,8 @@
 # module:			The module within the package.
 # name:				The full name of the table, eg: ciniki_systemdocs_api_tables.
 #
-# description:		The function description.
+# description:		The table description.
+# html_description:	The table description, processed into html.
 #
 # create_sql:		The SQL used to create the database table.
 #
@@ -24,6 +25,7 @@ create table ciniki_systemdocs_api_tables (
 	module varchar(100) not null,
 	name varchar(100) not null,
 	description varchar(6000) not null,
+	html_description varchar(6000) not null,
 	create_sql varchar(6000) not null,
 	version varchar(10) not null,
 	last_updated datetime not null,

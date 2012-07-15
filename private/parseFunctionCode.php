@@ -17,7 +17,8 @@
 // -------
 // <rsp stat="ok">
 //		<method filename="/ciniki-api/core/public/echoTest.php" package="ciniki" module="" method="ciniki.core.echoTest" name="echoTest" type="public">
-//			<description>This functionw will return an echo of the arguments received.</description>
+//			<description>This function will return an echo of the arguments received.</description>
+//			<notes>Internal notes for developers.</description>
 //			<returns>&lt;rsp stat="ok" /&gt;</returns>
 //			<args>
 //				<ciniki name="ciniki" description="">
@@ -42,9 +43,13 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 		'suffix'=>$suffix,
 		'name'=>'',
 		'description'=>'',
+		'notes'=>'',
 		'returns'=>'',
 		'size'=>0,
 		'lines'=>0,
+		'blines'=>0,
+		'clines'=>0,
+		'plines'=>0,
 		'args'=>array(),
 		'errors'=>array(),
 		'calls'=>array(),
@@ -60,16 +65,40 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 	$calls = array();
 
 	//
+	// Count line types
+	//
+	for($i=0;$i<count($lines);$i++) {
+		if( preg_match('/^\s*\/\/\s*[^ ]/', $lines[$i]) ) {
+			$rsp['clines']++;
+		} elseif( preg_match('/^\s*\/\/\s*$/', $lines[$i]) ) {
+			$rsp['blines']++;
+		} elseif( preg_match('/^\s*$/', $lines[$i]) ) {
+			$rsp['blines']++;
+		} else {
+			$rsp['plines']++;
+		}
+	}
+	//
 	// Find the header documentation
 	//
 	$section = '';
 	$cur_arg = '';
 	$args = array();
+	$info = array();
+	$num_fields = 0;
 	for($i=0;$i<count($lines);$i++) {
 		if( preg_match('/^\s*\/\//', $lines[$i]) ) {
 			$cur_line = preg_replace('/^\s*\/\/\s?/', '', $lines[$i]);
 			if( preg_match('/^\s*description/i', $cur_line) && preg_match('/[- \t]+/', $lines[$i+1]) ) {
 				$section = 'description';
+				$i++;
+				continue;
+			} elseif( preg_match('/^\s*notes/i', $cur_line) && preg_match('/[- \t]+/', $lines[$i+1]) ) {
+				$section = 'notes';
+				$i++;
+				continue;
+			} elseif( preg_match('/^\s*info/i', $cur_line) && preg_match('/[- \t]+/', $lines[$i+1]) ) {
+				$section = 'info';
 				$i++;
 				continue;
 			} elseif( preg_match('/^\s*arguments/i', $cur_line) && preg_match('/[- \t]+/', $lines[$i+1]) ) {
@@ -85,8 +114,19 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 			if( $section == 'description' ) {
 				$rsp['description'] .= $cur_line;
 			}
+			elseif( $section == 'notes' ) {
+				$rsp['notes'] .= $cur_line;
+			}
 			elseif( $section == 'returns' ) {
 				$rsp['returns'] .= htmlspecialchars($cur_line);
+			}
+			elseif( $section == 'info' ) {
+				if( preg_match('/^[^\s]+:/', $cur_line) ) {
+					$split_line = preg_split('/:/', $cur_line, 2);
+					$split_line[1] = preg_replace('/^\s+/','', $split_line[1]);
+					$split_line[1] = preg_replace('/\s+$/','', $split_line[1]);
+					$info[$split_line[0]] = array('name'=>$split_line[0], 'detail'=>$split_line[1]);
+				}
 			}
 			elseif( $section == 'arguments' ) {
 				if( preg_match('/^[^\s]+:/', $cur_line) ) {
@@ -101,6 +141,7 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 					$split_line[1] = preg_replace('/^\s+/','', $split_line[1]);
 					$split_line[1] = preg_replace('/\s+$/','', $split_line[1]);
 					$args[$cur_arg]['description'] = $split_line[1] . "\n";
+					$args[$cur_arg]['sequence'] = $num_fields++;
 				} elseif( $cur_arg != '' ) {
 					$args[$cur_arg]['description'] .= $cur_line;
 				}
@@ -108,17 +149,25 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 		}
 
 		//
+		// Break out of the initial comment block
+		//
+		elseif( $type == 'scripts' && $section == 'description' ) {
+			$rsp['name'] = $file . '.' . $suffix;
+			break;
+		}
+
+		//
 		// Check if we've reached the end of the header
 		//
-		if( preg_match('/^\s*function\s+(.*)\((.*)\)/', $lines[$i], $matches) ) {
+		if( $type != 'scripts' && preg_match('/^\s*function\s+(.*)\((.*)\)/', $lines[$i], $matches) ) {
 			$rsp['name'] = $matches[1];
 			// Only add arguments for non-public calls
 			if( $type != 'public' ) {
 				$arguments = explode(',', $matches[2]);
 				foreach($arguments as $argument) {
-					$argument = preg_replace('/^\s*\$/', '', $argument);
+					$argument = preg_replace('/^\s*\&?\$/', '', $argument);
 					if( !isset($args[$argument]) ) {
-						$args[$argument] = array('name'=>$argument, 'description'=>'', 'options'=>'');
+						$args[$argument] = array('name'=>$argument, 'description'=>'', 'options'=>'', 'sequence'=>$num_fields++);
 					}
 				}
 			}
@@ -130,6 +179,7 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 	// Remove the last blank line from the description
 	//
 	$rsp['description'] = preg_replace('/\s+$/', '', $rsp['description']);
+	$rsp['notes'] = preg_replace('/\s+$/', '', $rsp['notes']);
 	$rsp['returns'] = preg_replace('/\s*$/', '', $rsp['returns']);
 	$rsp['args'] = $args;
 
@@ -145,8 +195,12 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 		foreach($matches as $val) {
 			if( isset($rsp['errors'][$val[2]]) ) {
 				$rsp['errors'][$val[2]]['dup'] = 'yes';
+				if( !isset($rsp['duperrors']) ) {
+					$rsp['duperrors'] = array();
+				}
+				array_push($rsp['duperrors'], array('error'=>array('package'=>$val[1], 'module'=>$module, 'type'=>$type, 'file'=>$file, 'code'=>$val[2], 'msg'=>$val[4], 'pmsg'=>'')));
 			} else {
-				$rsp['errors'][$val[2]] = array('package'=>$val[1], 'code'=>$val[2], 'msg'=>$val[4], 'pmsg'=>'');
+				$rsp['errors'][$val[2]] = array('package'=>$val[1], 'code'=>$val[2], 'msg'=>$val[4], 'pmsg'=>'', 'dup'=>'no');
 				if( isset($val[6]) ) {
 					$rsp['errors'][$val[2]]['pmsg'] = $val[8];
 				}

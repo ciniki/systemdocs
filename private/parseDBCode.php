@@ -54,11 +54,14 @@ function ciniki_systemdocs_parseDBCode($ciniki, $package, $module, $table) {
 			}
 		
 			if( $section == 'description' ) {
-				array_push($description, $cur_line);
+				if( $cur_line == '' ) {
+					array_push($description, "\n");
+				} else {
+					array_push($description, $cur_line);
+				}
 			}
 
 			elseif( $section == 'fields' ) {
-				//print "Field<br/>\n";
 				if( preg_match('/^[^\s]+:/', $cur_line) ) {
 					$split_line = preg_split('/:/', $cur_line, 2);
 					$cur_field = $split_line[0];
@@ -66,10 +69,14 @@ function ciniki_systemdocs_parseDBCode($ciniki, $package, $module, $table) {
 					$split_line[1] = preg_replace('/^\s+/','', $split_line[1]);
 					$split_line[1] = preg_replace('/\s+$/','', $split_line[1]);
 					$fields[$cur_field]['name'] = $cur_field;
-					$fields[$cur_field]['description'] = $split_line[1];
+					$fields[$cur_field]['description'] = $split_line[1] . "\n";
 					$fields[$cur_field]['sequence'] = $num_fields++;
 				} elseif( $cur_field != '' ) {
-					$fields[$cur_field]['description'] .= "\n" . $cur_line;
+					if( $cur_line == '' ) {
+						$fields[$cur_field]['description'] .= "\n";
+					} else {
+						$fields[$cur_field]['description'] .= " " . $cur_line;
+					}
 				}
 			}
 		}

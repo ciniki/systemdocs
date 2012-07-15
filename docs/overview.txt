@@ -4,5 +4,9 @@ is parsed and documentation extracted.
 
 This module does not currently handle any documentation for ciniki-manage.
 
-This module will provide the information to generate the API information 
-for the ciniki website.
+The information parsed into the database is used to generate the API
+documentation on the master website.
+
+**Note** Currently this module is only accessible to the sysadmins, and 
+is not published as part of the API.
+

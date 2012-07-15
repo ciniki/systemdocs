@@ -55,6 +55,27 @@ function ciniki_systemdocs_module($ciniki) {
 	$rsp = array('stat'=>'ok', 'tables'=>array(), 'public'=>array(), 'private'=>array());
 
 	//
+	// Get any detail information for the module
+	//
+	$strsql = "SELECT detail_key, html_details "
+		. "FROM ciniki_systemdocs_api_module_details "
+		. "WHERE package = '" . ciniki_core_dbQuote($ciniki, $args['package']) . "' "
+		. "AND module = '" . ciniki_core_dbQuote($ciniki, $args['module']) . "' "
+		. "";
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
+	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'systemdocs', array(
+		array('container'=>'details', 'fname'=>'detail_key', 'fields'=>array('details'=>'html_details')),
+		));
+	if( $rc['stat'] != 'ok' ) {
+		return $rc;
+	}
+	if( isset($rc['details']) ) {
+		foreach($rc['details'] as $detail => $details) {
+			$rsp[$detail] = $details['html_details'];
+		}
+	}
+	
+	//
 	// Get the list of tables for this module
 	//
 	$strsql = "SELECT id, name "
@@ -81,7 +102,7 @@ function ciniki_systemdocs_module($ciniki) {
 		. "FROM ciniki_systemdocs_api_functions "
 		. "WHERE package = '" . ciniki_core_dbQuote($ciniki, $args['package']) . "' "
 		. "AND module = '" . ciniki_core_dbQuote($ciniki, $args['module']) . "' "
-		. "AND type <> 'scripts' "
+//		. "AND type <> 'scripts' "
 		. "";
 	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
 		array('container'=>'types', 'fname'=>'type', 'name'=>'type',

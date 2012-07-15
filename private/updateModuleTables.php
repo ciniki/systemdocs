@@ -21,6 +21,7 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbUpdate');
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbDelete');
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'parseDBCode');
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'processMarkdown');
 
 	//
 	// Load the table information from the database for this module
@@ -115,12 +116,15 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 		$dt = NULL;
 		$table_id = 0;
 		if( !isset($db_tables[$ft['name']]) ) {
+			$rc = ciniki_systemdocs_processMarkdown($ciniki, $ft['description']);
+			$ft['html_description'] = $rc['html_content'];
 			$strsql = "INSERT INTO ciniki_systemdocs_api_tables (package, module, name, "
-				. "description, create_sql, version, last_updated) VALUES ("
+				. "description, html_description, create_sql, version, last_updated) VALUES ("
 				. "'" . ciniki_core_dbQuote($ciniki, $package) . "', "
 				. "'" . ciniki_core_dbQuote($ciniki, $module) . "', "
 				. "'" . ciniki_core_dbQuote($ciniki, $ft['name']) . "', "
 				. "'" . ciniki_core_dbQuote($ciniki, $ft['description']) . "', "
+				. "'" . ciniki_core_dbQuote($ciniki, $ft['html_description']) . "', "
 				. "'" . ciniki_core_dbQuote($ciniki, $ft['create_sql']) . "', "
 				. "'" . ciniki_core_dbQuote($ciniki, $ft['version']) . "', "
 				. "UTC_TIMESTAMP()) "
@@ -136,6 +140,9 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 			$strsql = "";
 			if( $ft['description'] != $dt['description'] ) {
 				$strsql .= ", description = '" . ciniki_core_dbQuote($ciniki, $ft['description']) . "' ";
+				$rc = ciniki_systemdocs_processMarkdown($ciniki, $ft['description']);
+				$ft['html_description'] = $rc['html_content'];
+				$strsql .= ", html_description = '" . ciniki_core_dbQuote($ciniki, $ft['html_description']) . "' ";
 			}
 			if( $ft['create_sql'] != $dt['create_sql'] ) {
 				$strsql .= ", create_sql = '" . ciniki_core_dbQuote($ciniki, $ft['create_sql']) . "' ";
@@ -170,12 +177,15 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 				$ff['indexed'] = $ff['index'];
 			}
 			if( $dt == NULL || !isset($dt['fields'][$ff['name']]) ) {
+				$rc = ciniki_systemdocs_processMarkdown($ciniki, $ff['description']);
+				$ff['html_description'] = $rc['html_content'];
 				$strsql = "INSERT INTO ciniki_systemdocs_api_table_fields (table_id, "
-					. "sequence, name, description, type, indexed) VALUES ("
+					. "sequence, name, description, html_description, type, indexed) VALUES ("
 					. "'" . ciniki_core_dbQuote($ciniki, $table_id) . "', "
 					. "'" . ciniki_core_dbQuote($ciniki, $ff['sequence']) . "', "
 					. "'" . ciniki_core_dbQuote($ciniki, $ff['name']) . "', "
 					. "'" . ciniki_core_dbQuote($ciniki, $ff['description']) . "', "
+					. "'" . ciniki_core_dbQuote($ciniki, $ff['html_description']) . "', "
 					. "'" . ciniki_core_dbQuote($ciniki, $ff['type']) . "', "
 					. "'" . ciniki_core_dbQuote($ciniki, $ff['indexed']) . "' "
 					. ") ";
@@ -192,6 +202,9 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 				}
 				if( $ff['description'] != $df['description'] ) {
 					$strsql .= ", description = '" . ciniki_core_dbQuote($ciniki, $ff['description']) . "' ";
+					$rc = ciniki_systemdocs_processMarkdown($ciniki, $ff['description']);
+					$ff['html_description'] = $rc['html_content'];
+					$strsql .= ", html_description = '" . ciniki_core_dbQuote($ciniki, $ff['html_description']) . "' ";
 				}
 				if( isset($ff['type']) && $ff['type'] != $df['type'] ) {
 					$strsql .= ", type = '" . ciniki_core_dbQuote($ciniki, $ff['type']) . "' ";
