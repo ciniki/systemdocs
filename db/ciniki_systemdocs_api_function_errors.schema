@@ -13,9 +13,9 @@
 # code:				The error code number.
 # msg:				The error message, which will be displayed by the UI.
 # pmsg:				The programmers error message, which typically contains more cryptic information, or results from mysql, etc.
-# 
-# last_updated:		The UTC date and time error was last updated in this database.
 #
+# dup:				If the error code is a duplicate within the function, the dup flag will be set to 'yes'.  Otherwise 'no' or blank.
+# 
 create table ciniki_systemdocs_api_function_errors (
 	id int not null auto_increment,
 	function_id int not null,

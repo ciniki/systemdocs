@@ -12,7 +12,9 @@
 # package:					The package that contains the function, typically 'ciniki'.
 # module:					The module within the package.
 # type:						The type of method which also is where it's located, (script/private/public/web/cron).
-# function:					The name of the function called.
+# name:						The name of the function called.
+#
+# args:						The arguments passed to the function being called.
 #
 create table ciniki_systemdocs_api_function_calls (
 	id int not null auto_increment,
