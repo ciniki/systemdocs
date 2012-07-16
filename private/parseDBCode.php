@@ -89,7 +89,21 @@ function ciniki_systemdocs_parseDBCode($ciniki, $package, $module, $table) {
 				continue;
 			}
 
-			if( preg_match('/\s*(?P<field>\S+)\s+(?P<type>blob|bigint|int|tinyint|smallint|text|datetime|date|numeric\(.*\)|char\([0-9]+\)|varchar\([0-9]+\)|decimal\(.*\))\s*(?P<unsigned>unsigned)?\s*(?P<null>\s|not null)?(?P<extras>.*)?,/', $lines[$i], $matches) ) {
+			if( preg_match('/(?P<type>primary key|unique index|unique|index)\s*\((?P<pks>.*)\)/', $lines[$i], $matches) ) {
+				$split_line = preg_split('/,\s*/', $matches['pks'], -1);
+				foreach($split_line as $field) {
+					if( $matches['type'] == 'primary key' ) {
+						$fields[$field]['index'] = 'P';
+					} elseif( $matches['type'] == 'unique index' ) {
+						$fields[$field]['index'] = 'U';
+					} elseif( $matches['type'] == 'unique' ) {
+						$fields[$field]['index'] = 'U';
+					} elseif( $matches['type'] == 'index' ) {
+						$fields[$field]['index'] = 'I';
+					}
+				}
+			}
+			elseif( preg_match('/\s*(?P<field>\S+)\s+(?P<type>blob|bigint|int|tinyint|smallint|text|datetime|date|numeric\(.*\)|char\([0-9]+\)|varchar\([0-9]+\)|decimal\(.*\))\s*(?P<unsigned>unsigned)?\s*(?P<null>\s|not null)?(?P<extras>.*)?,/', $lines[$i], $matches) ) {
 				if( !isset($fields[$matches['field']]['name']) ) {
 					$fields[$matches['field']]['name'] = $matches['field'];
 				}
@@ -109,20 +123,6 @@ function ciniki_systemdocs_parseDBCode($ciniki, $package, $module, $table) {
 			if( preg_match('/\s*\((?P<pks>.*)\)/', $lines[$i], $matches) ) {
 				
 			} 
-			if( preg_match('/(?P<type>primary key|unique index|unique|index)\s*\((?P<pks>.*)\)/', $lines[$i], $matches) ) {
-				$split_line = preg_split('/,\s*/', $matches['pks'], -1);
-				foreach($split_line as $field) {
-					if( $matches['type'] == 'primary key' ) {
-						$fields[$field]['index'] = 'P';
-					} elseif( $matches['type'] == 'unique index' ) {
-						$fields[$field]['index'] = 'U';
-					} elseif( $matches['type'] == 'unique' ) {
-						$fields[$field]['index'] = 'U';
-					} elseif( $matches['type'] == 'index' ) {
-						$fields[$field]['index'] = 'I';
-					}
-				}
-			}
 
 			$create_statement .= $lines[$i];
 		}
