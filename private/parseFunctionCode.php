@@ -11,7 +11,8 @@
 // package:			The package the method is part of, eg: ciniki
 // module:			The module contained within the package.
 // type:			The directory and type for the method.  (public, private, cron)
-// method:			The name of the method to parse.
+// file:			The name of the method to parse.
+// suffix:			The suffix or extension of the filename, typically this should be 'php'.
 // 
 // Returns
 // -------
@@ -242,6 +243,19 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 					'args'=>$val[7],
 					);
 			}
+		}
+	}
+
+	//
+	// Check for standard args and fill in the details
+	//
+	foreach($rsp['args'] as $name => $arg) {
+		if( $name == 'api_key' && preg_match('/^\s*$/', $arg['description']) ) {
+			$rsp['args'][$name]['description'] = "The unique key assigned to the interface the user is connecting from.";
+		} elseif( $name == 'auth_token' && preg_match('/^\s*$/', $arg['description']) ) {
+			$rsp['args'][$name]['description'] = "The token returned after the user authenticates.";
+		} elseif( $name == 'ciniki' && preg_match('/^\s*$/', $arg['description']) ) {
+			$rsp['args'][$name]['description'] = "The ciniki variable which must be passed to every function as it contains config and session information.";
 		}
 	}
 
