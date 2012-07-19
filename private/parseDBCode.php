@@ -124,7 +124,7 @@ function ciniki_systemdocs_parseDBCode($ciniki, $package, $module, $table) {
 				
 			} 
 
-			$create_statement .= $lines[$i];
+			$create_statement .= preg_replace('/\t/', '    ', $lines[$i]);
 		}
 	}
 

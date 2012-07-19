@@ -33,7 +33,7 @@ function ciniki_systemdocs_modules($ciniki) {
 	// check permission to run this function for this business
 	//
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'checkAccess');
-	$rc = ciniki_systemdocs_checkAccess($ciniki, 'ciniki.systemdocs.updateTables');
+	$rc = ciniki_systemdocs_checkAccess($ciniki, 'ciniki.systemdocs.modules');
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
 	}

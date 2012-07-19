@@ -31,7 +31,7 @@
 //				<29 code="29" msg="Unable to parse arguments" />
 //			</errors>
 //		</method>
-// </methods>
+// </rsp>
 function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, $file, $suffix) {
 	
 	$filename = $ciniki['config']['core']['root_dir'] . '/' . $package . '-api/' . $module . '/' . $type . '/' . $file . '.' . $suffix;
@@ -79,6 +79,7 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 			$rsp['plines']++;
 		}
 	}
+
 	//
 	// Find the header documentation
 	//
@@ -90,23 +91,23 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 	for($i=0;$i<count($lines);$i++) {
 		if( preg_match('/^\s*\/\//', $lines[$i]) ) {
 			$cur_line = preg_replace('/^\s*\/\/\s?/', '', $lines[$i]);
-			if( preg_match('/^\s*description/i', $cur_line) && preg_match('/[- \t]+/', $lines[$i+1]) ) {
+			if( preg_match('/^\s*description/i', $cur_line) && preg_match('/[-=][-=]+/', $lines[$i+1]) ) {
 				$section = 'description';
 				$i++;
 				continue;
-			} elseif( preg_match('/^\s*notes/i', $cur_line) && preg_match('/[- \t]+/', $lines[$i+1]) ) {
+			} elseif( preg_match('/^\s*notes/i', $cur_line) && preg_match('/[-=][-=]+/', $lines[$i+1]) ) {
 				$section = 'notes';
 				$i++;
 				continue;
-			} elseif( preg_match('/^\s*info/i', $cur_line) && preg_match('/[- \t]+/', $lines[$i+1]) ) {
+			} elseif( preg_match('/^\s*info/i', $cur_line) && preg_match('/[-=][-=]+/', $lines[$i+1]) ) {
 				$section = 'info';
 				$i++;
 				continue;
-			} elseif( preg_match('/^\s*arguments/i', $cur_line) && preg_match('/[- \t]+/', $lines[$i+1]) ) {
+			} elseif( preg_match('/^\s*arguments/i', $cur_line) && preg_match('/[-=][-=]+/', $lines[$i+1]) ) {
 				$section = 'arguments';
 				$i++;
 				continue;
-			} elseif( preg_match('/^\s*returns/i', $cur_line) && preg_match('/[- \t]+/', $lines[$i+1]) ) {
+			} elseif( preg_match('/^\s*returns/i', $cur_line) && preg_match('/[-=][-=]+/', $lines[$i+1]) ) {
 				$section = 'returns';
 				$i++;
 				continue;
@@ -119,7 +120,7 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 				$rsp['notes'] .= $cur_line;
 			}
 			elseif( $section == 'returns' ) {
-				$rsp['returns'] .= htmlspecialchars($cur_line);
+				$rsp['returns'] .= preg_replace('/\t/', '    ', htmlspecialchars($cur_line));
 			}
 			elseif( $section == 'info' ) {
 				if( preg_match('/^[^\s]+:/', $cur_line) ) {

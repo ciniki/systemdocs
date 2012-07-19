@@ -35,7 +35,7 @@ function ciniki_systemdocs_toolsNoOverview($ciniki) {
 	// check permission to run this function for this business
 	//
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'checkAccess');
-	$rc = ciniki_systemdocs_checkAccess($ciniki, 'ciniki.systemdocs.toolsImproperCheckAccess');
+	$rc = ciniki_systemdocs_checkAccess($ciniki, 'ciniki.systemdocs.toolsNoOverview');
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
 	}

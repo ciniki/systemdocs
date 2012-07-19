@@ -6,6 +6,8 @@
 // 
 // Arguments
 // ---------
+// api_key:
+// auth_token:
 // function_id:			The database ID of the function.
 // 
 // Returns
@@ -41,7 +43,7 @@ function ciniki_systemdocs_function($ciniki) {
 	// check permission to run this function for this business
 	//
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'checkAccess');
-	$rc = ciniki_systemdocs_checkAccess($ciniki, 'ciniki.systemdocs.module');
+	$rc = ciniki_systemdocs_checkAccess($ciniki, 'ciniki.systemdocs.function');
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
 	}
