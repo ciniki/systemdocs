@@ -168,6 +168,7 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 				$arguments = explode(',', $matches[2]);
 				foreach($arguments as $argument) {
 					$argument = preg_replace('/^\s*\&?\$/', '', $argument);
+					$argument = preg_replace('/=.*$/','',$argument);
 					if( !isset($args[$argument]) ) {
 						$args[$argument] = array('name'=>$argument, 'description'=>'', 'options'=>'', 'sequence'=>$num_fields++);
 					}
