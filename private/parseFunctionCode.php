@@ -17,7 +17,7 @@
 // Returns
 // -------
 // <rsp stat="ok">
-//		<method filename="/ciniki-api/core/public/echoTest.php" package="ciniki" module="" method="ciniki.core.echoTest" name="echoTest" type="public">
+//		<method filename="/ciniki-api/core/public/echoTest.php" package="ciniki" module="" method="ciniki.core.echoTest" name="echoTest" type="public" publish="yes" />
 //			<description>This function will return an echo of the arguments received.</description>
 //			<notes>Internal notes for developers.</description>
 //			<returns>&lt;rsp stat="ok" /&gt;</returns>
@@ -51,6 +51,7 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 		'blines'=>0,
 		'clines'=>0,
 		'plines'=>0,
+		'publish'=>'yes',
 		'args'=>array(),
 		'errors'=>array(),
 		'calls'=>array(),
@@ -127,7 +128,11 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 					$split_line = preg_split('/:/', $cur_line, 2);
 					$split_line[1] = preg_replace('/^\s+/','', $split_line[1]);
 					$split_line[1] = preg_replace('/\s+$/','', $split_line[1]);
-					$info[$split_line[0]] = array('name'=>$split_line[0], 'detail'=>$split_line[1]);
+					if( $split_line[0] == 'publish' ) {
+						$rsp['publish'] = $split_line[1];
+					} else {
+						$info[$split_line[0]] = array('name'=>$split_line[0], 'detail'=>$split_line[1]);
+					}
 				}
 			}
 			elseif( $section == 'arguments' ) {

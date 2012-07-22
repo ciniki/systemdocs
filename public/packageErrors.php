@@ -11,8 +11,8 @@
 // It can act as a double check, or from the command line while coding without having
 // to always update the docs first.
 //
-// API Arguments
-// -------------
+// Arguments
+// ---------
 // api_key:
 // auth_token:
 // package:			(optional) The package name to get the errors for.  eg: ciniki

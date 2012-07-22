@@ -18,7 +18,7 @@
 //		<table name="ciniki_artcatalog" />
 //	</tables>
 //	<scripts>
-//		<script name='index' package="ciniki" module="core" type="scripts" file="rest" suffix="php" />
+//		<script name='index' package="ciniki" module="core" type="scripts" file="rest" suffix="php" publish="yes" />
 //	</scripts>
 //	<public>
 //		<function name="ciniki_artcatalog_get" package="ciniki" module="artcatalog" type="public" file="get" suffix="php" />
@@ -105,7 +105,7 @@ function ciniki_systemdocs_module($ciniki) {
 	//
 	// Get the list of functions for this module
 	//
-	$strsql = "SELECT id, name, package, module, type, file, suffix "
+	$strsql = "SELECT id, name, package, module, type, file, suffix, publish "
 		. "FROM ciniki_systemdocs_api_functions "
 		. "WHERE package = '" . ciniki_core_dbQuote($ciniki, $args['package']) . "' "
 		. "AND module = '" . ciniki_core_dbQuote($ciniki, $args['module']) . "' "
@@ -115,7 +115,7 @@ function ciniki_systemdocs_module($ciniki) {
 		array('container'=>'types', 'fname'=>'type', 'name'=>'type',
 			'fields'=>array('name'=>'type')),
 		array('container'=>'functions', 'fname'=>'id', 'name'=>'function',
-			'fields'=>array('id', 'name', 'package', 'module', 'type', 'file', 'suffix')),
+			'fields'=>array('id', 'name', 'package', 'module', 'type', 'file', 'suffix', 'publish')),
 		));
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;

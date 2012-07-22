@@ -54,7 +54,9 @@ create table ciniki_systemdocs_api_functions (
 	blines int not null,
 	clines int not null,
 	plines int not null,
+	publish varchar(20) not null,
 	last_updated datetime not null,
 	primary key (id),
-	unique index (package, module, type, file, suffix)
+	unique index (package, module, type, file, suffix),
+	index (status, publish)
 ) ENGINE='InnoDB', COMMENT='v1.01';

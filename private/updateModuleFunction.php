@@ -32,7 +32,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 	//
 	// Load all the function information from the database
 	//
-	$strsql = "SELECT id, status, package, module, type, file, suffix, name, description, notes, returns, fsize, flines, blines, clines, plines, last_updated "
+	$strsql = "SELECT id, status, package, module, type, file, suffix, name, description, notes, returns, fsize, flines, blines, clines, plines, publish, last_updated "
 		. "FROM ciniki_systemdocs_api_functions "
 		. "WHERE package = '" . ciniki_core_dbQuote($ciniki, $package) . "' " 
 		. "AND module = '" . ciniki_core_dbQuote($ciniki, $module) . "' " 
@@ -119,7 +119,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 			$rc = ciniki_systemdocs_processMarkdown($ciniki, $mod_function['notes']);
 			$mod_function['html_notes'] = $rc['html_content'];
 			$strsql = "INSERT INTO ciniki_systemdocs_api_functions (status, package, module, type, file, suffix, name, "
-				. "description, html_description, notes, html_notes, returns, fsize, flines, blines, clines, plines, last_updated) VALUES ("
+				. "description, html_description, notes, html_notes, returns, fsize, flines, blines, clines, plines, publish, last_updated) VALUES ("
 				. "1, "
 				. "'" . ciniki_core_dbQuote($ciniki, $mod_function['package']) . "', "
 				. "'" . ciniki_core_dbQuote($ciniki, $mod_function['module']) . "', "
@@ -137,6 +137,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 				. "'" . ciniki_core_dbQuote($ciniki, $mod_function['blines']) . "', "
 				. "'" . ciniki_core_dbQuote($ciniki, $mod_function['clines']) . "', "
 				. "'" . ciniki_core_dbQuote($ciniki, $mod_function['plines']) . "', "
+				. "'" . ciniki_core_dbQuote($ciniki, $mod_function['publish']) . "', "
 				. "UTC_TIMESTAMP() "
 				. ")";
 			$rc = ciniki_core_dbInsert($ciniki, $strsql, 'systemdocs');
@@ -161,6 +162,9 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 			}
 			if( $mod_function['returns'] != $db_function['returns'] ) {
 				$strsql .= ", returns = '" . ciniki_core_dbQuote($ciniki, $mod_function['returns']) . "' ";
+			}
+			if( $mod_function['publish'] != $db_function['publish'] ) {
+				$strsql .= ", publish = '" . ciniki_core_dbQuote($ciniki, $mod_function['publish']) . "' ";
 			}
 			$strsql = "UPDATE ciniki_systemdocs_api_functions SET last_updated = UTC_TIMESTAMP()" 
 				. $strsql . " "
