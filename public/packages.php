@@ -2,7 +2,12 @@
 //
 // Description
 // -----------
-// This method will return the list of packages and modules.
+// This method will return the list of packages.
+//
+// Arguments
+// ---------
+// api_key:
+// auth_token:
 // 
 // Returns
 // -------
@@ -12,19 +17,6 @@
 // </packages>
 //
 function ciniki_systemdocs_packages($ciniki) {
-
-    //  
-    // Find all the required and optional arguments
-    //  
-	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
-    $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'package'=>array('required'=>'no', 'blank'=>'no', 'errmsg'=>'No package specified'), 
-        )); 
-    if( $rc['stat'] != 'ok' ) { 
-        return $rc;
-    }   
-    $args = $rc['args'];	
-
 	//
 	// Make suee this module is activated, and
 	// check permission to run this function for this business

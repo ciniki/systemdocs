@@ -2,19 +2,31 @@
 //
 // Description
 // -----------
-// This method will return a complete list of errors for a package, and 
-// 
+// This method will return a complete list of errors for a package.
+// Duplicate errors are any error codes that appear more than once in a package.
+//
+// Notes
+// -----
+// This method will parse all the code and does not use the database of parsed code.
+// It can act as a double check, or from the command line while coding without having
+// to always update the docs first.
 //
 // API Arguments
 // -------------
-// package:			The package name to get the errors for.  eg: ciniki
+// api_key:
+// auth_token:
+// package:			(optional) The package name to get the errors for.  eg: ciniki
+//					If no package specified, it defaults to package ciniki.
 // 
 // Returns
 // -------
 // <rsp stat='ok'>
-// 	<errors>
-// 		<error package='ciniki' code='456' msg='Error message' pmsg='Private error message, for coders' />
-// 	</errors>
+//	 	<errors>
+// 			<error package='ciniki' code='456' msg='Error message' pmsg='Private error message, for coders' />
+// 		</errors>
+//		<duperrors>
+// 			<error package='ciniki' code='456' msg='Error message' pmsg='Private error message, for coders' />
+//		</duperrors>
 // </rsp>
 //
 function ciniki_systemdocs_packageErrors($ciniki) {

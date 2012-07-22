@@ -2,8 +2,14 @@
 //
 // Description
 // -----------
-// This method will return the list of packages and modules.
+// This method will return the list of packages and their database tables.
 // 
+// Arguments
+// ---------
+// api_key:
+// auth_token:
+// package:		(optional) The package to get the tables for.
+//
 // Returns
 // -------
 // <packages>

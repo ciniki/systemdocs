@@ -4,6 +4,12 @@
 // -----------
 // This method will return the information about a database table, and the fields.
 // 
+// Arguments
+// ---------
+// api_key:
+// auth_token:
+// table_id:		The ID of the table to get the information about.
+//
 // Returns
 // -------
 // <table name="artcatalog" package="ciniki" module="artcatalog" description="" create_sql="" version="1.01">

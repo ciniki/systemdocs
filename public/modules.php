@@ -3,6 +3,12 @@
 // Description
 // -----------
 // This method will return the list of packages and modules.
+//
+// Arguments
+// ---------
+// api_key:
+// auth_token:
+// package:		(optional) The package to get the modules for.
 // 
 // Returns
 // -------

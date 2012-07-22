@@ -4,6 +4,13 @@
 // -----------
 // This method will return a list of attributed for a module.  The list of tables, functions and errors.
 // 
+// Arguments
+// ---------
+// api_key:
+// auth_token:
+// package:		The package the module is located in.
+// module:		The module to return the information for.
+//
 // Returns
 // -------
 // <module name='artcatalog'>

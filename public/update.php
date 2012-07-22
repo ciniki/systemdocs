@@ -4,6 +4,12 @@
 // -----------
 // This method will parse the module .php files and process them into the systemdocs database.
 // 
+// Arguments
+// ---------
+// api_key:
+// auth_token:
+// package:		(optional) The package to update the documentation for.
+//
 // Returns
 // -------
 // <rsp stat='ok' />

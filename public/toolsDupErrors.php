@@ -36,7 +36,7 @@ function ciniki_systemdocs_toolsDupErrors($ciniki) {
     $args = $rc['args'];	
 
 	//
-	// Make suee this module is activated, and
+	// Make sure this module is activated, and
 	// check permission to run this function for this business
 	//
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'checkAccess');
@@ -44,7 +44,6 @@ function ciniki_systemdocs_toolsDupErrors($ciniki) {
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
 	}
-
 
 	$strsql = "SELECT ciniki_systemdocs_api_function_errors.id AS eid, "
 		. "ciniki_systemdocs_api_function_errors.package, "
