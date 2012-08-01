@@ -57,7 +57,7 @@ function ciniki_systemdocs_searchQuick($ciniki) {
 			. "AND ciniki_systemdocs_api_function_errors.function_id = ciniki_systemdocs_api_functions.id "
 			. "LIMIT " . ciniki_core_dbQuote($ciniki, $args['limit']) . " "
 			. "";
-		$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+		$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 			array('container'=>'results', 'fname'=>'id', 'name'=>'result',
 				'fields'=>array('type', 'id', 'package', 'module', 'name')),
 			));
@@ -77,7 +77,7 @@ function ciniki_systemdocs_searchQuick($ciniki) {
 		. "WHERE ciniki_systemdocs_api_functions.file LIKE '" . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
 		. "LIMIT " . ciniki_core_dbQuote($ciniki, $args['limit']) . " "
 		. "";
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'results', 'fname'=>'id', 'name'=>'result',
 			'fields'=>array('type', 'id', 'package', 'module', 'name')),
 		));
@@ -104,7 +104,7 @@ function ciniki_systemdocs_searchQuick($ciniki) {
 		. "OR ciniki_systemdocs_api_tables.name LIKE '%_" . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
 		. "LIMIT " . ciniki_core_dbQuote($ciniki, $args['limit']) . " "
 		. "";
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'results', 'fname'=>'id', 'name'=>'result',
 			'fields'=>array('type', 'id', 'package', 'module', 'name')),
 		));

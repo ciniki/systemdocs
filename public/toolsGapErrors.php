@@ -57,7 +57,7 @@ function ciniki_systemdocs_toolsGapErrors($ciniki) {
 		. "ciniki_systemdocs_api_function_errors.code ASC "
 		. "";
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'packages', 'fname'=>'package', 'name'=>'package',
 			'fields'=>array('name'=>'package')),
 		array('container'=>'errors', 'fname'=>'eid', 'name'=>'error', 

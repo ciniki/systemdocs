@@ -72,7 +72,7 @@ function ciniki_systemdocs_errors($ciniki) {
 		. "ciniki_systemdocs_api_function_errors.code DESC "
 		. "";
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'errors', 'fname'=>'eid', 'name'=>'error', 
 			'fields'=>array('function_id', 'package', 'code', 'module', 'type', 'file', 'msg', 'pmsg')),
 		));

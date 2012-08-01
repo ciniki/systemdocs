@@ -53,7 +53,7 @@ function ciniki_systemdocs_toolsTableUnknownFields($ciniki) {
 		. "ciniki_systemdocs_api_tables.name "
 		. "";
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'tables', 'fname'=>'id', 'name'=>'table', 
 			'fields'=>array('id', 'package', 'name')),
 		));

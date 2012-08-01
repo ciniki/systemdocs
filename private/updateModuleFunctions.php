@@ -34,7 +34,7 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 		. "WHERE ciniki_systemdocs_api_functions.package = '" . ciniki_core_dbQuote($ciniki, $package) . "' " 
 		. "AND ciniki_systemdocs_api_functions.module = '" . ciniki_core_dbQuote($ciniki, $module) . "' " 
 		. "";
-	$rc = ciniki_core_dbHashIDQuery($ciniki, $strsql, 'systemdocs', 'functions', 'full_name');
+	$rc = ciniki_core_dbHashIDQuery($ciniki, $strsql, 'ciniki.systemdocs', 'functions', 'full_name');
 	if( $rc['stat'] != 'ok' ) {
 		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'791', 'msg'=>'Unable to locate tables', 'err'=>$rc['err']));
 	}
@@ -98,7 +98,7 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 			$strsql = "DELETE FROM ciniki_systemdocs_api_functions "
 				. "WHERE id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 				. "";
-			$rc = ciniki_core_dbDelete($ciniki, $strsql, 'systemdocs');
+			$rc = ciniki_core_dbDelete($ciniki, $strsql, 'ciniki.systemdocs');
 			if( $rc['stat'] != 'ok' ) {
 				return $rc;
 			}
@@ -109,7 +109,7 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 			$strsql = "DELETE FROM ciniki_systemdocs_api_function_args "
 				. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 				. "";
-			$rc = ciniki_core_dbDelete($ciniki, $strsql, 'systemdocs');
+			$rc = ciniki_core_dbDelete($ciniki, $strsql, 'ciniki.systemdocs');
 			if( $rc['stat'] != 'ok' ) {
 				return $rc;
 			}
@@ -120,7 +120,7 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 			$strsql = "DELETE FROM ciniki_systemdocs_api_function_errors "
 				. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 				. "";
-			$rc = ciniki_core_dbDelete($ciniki, $strsql, 'systemdocs');
+			$rc = ciniki_core_dbDelete($ciniki, $strsql, 'ciniki.systemdocs');
 			if( $rc['stat'] != 'ok' ) {
 				return $rc;
 			}
@@ -131,7 +131,7 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 			$strsql = "DELETE FROM ciniki_systemdocs_api_function_calls "
 				. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 				. "";
-			$rc = ciniki_core_dbDelete($ciniki, $strsql, 'systemdocs');
+			$rc = ciniki_core_dbDelete($ciniki, $strsql, 'ciniki.systemdocs');
 			if( $rc['stat'] != 'ok' ) {
 				return $rc;
 			}

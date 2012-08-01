@@ -66,7 +66,7 @@ function ciniki_systemdocs_toolsDupErrors($ciniki) {
 		. "ciniki_systemdocs_api_function_errors.code ASC "
 		. "";
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'errors', 'fname'=>'eid', 'name'=>'error', 
 			'fields'=>array('function_id', 'package', 'module', 'type', 'file', 'code', 'msg', 'pmsg', 'dup')),
 		));

@@ -37,7 +37,7 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 		. "WHERE ciniki_systemdocs_api_tables.package = '" . ciniki_core_dbQuote($ciniki, $package) . "' " 
 		. "AND ciniki_systemdocs_api_tables.module = '" . ciniki_core_dbQuote($ciniki, $module) . "' " 
 		. "";
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'tables', 'fname'=>'table_id', 'name'=>'table',
 			'fields'=>array('id'=>'table_id', 'package', 'module', 'name'=>'table_name', 
 				'description'=>'table_description', 'create_sql', 'version', 'last_updated'=>'table_last_updated')),
@@ -129,7 +129,7 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 				. "'" . ciniki_core_dbQuote($ciniki, $ft['version']) . "', "
 				. "UTC_TIMESTAMP()) "
 				. "";
-			$rc = ciniki_core_dbInsert($ciniki, $strsql, 'systemdocs');
+			$rc = ciniki_core_dbInsert($ciniki, $strsql, 'ciniki.systemdocs');
 			if( $rc['stat'] != 'ok' ) {
 				return $rc;
 			}
@@ -155,7 +155,7 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 					. $strsql . " "
 					. "WHERE id = '" . ciniki_core_dbQuote($ciniki, $dt['id']) . "' "
 					. "";
-				$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'systemdocs');
+				$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
 				if( $rc['stat'] != 'ok' ) {
 					return $rc;
 				}
@@ -189,7 +189,7 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 					. "'" . ciniki_core_dbQuote($ciniki, $ff['type']) . "', "
 					. "'" . ciniki_core_dbQuote($ciniki, $ff['indexed']) . "' "
 					. ") ";
-				$rc = ciniki_core_dbInsert($ciniki, $strsql, 'systemdocs');
+				$rc = ciniki_core_dbInsert($ciniki, $strsql, 'ciniki.systemdocs');
 				if( $rc['stat'] != 'ok' ) {
 					return $rc;
 				}
@@ -217,7 +217,7 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 						. $strsql . " "
 						. "WHERE id = '" . ciniki_core_dbQuote($ciniki, $df['id']) . "' "
 						. "";
-					$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'systemdocs');
+					$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
 					if( $rc['stat'] != 'ok' ) {
 						return $rc;
 					}
@@ -227,7 +227,7 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 					$strsql = "UPDATE ciniki_systemdocs_api_tables SET last_updated = UTC_TIMESTAMP() " 
 						. "WHERE id = '" . ciniki_core_dbQuote($ciniki, $dt['id']) . "' "
 						. "";
-					$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'systemdocs');
+					$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
 					if( $rc['stat'] != 'ok' ) {
 						return $rc;
 					}
@@ -245,7 +245,7 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 						. "WHERE table_id = '" . ciniki_core_dbQuote($ciniki, $dt['id']) . "' "
 						. "AND id = '" . ciniki_core_dbQuote($ciniki, $df['id']) . "' "
 						. "";
-					$rc = ciniki_core_dbDelete($ciniki, $strsql, 'systemdocs');
+					$rc = ciniki_core_dbDelete($ciniki, $strsql, 'ciniki.systemdocs');
 					if( $rc['stat'] != 'ok' ) {
 						return $rc;
 					}
@@ -266,7 +266,7 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 			$strsql = "DELETE FROM ciniki_systemdocs_api_tables "
 				. "WHERE id = '" . ciniki_core_dbQuote($ciniki, $dt['id']) . "' "
 				. "";
-			$rc = ciniki_core_dbDelete($ciniki, $strsql, 'systemdocs');
+			$rc = ciniki_core_dbDelete($ciniki, $strsql, 'ciniki.systemdocs');
 			if( $rc['stat'] != 'ok' ) {
 				return $rc;
 			}
@@ -277,7 +277,7 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 			$strsql = "DELETE FROM ciniki_systemdocs_api_table_fields "
 				. "WHERE table_id = '" . ciniki_core_dbQuote($ciniki, $dt['id']) . "' "
 				. "";
-			$rc = ciniki_core_dbDelete($ciniki, $strsql, 'systemdocs');
+			$rc = ciniki_core_dbDelete($ciniki, $strsql, 'ciniki.systemdocs');
 			if( $rc['stat'] != 'ok' ) {
 				return $rc;
 			}

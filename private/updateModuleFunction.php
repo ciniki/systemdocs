@@ -40,7 +40,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 		. "AND file = '" . ciniki_core_dbQuote($ciniki, $file) . "' " 
 		. "AND suffix = '" . ciniki_core_dbQuote($ciniki, $suffix) . "' " 
 		. "";
-	$rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'systemdocs', 'function');
+	$rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.systemdocs', 'function');
 	if( $rc['stat'] != 'ok' ) {
 		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'792', 'msg'=>'Unable to locate function', 'err'=>$rc['err']));
 	}
@@ -54,7 +54,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 			. "FROM ciniki_systemdocs_api_function_args "
 			. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 			. "";
-		$rc = ciniki_core_dbHashIDQuery($ciniki, $strsql, 'systemdocs', 'args', 'name');
+		$rc = ciniki_core_dbHashIDQuery($ciniki, $strsql, 'ciniki.systemdocs', 'args', 'name');
 		if( $rc['stat'] != 'ok' ) {
 			return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'794', 'msg'=>'Unable to locate function arguments', 'err'=>$rc['err']));
 		}
@@ -67,7 +67,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 			. "FROM ciniki_systemdocs_api_function_calls "
 			. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 			. "";
-		$rc = ciniki_core_dbHashIDQuery($ciniki, $strsql, 'systemdocs', 'calls', 'fcall');
+		$rc = ciniki_core_dbHashIDQuery($ciniki, $strsql, 'ciniki.systemdocs', 'calls', 'fcall');
 		if( $rc['stat'] != 'ok' ) {
 			return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'795', 'msg'=>'Unable to locate function calls', 'err'=>$rc['err']));
 		}
@@ -80,7 +80,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 			. "FROM ciniki_systemdocs_api_function_errors "
 			. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 			. "";
-		$rc = ciniki_core_dbHashIDQuery($ciniki, $strsql, 'systemdocs', 'errors', 'code');
+		$rc = ciniki_core_dbHashIDQuery($ciniki, $strsql, 'ciniki.systemdocs', 'errors', 'code');
 		if( $rc['stat'] != 'ok' ) {
 			return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'796', 'msg'=>'Unable to locate function errors', 'err'=>$rc['err']));
 		}
@@ -140,7 +140,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 				. "'" . ciniki_core_dbQuote($ciniki, $mod_function['publish']) . "', "
 				. "UTC_TIMESTAMP() "
 				. ")";
-			$rc = ciniki_core_dbInsert($ciniki, $strsql, 'systemdocs');
+			$rc = ciniki_core_dbInsert($ciniki, $strsql, 'ciniki.systemdocs');
 			if( $rc['stat'] != 'ok' ) {
 				return $rc;
 			}
@@ -175,7 +175,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 				. ", plines = '" . ciniki_core_dbQuote($ciniki, $mod_function['plines']) . "' "
 				. "WHERE id = '" . ciniki_core_dbQuote($ciniki, $function_id) . "' "
 				. "";
-			$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'systemdocs');
+			$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
 			if( $rc['stat'] != 'ok' ) {
 				return $rc;
 			}
@@ -199,7 +199,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 					. "'" . ciniki_core_dbQuote($ciniki, $mod_arg['description']) . "', "
 					. "'" . ciniki_core_dbQuote($ciniki, $mod_arg['html_description']) . "' "
 					. ") ";
-				$rc = ciniki_core_dbInsert($ciniki, $strsql, 'systemdocs');
+				$rc = ciniki_core_dbInsert($ciniki, $strsql, 'ciniki.systemdocs');
 				if( $rc['stat'] != 'ok' ) {
 					return $rc;
 				}
@@ -226,7 +226,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 						. $strsql . " "
 						. "WHERE id = '" . ciniki_core_dbQuote($ciniki, $db_arg['id']) . "' "
 						. "";
-					$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'systemdocs');
+					$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
 					if( $rc['stat'] != 'ok' ) {
 						return $rc;
 					}
@@ -245,7 +245,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 						. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 						. "AND id = '" . ciniki_core_dbQuote($ciniki, $db_arg['id']) . "' "
 						. "";
-					$rc = ciniki_core_dbDelete($ciniki, $strsql, 'systemdocs');
+					$rc = ciniki_core_dbDelete($ciniki, $strsql, 'ciniki.systemdocs');
 					if( $rc['stat'] != 'ok' ) {
 						return $rc;
 					}
@@ -270,7 +270,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 					. "'" . ciniki_core_dbQuote($ciniki, $mod_call['name']) . "', "
 					. "'" . ciniki_core_dbQuote($ciniki, $mod_call['args']) . "' "
 					. ") ";
-				$rc = ciniki_core_dbInsert($ciniki, $strsql, 'systemdocs');
+				$rc = ciniki_core_dbInsert($ciniki, $strsql, 'ciniki.systemdocs');
 				if( $rc['stat'] != 'ok' ) {
 					return $rc;
 				}
@@ -288,7 +288,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 						. $strsql . " "
 						. "WHERE id = '" . ciniki_core_dbQuote($ciniki, $db_call['id']) . "' "
 						. "";
-					$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'systemdocs');
+					$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
 					if( $rc['stat'] != 'ok' ) {
 						return $rc;
 					}
@@ -307,7 +307,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 						. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 						. "AND id = '" . ciniki_core_dbQuote($ciniki, $db_call['id']) . "' "
 						. "";
-					$rc = ciniki_core_dbDelete($ciniki, $strsql, 'systemdocs');
+					$rc = ciniki_core_dbDelete($ciniki, $strsql, 'ciniki.systemdocs');
 					if( $rc['stat'] != 'ok' ) {
 						return $rc;
 					}
@@ -332,7 +332,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 					. "'" . ciniki_core_dbQuote($ciniki, $mod_error['pmsg']) . "', "
 					. "'" . ciniki_core_dbQuote($ciniki, $mod_error['dup']) . "' "
 					. ") ";
-				$rc = ciniki_core_dbInsert($ciniki, $strsql, 'systemdocs');
+				$rc = ciniki_core_dbInsert($ciniki, $strsql, 'ciniki.systemdocs');
 				if( $rc['stat'] != 'ok' ) {
 					return $rc;
 				}
@@ -356,7 +356,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 						. $strsql . " "
 						. "WHERE id = '" . ciniki_core_dbQuote($ciniki, $db_error['id']) . "' "
 						. "";
-					$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'systemdocs');
+					$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
 					if( $rc['stat'] != 'ok' ) {
 						return $rc;
 					}
@@ -375,7 +375,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 						. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 						. "AND id = '" . ciniki_core_dbQuote($ciniki, $db_error['id']) . "' "
 						. "";
-					$rc = ciniki_core_dbDelete($ciniki, $strsql, 'systemdocs');
+					$rc = ciniki_core_dbDelete($ciniki, $strsql, 'ciniki.systemdocs');
 					if( $rc['stat'] != 'ok' ) {
 						return $rc;
 					}
@@ -396,7 +396,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 			$strsql = "UPDATE ciniki_systemdocs_api_functions SET last_updated = UTC_TIMESTAMP() " 
 				. "WHERE id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 				. "";
-			$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'systemdocs');
+			$rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
 			if( $rc['stat'] != 'ok' ) {
 				return $rc;
 			}
@@ -413,7 +413,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 		$strsql = "DELETE FROM ciniki_systemdocs_api_functions "
 			. "WHERE id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 			. "";
-		$rc = ciniki_core_dbDelete($ciniki, $strsql, 'systemdocs');
+		$rc = ciniki_core_dbDelete($ciniki, $strsql, 'ciniki.systemdocs');
 		if( $rc['stat'] != 'ok' ) {
 			return $rc;
 		}
@@ -424,7 +424,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 		$strsql = "DELETE FROM ciniki_systemdocs_api_function_args "
 			. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 			. "";
-		$rc = ciniki_core_dbDelete($ciniki, $strsql, 'systemdocs');
+		$rc = ciniki_core_dbDelete($ciniki, $strsql, 'ciniki.systemdocs');
 		if( $rc['stat'] != 'ok' ) {
 			return $rc;
 		}
@@ -435,7 +435,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 		$strsql = "DELETE FROM ciniki_systemdocs_api_function_calls "
 			. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 			. "";
-		$rc = ciniki_core_dbDelete($ciniki, $strsql, 'systemdocs');
+		$rc = ciniki_core_dbDelete($ciniki, $strsql, 'ciniki.systemdocs');
 		if( $rc['stat'] != 'ok' ) {
 			return $rc;
 		}
@@ -446,7 +446,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 		$strsql = "DELETE FROM ciniki_systemdocs_api_function_errors "
 			. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
 			. "";
-		$rc = ciniki_core_dbDelete($ciniki, $strsql, 'systemdocs');
+		$rc = ciniki_core_dbDelete($ciniki, $strsql, 'ciniki.systemdocs');
 		if( $rc['stat'] != 'ok' ) {
 			return $rc;
 		}

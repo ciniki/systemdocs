@@ -58,7 +58,7 @@ function ciniki_systemdocs_function($ciniki) {
 		. "WHERE id = '" . ciniki_core_dbQuote($ciniki, $args['function_id']) . "' "
 		. "";
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'functions', 'fname'=>'id', 'name'=>'function',
 			'fields'=>array('id', 'name', 'package', 'module', 'type', 'file', 'suffix', 
 				'description'=>'html_description', 'returns', 'size'=>'fsize', 'lines'=>'flines')),
@@ -79,7 +79,7 @@ function ciniki_systemdocs_function($ciniki) {
 		. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $args['function_id']) . "' "
 		. "ORDER BY sequence "
 		. "";
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'args', 'fname'=>'id', 'name'=>'argument',
 			'fields'=>array('id', 'name', 'options', 'description'=>'html_description')),
 		));
@@ -112,7 +112,7 @@ function ciniki_systemdocs_function($ciniki) {
 			. ") "
 		. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $args['function_id']) . "' "
 		. "";
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'calls', 'fname'=>'arg_id', 'name'=>'function',
 			'fields'=>array('id'=>'called_id', 'call'=>'called_name', 'args', 'package', 'module', 'type', 'name')),
 		));
@@ -133,7 +133,7 @@ function ciniki_systemdocs_function($ciniki) {
 		. "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $args['function_id']) . "' "
 		. "ORDER BY code "
 		. "";
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'errors', 'fname'=>'id', 'name'=>'error',
 			'fields'=>array('id', 'package', 'code', 'msg', 'pmsg')),
 		));

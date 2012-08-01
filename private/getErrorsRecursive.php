@@ -36,7 +36,7 @@ function ciniki_systemdocs_getErrorsRecursive($ciniki, $function_id, $extended_o
 			. "AND ciniki_systemdocs_api_function_calls.name = ciniki_systemdocs_api_functions.file "
 			. "";
 		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbQueryList');
-		$rc = ciniki_core_dbQueryList($ciniki, $strsql, 'systemdocs', 'functions', 'id');
+		$rc = ciniki_core_dbQueryList($ciniki, $strsql, 'ciniki.systemdocs', 'functions', 'id');
 		if( $rc['stat'] != 'ok' ) {
 			return $rc;
 		}
@@ -74,7 +74,7 @@ function ciniki_systemdocs_getErrorsRecursive($ciniki, $function_id, $extended_o
 		. "ciniki_systemdocs_api_function_errors.code ASC "
 		. "";
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'errors', 'fname'=>'eid', 'name'=>'error', 
 			'fields'=>array('function_id', 'package', 'code', 'module', 'type', 'file', 'name', 'msg', 'pmsg')),
 		));

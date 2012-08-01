@@ -54,7 +54,7 @@ function ciniki_systemdocs_toolsNoReturnValue($ciniki) {
 		. "ciniki_systemdocs_api_functions.module, ciniki_systemdocs_api_functions.file "
 		. "";
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'functions', 'fname'=>'id', 'name'=>'function', 
 			'fields'=>array('id', 'package', 'module', 'type', 'file')),
 		));

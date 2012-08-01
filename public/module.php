@@ -70,7 +70,7 @@ function ciniki_systemdocs_module($ciniki) {
 		. "AND module = '" . ciniki_core_dbQuote($ciniki, $args['module']) . "' "
 		. "";
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
-	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'details', 'fname'=>'detail_key', 'fields'=>array('details'=>'html_details')),
 		));
 	if( $rc['stat'] != 'ok' ) {
@@ -91,7 +91,7 @@ function ciniki_systemdocs_module($ciniki) {
 		. "AND module = '" . ciniki_core_dbQuote($ciniki, $args['module']) . "' "
 		. "";
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'tables', 'fname'=>'id', 'name'=>'table',
 			'fields'=>array('id', 'name')),
 		));
@@ -111,7 +111,7 @@ function ciniki_systemdocs_module($ciniki) {
 		. "AND module = '" . ciniki_core_dbQuote($ciniki, $args['module']) . "' "
 //		. "AND type <> 'scripts' "
 		. "";
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'types', 'fname'=>'type', 'name'=>'type',
 			'fields'=>array('name'=>'type')),
 		array('container'=>'functions', 'fname'=>'id', 'name'=>'function',

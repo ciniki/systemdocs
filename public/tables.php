@@ -56,7 +56,7 @@ function ciniki_systemdocs_tables($ciniki) {
 	$strsql .= "ORDER BY package, module, name "
 		. "";
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'packages', 'fname'=>'package', 'name'=>'package', 'fields'=>array('name'=>'package')),
 		array('container'=>'tables', 'fname'=>'name', 'name'=>'table', 'fields'=>array('id', 'name', 'package', 'module', 'version')),
 		));

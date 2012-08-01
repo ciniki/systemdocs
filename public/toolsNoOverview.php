@@ -55,7 +55,7 @@ function ciniki_systemdocs_toolsNoOverview($ciniki) {
 		. "ciniki_systemdocs_api_functions.module, ciniki_systemdocs_api_functions.file "
 		. "";
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'systemdocs', array(
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'modules', 'fname'=>'mid', 'name'=>'module', 
 			'fields'=>array('package', 'name'=>'module', 'overview')),
 		));
