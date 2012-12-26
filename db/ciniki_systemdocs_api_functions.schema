@@ -33,6 +33,8 @@
 # clines:			The number of comment lines in the file.
 # plines:			The number of lines of code in the file.
 #
+# publish:			Should this method be published in the API spec.
+#
 # last_updated:		The UTC date and time the file was last updated.
 # 
 create table ciniki_systemdocs_api_functions (
