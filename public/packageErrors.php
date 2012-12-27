@@ -34,7 +34,7 @@ function ciniki_systemdocs_packageErrors($ciniki) {
     //  
     // Find all the required and optional arguments
     //  
-    require_once($ciniki['config']['core']['modules_dir'] . '/core/private/prepareArgs.php');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
         'package'=>array('required'=>'no', 'default'=>'ciniki', 'blank'=>'no', 'errmsg'=>'No package specified'), 
         )); 
@@ -47,7 +47,7 @@ function ciniki_systemdocs_packageErrors($ciniki) {
 	// Make suee this module is activated, and
 	// check permission to run this function for this business
 	//
-	require_once($ciniki['config']['core']['modules_dir'] . '/systemdocs/private/checkAccess.php');
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'checkAccess');
 	$rc = ciniki_systemdocs_checkAccess($ciniki, 'ciniki.systemdocs.packageErrors');
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
@@ -56,7 +56,7 @@ function ciniki_systemdocs_packageErrors($ciniki) {
 	//
 	// FIXME: Add code to check for other packages, and parse them as well
 	//
-	require_once($ciniki['config']['core']['modules_dir'] . '/systemdocs/private/parsePackageCode.php');
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'parsePackageCode');
 	$rc = ciniki_systemdocs_parsePackageCode($ciniki, $args['package']);
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;

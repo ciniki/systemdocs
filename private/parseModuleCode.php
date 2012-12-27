@@ -16,9 +16,9 @@
 // </rsp>
 function ciniki_systemdocs_parseModuleCode($ciniki, $package, $module) {
 
-	require_once($ciniki['config']['core']['modules_dir'] . '/systemdocs/private/parseScriptCode.php');
-	require_once($ciniki['config']['core']['modules_dir'] . '/systemdocs/private/parseDBCode.php');
-	require_once($ciniki['config']['core']['modules_dir'] . '/systemdocs/private/parseMethodCode.php');
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'parseScriptCode');
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'parseDBCode');
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'parseMethodCode');
 
 	//
 	// Setup return hash array

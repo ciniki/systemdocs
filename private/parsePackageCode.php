@@ -61,7 +61,7 @@
 //
 function ciniki_systemdocs_parsePackageCode($ciniki, $package) {
 
-	require_once($ciniki['config']['core']['modules_dir'] . '/systemdocs/private/parseModuleCode.php');
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'parseModuleCode');
 
 	$rsp = array('name'=>$package, 'errors'=>array(), 'modules'=>array());
 
