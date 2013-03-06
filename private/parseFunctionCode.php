@@ -199,19 +199,22 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 	//
 	// Find the error codes
 	//
-	if( preg_match_all('/array\(\'pkg\'=>\'([^\']+)\',\s*\'code\'=>\'(.*)\',\s*\'msg\'=>(\'|\")([^\'\"]+)(\'|\")(,\s*\'pmsg\'=>(\'|\")([^\'\"]+)(\'|\"))?/i', $contents, $matches, PREG_SET_ORDER) ) {
+	// Removed because it wasn't catching error msg with variable outside quotes
+//	if( preg_match_all('/array\(\'pkg\'=>\'([^\']+)\',\s*\'code\'=>\'(.*)\',\s*\'msg\'=>(\'|\")([^\'\"]+)(\'|\")(,\s*\'pmsg\'=>(\'|\")([^\'\"]+)(\'|\"))?/i', $contents, $matches, PREG_SET_ORDER) ) {
+	if( preg_match_all('/array\(\'pkg\'=>\'([^\']+)\',\s*\'code\'=>\'(.*)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
 		foreach($matches as $val) {
 			if( isset($rsp['errors'][$val[2]]) ) {
 				$rsp['errors'][$val[2]]['dup'] = 'yes';
 				if( !isset($rsp['duperrors']) ) {
 					$rsp['duperrors'] = array();
 				}
-				array_push($rsp['duperrors'], array('error'=>array('package'=>$val[1], 'module'=>$module, 'type'=>$type, 'file'=>$file, 'code'=>$val[2], 'msg'=>$val[4], 'pmsg'=>'')));
+				array_push($rsp['duperrors'], array('error'=>array('package'=>$val[1], 'module'=>$module, 'type'=>$type, 'file'=>$file, 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'')));
 			} else {
-				$rsp['errors'][$val[2]] = array('package'=>$val[1], 'code'=>$val[2], 'msg'=>$val[4], 'pmsg'=>'', 'dup'=>'no');
-				if( isset($val[6]) ) {
-					$rsp['errors'][$val[2]]['pmsg'] = $val[8];
-				}
+				$rsp['errors'][$val[2]] = array('package'=>$val[1], 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'', 'dup'=>'no');
+				// FIXME: Add back code for pmsg
+//				if( isset($val[6]) ) {
+//					$rsp['errors'][$val[2]]['pmsg'] = $val[8];
+//				}
 			}
 		}
 	}
