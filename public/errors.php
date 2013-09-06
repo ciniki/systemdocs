@@ -25,8 +25,9 @@ function ciniki_systemdocs_errors($ciniki) {
     //  
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'package'=>array('required'=>'no', 'blank'=>'no', 'errmsg'=>'No package specified'), 
-        'module'=>array('required'=>'no', 'blank'=>'no', 'errmsg'=>'No module specified'), 
+        'package'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Package'), 
+        'module'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Module'), 
+		'limit'=>array('required'=>'no', 'blank'=>'yes', 'default'=>0, 'type'=>'int', 'name'=>'Limit'),
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
@@ -71,6 +72,10 @@ function ciniki_systemdocs_errors($ciniki) {
 	$strsql .= "ORDER BY ciniki_systemdocs_api_functions.package, "
 		. "ciniki_systemdocs_api_function_errors.code DESC "
 		. "";
+	if( isset($args['limit']) && $args['limit'] > 0 ) {
+		$strsql .= "LIMIT " . $args['limit'];
+	}
+	
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
 	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
 		array('container'=>'errors', 'fname'=>'eid', 'name'=>'error', 

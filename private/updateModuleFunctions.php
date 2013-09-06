@@ -43,6 +43,8 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 		$db_functions = $rc['functions'];
 	}
 
+//	date_default_timezone_set('UTC');
+
 	//
 	// Check for database schema and upgrade files
 	//
@@ -60,6 +62,7 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 				if( preg_match('/(.*)\.php$/', $file, $matches) ) {
 					$file = $matches[1];
 					$full_name = "{$package}_{$module}_{$type}_" . $file;
+					// Note: Make sure the timezone is set in the php.ini file properly!
 					$mtime = filemtime("$path/$file.php") - $tz_offset;
 					$mod_functions[$full_name] = array('package'=>$package, 'module'=>$module, 'type'=>$type, 'file'=>$file,
 						'last_updated'=>$mtime);
@@ -79,6 +82,7 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 		//
 		if( !isset($db_functions[$full_name]) 
 			|| $db_functions[$full_name]['last_updated'] < $mod_function['last_updated'] ) {
+			error_log('updating');
 			$rc = ciniki_systemdocs_updateModuleFunction($ciniki, $mod_function['package'], $mod_function['module'], $mod_function['type'], $mod_function['file'], 'php');
 			if( $rc['stat'] != 'ok' ) {	
 				return $rc;
