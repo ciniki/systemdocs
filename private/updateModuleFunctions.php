@@ -82,7 +82,6 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 		//
 		if( !isset($db_functions[$full_name]) 
 			|| $db_functions[$full_name]['last_updated'] < $mod_function['last_updated'] ) {
-			error_log('updating');
 			$rc = ciniki_systemdocs_updateModuleFunction($ciniki, $mod_function['package'], $mod_function['module'], $mod_function['type'], $mod_function['file'], 'php');
 			if( $rc['stat'] != 'ok' ) {	
 				return $rc;
