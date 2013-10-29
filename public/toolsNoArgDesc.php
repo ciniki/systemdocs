@@ -23,7 +23,7 @@ function ciniki_systemdocs_toolsNoArgDesc($ciniki) {
     //  
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'package'=>array('required'=>'no', 'blank'=>'no', 'errmsg'=>'No package specified'), 
+        'package'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Package'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;

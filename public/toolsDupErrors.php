@@ -27,8 +27,8 @@ function ciniki_systemdocs_toolsDupErrors($ciniki) {
     //  
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'package'=>array('required'=>'no', 'blank'=>'no', 'errmsg'=>'No package specified'), 
-        'module'=>array('required'=>'no', 'blank'=>'no', 'errmsg'=>'No module specified'), 
+        'package'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Package'), 
+        'module'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Module'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;

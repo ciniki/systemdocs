@@ -36,7 +36,7 @@ function ciniki_systemdocs_packageErrors($ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'package'=>array('required'=>'no', 'default'=>'ciniki', 'blank'=>'no', 'errmsg'=>'No package specified'), 
+        'package'=>array('required'=>'no', 'default'=>'ciniki', 'blank'=>'no', 'name'=>'Package'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;

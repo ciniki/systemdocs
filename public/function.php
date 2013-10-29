@@ -31,7 +31,7 @@ function ciniki_systemdocs_function($ciniki) {
     //  
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'function_id'=>array('required'=>'yes', 'blank'=>'no', 'errmsg'=>'No function specified'), 
+        'function_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Function'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;

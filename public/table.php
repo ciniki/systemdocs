@@ -25,7 +25,7 @@ function ciniki_systemdocs_table($ciniki) {
     //  
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'table_id'=>array('required'=>'yes', 'blank'=>'no', 'errmsg'=>'No table specified'), 
+        'table_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Table'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;

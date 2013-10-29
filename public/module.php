@@ -41,8 +41,8 @@ function ciniki_systemdocs_module($ciniki) {
     //  
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'package'=>array('required'=>'yes', 'blank'=>'no', 'errmsg'=>'No package specified'), 
-        'module'=>array('required'=>'yes', 'blank'=>'no', 'errmsg'=>'No module specified'), 
+        'package'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Package'), 
+        'module'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Module'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
