@@ -77,13 +77,17 @@ function ciniki_systemdocs_toolsGapErrors($ciniki) {
 		foreach($package['package']['errors'] as $enum => $error) {
 			if( ($error['error']['code'] - $prev_code) > 1 ) {
 				for($i=$prev_code+1;$i<$error['error']['code'];$i++) {
-					array_push($rsp['packages'][$pnum]['package']['gaps'], 
-						array('error'=>array('package'=>$package['package']['name'], 'code'=>$i)));
+					if( $i > 999 ) {
+						array_push($rsp['packages'][$pnum]['package']['gaps'], 
+							array('error'=>array('package'=>$package['package']['name'], 'code'=>$i)));
+					}
 				}
 			}
 			$prev_code = $error['error']['code'];
 		}
 	}
+
+	$rsp['lastcode'] = $prev_code;
 
 	return $rsp;
 }
