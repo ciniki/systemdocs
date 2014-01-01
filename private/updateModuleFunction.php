@@ -91,7 +91,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
 	// parse the module file
 	//
 	$dups = array();
-	$filename = $ciniki['config']['core']['root_dir'] . '/' . $package . '-api/' . $module . '/' . $type . '/' . $file . '.' . $suffix;
+	$filename = $ciniki['config']['core']['root_dir'] . '/' . $package . '-mods/' . $module . '/' . $type . '/' . $file . '.' . $suffix;
 	if( is_file($filename) ) {
 		$rc = ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, $file, $suffix);
 		if( $rc['stat'] != 'ok' ) {	

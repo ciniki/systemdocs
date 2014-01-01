@@ -17,9 +17,9 @@
 // </rsp>
 //
 function ciniki_systemdocs_parseDBCode($ciniki, $package, $module, $table) {
-	$dbfile = $ciniki['config']['core']['root_dir'] . '/' . $package . '-api/' . $module . '/db/' . $table . '.schema';
+	$dbfile = $ciniki['config']['core']['root_dir'] . '/' . $package . '-mods/' . $module . '/db/' . $table . '.schema';
 
-	$rsp = array('filename'=>'/' . $package . '-api/' . $module . '/db/' . $table . '.schema', 
+	$rsp = array('filename'=>'/' . $package . '-mods/' . $module . '/db/' . $table . '.schema', 
 		'package'=>$package, 
 		'module'=>$module, 
 		'name'=>$table, 

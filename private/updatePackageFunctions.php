@@ -18,7 +18,7 @@ function ciniki_systemdocs_updatePackageFunctions($ciniki, $package) {
 	//
 	// Check if package exists
 	//
-	if( !is_dir($ciniki['config']['core']['root_dir'] . "/{$package}-api") ) {
+	if( !is_dir($ciniki['config']['core']['root_dir'] . "/{$package}-mods") ) {
 		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'790', 'msg'=>'Package does not exist'));
 	}
 
@@ -29,12 +29,12 @@ function ciniki_systemdocs_updatePackageFunctions($ciniki, $package) {
 	//
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'updateModuleFunctions');
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'updateModuleDetails');
-	$fp = opendir($ciniki['config']['core']['root_dir'] . "/{$package}-api");
+	$fp = opendir($ciniki['config']['core']['root_dir'] . "/{$package}-mods");
 	while( $file = readdir($fp) ) {
 		if($file[0] == '.' ) {
 			continue;
 		}
-		if( is_dir($ciniki['config']['core']['root_dir'] . "/{$package}-api/" . $file) ) {
+		if( is_dir($ciniki['config']['core']['root_dir'] . "/{$package}-mods/" . $file) ) {
 			$rc = ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $file);
 			if( $rc['stat'] != 'ok' ) {
 				return $rc;

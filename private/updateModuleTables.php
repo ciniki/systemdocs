@@ -73,7 +73,7 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
 	// Check for database schema and upgrade files
 	//
 	$mod_tables = array();
-	$path = $ciniki['config']['core']['root_dir'] . '/' . $package . '-api/' . $module . '/db';
+	$path = $ciniki['config']['core']['root_dir'] . '/' . $package . '-mods/' . $module . '/db';
 	if( is_dir($path) ) {
 		//
 		// Load in the module table information

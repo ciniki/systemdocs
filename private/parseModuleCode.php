@@ -28,9 +28,9 @@ function ciniki_systemdocs_parseModuleCode($ciniki, $package, $module) {
 	//
 	// Check for scripts
 	//
-	$path = $ciniki['config']['core']['root_dir'] . '/' . $package . '-api/' . $module . '/scripts';
+	$path = $ciniki['config']['core']['root_dir'] . '/' . $package . '-mods/' . $module . '/scripts';
 	if( is_dir($path) ) {
-		$rsp['scripts'] = array('filename'=>'/' . $package . '-api/' . $module . '/scripts',
+		$rsp['scripts'] = array('filename'=>'/' . $package . '-mods/' . $module . '/scripts',
 			'package'=>$package, 
 			'module'=>$module, 
 			'type'=>'scripts',
@@ -47,9 +47,9 @@ function ciniki_systemdocs_parseModuleCode($ciniki, $package, $module) {
 	//
 	// Check for database schema and upgrade files
 	//
-	$path = $ciniki['config']['core']['root_dir'] . '/' . $package . '-api/' . $module . '/db';
+	$path = $ciniki['config']['core']['root_dir'] . '/' . $package . '-mods/' . $module . '/db';
 	if( is_dir($path) ) {
-		$rsp['database'] = array('filename'=>'/' . $package . '-api/' . $module . '/db',
+		$rsp['database'] = array('filename'=>'/' . $package . '-mods/' . $module . '/db',
 			'package'=>$package, 
 			'module'=>$module, 
 			'tables'=>array(),
@@ -74,12 +74,12 @@ function ciniki_systemdocs_parseModuleCode($ciniki, $package, $module) {
 	//
 	$subdirs = array('scripts', 'public', 'private', 'cron', 'web', 'sync');
 	foreach($subdirs as $subdir) {
-		$path = $ciniki['config']['core']['root_dir'] . '/' . $package . '-api/' . $module . '/' . $subdir;
+		$path = $ciniki['config']['core']['root_dir'] . '/' . $package . '-mods/' . $module . '/' . $subdir;
 		if( !is_dir($path) ) {
 			continue;
 		}
 		$fp = opendir($path);
-		$rsp[$subdir] = array('filename'=>'/' . $package . '-api/' . $module . '/' . $subdir,
+		$rsp[$subdir] = array('filename'=>'/' . $package . '-mods/' . $module . '/' . $subdir,
 			'package'=>$package, 
 			'module'=>$module, 
 			'type'=>$subdir,

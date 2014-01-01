@@ -47,7 +47,7 @@ function ciniki_systemdocs_updateModuleDetails($ciniki, $package, $module) {
 	$dirs = array('overview', 'notes', 'description');
 	$tz_offset = date('Z');
 	foreach($dirs as $file) {
-		$filename = $ciniki['config']['core']['root_dir'] . '/' . $package . '-api/' . $module . '/docs/' . $file . '.txt';
+		$filename = $ciniki['config']['core']['root_dir'] . '/' . $package . '-mods/' . $module . '/docs/' . $file . '.txt';
 		if( is_file($filename) ) {
 			$mtime = filemtime("$filename") - $tz_offset;
 			$full_name = "{$package}_{$module}_" . $file;
@@ -81,7 +81,7 @@ function ciniki_systemdocs_updateModuleDetails($ciniki, $package, $module) {
 	//
 	// Read in the _info.ini file for the module, and add elements to ciniki_systemdocs_api_module_details
 	//
-	$filename = $ciniki['config']['core']['root_dir'] . '/' . $package . '-api/' . $module . '/_info.ini';
+	$filename = $ciniki['config']['core']['root_dir'] . '/' . $package . '-mods/' . $module . '/_info.ini';
 	$ini_details = array();
 	if( is_file($filename) ) {
 		$ini_details = parse_ini_file($filename, false, INI_SCANNER_RAW);
@@ -115,7 +115,7 @@ function ciniki_systemdocs_updateModuleDetails($ciniki, $package, $module) {
 	// Check for deleted files
 	//
 	foreach($db_details as $full_name => $db_detail) {
-		$filename = $ciniki['config']['core']['root_dir'] . '/' . $db_detail['package'] . '-api/' . $db_detail['module'] . '/docs/' . $db_detail['detail_key'] . '.txt';
+		$filename = $ciniki['config']['core']['root_dir'] . '/' . $db_detail['package'] . '-mods/' . $db_detail['module'] . '/docs/' . $db_detail['detail_key'] . '.txt';
 		if( !is_file($filename) && !array_key_exists($db_detail['detail_key'], $ini_details) ) {
 			//
 			// Delete the function information

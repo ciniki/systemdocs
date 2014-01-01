@@ -17,7 +17,7 @@
 // Returns
 // -------
 // <rsp stat="ok">
-//		<method filename="/ciniki-api/core/public/echoTest.php" package="ciniki" module="" method="ciniki.core.echoTest" name="echoTest" type="public" publish="yes" />
+//		<method filename="/ciniki-mods/core/public/echoTest.php" package="ciniki" module="" method="ciniki.core.echoTest" name="echoTest" type="public" publish="yes" />
 //			<description>This function will return an echo of the arguments received.</description>
 //			<notes>Internal notes for developers.</description>
 //			<returns>&lt;rsp stat="ok" /&gt;</returns>
@@ -34,9 +34,9 @@
 // </rsp>
 function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, $file, $suffix) {
 	
-	$filename = $ciniki['config']['ciniki.core']['root_dir'] . '/' . $package . '-api/' . $module . '/' . $type . '/' . $file . '.' . $suffix;
+	$filename = $ciniki['config']['ciniki.core']['root_dir'] . '/' . $package . '-mods/' . $module . '/' . $type . '/' . $file . '.' . $suffix;
 
-	$rsp = array('filename'=>'/' . $package . '-api/' . $module . '/' . $type . '/' . $file . '.' . $suffix, 
+	$rsp = array('filename'=>'/' . $package . '-mods/' . $module . '/' . $type . '/' . $file . '.' . $suffix, 
 		'package'=>$package, 
 		'module'=>$module, 
 		'type'=>$type,
@@ -232,13 +232,13 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 			// If unknown type
 			$ctype = $val[5];
 			if( $val[5] == '' ) {
-				if( is_file($ciniki['config']['ciniki.core']['root_dir'] . '/' . $val[2] . '-api/' . $val[3] . '/private/' . $val[6] . '.php') ) {
+				if( is_file($ciniki['config']['ciniki.core']['root_dir'] . '/' . $val[2] . '-mods/' . $val[3] . '/private/' . $val[6] . '.php') ) {
 					$ctype = 'private';
-				} elseif( is_file($ciniki['config']['ciniki.core']['root_dir'] . '/' . $val[2] . '-api/' . $val[3] . '/public/' . $val[6] . '.php') ) {
+				} elseif( is_file($ciniki['config']['ciniki.core']['root_dir'] . '/' . $val[2] . '-mods/' . $val[3] . '/public/' . $val[6] . '.php') ) {
 					$ctype = 'public';
-				} elseif( is_file($ciniki['config']['ciniki.core']['root_dir'] . '/' . $val[2] . '-api/' . $val[3] . '/cron/' . $val[6] . '.php') ) {
+				} elseif( is_file($ciniki['config']['ciniki.core']['root_dir'] . '/' . $val[2] . '-mods/' . $val[3] . '/cron/' . $val[6] . '.php') ) {
 					$ctype = 'cron';
-				} elseif( is_file($ciniki['config']['ciniki.core']['root_dir'] . '/' . $val[2] . '-api/' . $val[3] . '/web/' . $val[6] . '.php') ) {
+				} elseif( is_file($ciniki['config']['ciniki.core']['root_dir'] . '/' . $val[2] . '-mods/' . $val[3] . '/web/' . $val[6] . '.php') ) {
 					$ctype = 'web';
 				}
 			}

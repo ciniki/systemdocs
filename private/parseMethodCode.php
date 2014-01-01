@@ -16,7 +16,7 @@
 // Returns
 // -------
 // <rsp stat="ok">
-//		<method filename="/ciniki-api/core/public/echoTest.php" package="ciniki" module="" method="ciniki.core.echoTest" name="echoTest" type="public">
+//		<method filename="/ciniki-mods/core/public/echoTest.php" package="ciniki" module="" method="ciniki.core.echoTest" name="echoTest" type="public">
 //			<description>This functionw will return an echo of the arguments received.</description>
 //			<errors>
 //				<error code="29" msg="Unable to parse arguments" />
@@ -35,9 +35,9 @@
 // </methods>
 function ciniki_systemdocs_parseMethodCode($ciniki, $package, $module, $type, $method) {
 	
-	$file = $ciniki['config']['core']['root_dir'] . '/' . $package . '-api/' . $module . '/' . $type . '/' . $method . '.php';
+	$file = $ciniki['config']['core']['root_dir'] . '/' . $package . '-mods/' . $module . '/' . $type . '/' . $method . '.php';
 
-	$rsp = array('filename'=>'/' . $package . '-api/' . $module . '/' . $type . '/' . $method . '.php', 
+	$rsp = array('filename'=>'/' . $package . '-mods/' . $module . '/' . $type . '/' . $method . '.php', 
 		'method'=>"$package.$module.$method", 
 		'package'=>$package, 
 		'module'=>$module, 

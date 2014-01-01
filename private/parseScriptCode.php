@@ -19,9 +19,9 @@
 // </rsp>
 function ciniki_systemdocs_parseScriptCode($ciniki, $package, $module, $type, $script) {
 
-	$file = $ciniki['config']['core']['root_dir'] . '/' . $package . '-api/' . $module . '/' . $type . '/' . $script . '.php';
+	$file = $ciniki['config']['core']['root_dir'] . '/' . $package . '-mods/' . $module . '/' . $type . '/' . $script . '.php';
 
-	$rsp = array('filename'=>'/' . $package . '-api/' . $module . '/' . $type . '/' . $script . '.php', 
+	$rsp = array('filename'=>'/' . $package . '-mods/' . $module . '/' . $type . '/' . $script . '.php', 
 		'package'=>$package, 
 		'module'=>$module, 
 		'name'=>$script, 

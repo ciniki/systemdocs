@@ -19,13 +19,13 @@
 //		<module package="ciniki" name="core">
 // 			<errors>
 // 			</errors>
-// 			<database filename="/ciniki-api/core/db" package="ciniki" module="core">
+// 			<database filename="/ciniki-mods/core/db" package="ciniki" module="core">
 // 				<tables>
 // 				</tables>
 // 			</database>
 // 			<public>
 // 				<methods>
-//					<method filename="/ciniki-api/core/public/echoTest.php" package="ciniki" module="" method="ciniki.core.echoTest" name="echoTest" type="public">
+//					<method filename="/ciniki-mods/core/public/echoTest.php" package="ciniki" module="" method="ciniki.core.echoTest" name="echoTest" type="public">
 //						<description>This functionw will return an echo of the arguments received.</description>
 //						<errors>
 //							<error code="29" msg="Unable to parse arguments" />
@@ -65,16 +65,16 @@ function ciniki_systemdocs_parsePackageCode($ciniki, $package) {
 
 	$rsp = array('name'=>$package, 'errors'=>array(), 'modules'=>array());
 
-	if( !is_dir($ciniki['config']['core']['root_dir'] . "/{$package}-api") ) {
+	if( !is_dir($ciniki['config']['core']['root_dir'] . "/{$package}-mods") ) {
 		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'455', 'msg'=>'Package does not exist'));
 	}
 	
-	$fp = opendir($ciniki['config']['core']['root_dir'] . "/{$package}-api");
+	$fp = opendir($ciniki['config']['core']['root_dir'] . "/{$package}-mods");
 	while( $file = readdir($fp) ) {
 		if($file[0] == '.' ) {
 			continue;
 		}
-		if( is_dir($ciniki['config']['core']['root_dir'] . "/{$package}-api/" . $file) ) {
+		if( is_dir($ciniki['config']['core']['root_dir'] . "/{$package}-mods/" . $file) ) {
 			$rc = ciniki_systemdocs_parseModuleCode($ciniki, $package, $file);
 			array_push($rsp['modules'], array('module'=>$rc['module']));
 			if( isset($rc['module']) && isset($rc['module']['errors']) ) {
