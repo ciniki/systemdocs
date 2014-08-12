@@ -47,7 +47,10 @@ function ciniki_systemdocs_toolsImproperCheckAccess($ciniki) {
 		. "FROM ciniki_systemdocs_api_functions, ciniki_systemdocs_api_function_calls "
 		. "WHERE ciniki_systemdocs_api_functions.id = ciniki_systemdocs_api_function_calls.function_id "
 		. "AND ciniki_systemdocs_api_function_calls.name = 'checkAccess' "
-		. "AND ciniki_systemdocs_api_function_calls.args NOT LIKE CONCAT('%', CONCAT_WS('.', ciniki_systemdocs_api_functions.package, ciniki_systemdocs_api_functions.module, ciniki_systemdocs_api_functions.file), '%') "
+		. "AND (ciniki_systemdocs_api_function_calls.args NOT LIKE CONCAT('%', CONCAT_WS('.', ciniki_systemdocs_api_functions.package, ciniki_systemdocs_api_functions.module, ciniki_systemdocs_api_functions.file), '%') "
+			. "OR ciniki_systemdocs_api_functions.package != ciniki_systemdocs_api_function_calls.package "
+			. "OR ciniki_systemdocs_api_functions.module != ciniki_systemdocs_api_function_calls.module "
+			. ") "
 		. "";
 	if( isset($args['package']) && $args['package'] != '' ) {
 		$strsql .= "AND ciniki_systemdocs_api_functions.package = '" . ciniki_core_dbQuote($ciniki, $args['package']) . "' ";
