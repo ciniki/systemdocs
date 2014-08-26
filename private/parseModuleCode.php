@@ -72,7 +72,7 @@ function ciniki_systemdocs_parseModuleCode($ciniki, $package, $module) {
 	//
 	// Check for methods
 	//
-	$subdirs = array('scripts', 'public', 'private', 'cron', 'web', 'sync');
+	$subdirs = array('scripts', 'public', 'private', 'hooks', 'cron', 'web', 'sync', 'sapos');
 	foreach($subdirs as $subdir) {
 		$path = $ciniki['config']['core']['root_dir'] . '/' . $package . '-mods/' . $module . '/' . $subdir;
 		if( !is_dir($path) ) {
