@@ -49,7 +49,7 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
 	// Check for database schema and upgrade files
 	//
 	$mod_functions = array();
-	$dirs = array('scripts', 'public', 'private', 'cron', 'web', 'sync', 'hooks', 'sapos');
+	$dirs = array('scripts', 'public', 'private', 'cron', 'web', 'sync', 'hooks', 'sapos', 'recipes', 'taxes');
 	$tz_offset = date('Z');
 	foreach($dirs as $type) {
 		$path = $ciniki['config']['core']['root_dir'] . '/' . $package . '-mods/' . $module . '/' . $type;
