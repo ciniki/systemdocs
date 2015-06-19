@@ -359,7 +359,8 @@ function ciniki_systemdocs_main() {
 			}
 		};
 		this.toolstableblankfields.rowFn = function(s, i, d) {
-			return 'M.ciniki_systemdocs_main.showTable(\'M.ciniki_systemdocs_main.toolstableblankfields.show();\',\'' + d.table.id + '\');';
+			return 'M.ciniki_systemdocs_main.showTable(\'M.ciniki_systemdocs_main.showTableBlankFields();\',\'' + d.table.id + '\');';
+//			return 'M.ciniki_systemdocs_main.showTable(\'M.ciniki_systemdocs_main.toolstableblankfields.show();\',\'' + d.table.id + '\');';
 		};
 		this.toolstableblankfields.addClose('Back');
 
