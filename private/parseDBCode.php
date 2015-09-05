@@ -103,7 +103,7 @@ function ciniki_systemdocs_parseDBCode($ciniki, $package, $module, $table) {
 					}
 				}
 			}
-			elseif( preg_match('/\s*(?P<field>\S+)\s+(?P<type>longblob|mediumblob|blob|bigint|int|tinyint|smallint|text|datetime|date|numeric\(.*\)|char\([0-9]+\)|varchar\([0-9]+\)|decimal\(.*\))\s*(?P<unsigned>unsigned)?\s*(?P<null>\s|not null)?(?P<extras>.*)?,/', $lines[$i], $matches) ) {
+			elseif( preg_match('/\s*(?P<field>\S+)\s+(?P<type>longblob|mediumblob|blob|bigint|int|tinyint|smallint|text|datetime|date|time|numeric\(.*\)|char\([0-9]+\)|varchar\([0-9]+\)|decimal\(.*\))\s*(?P<unsigned>unsigned)?\s*(?P<null>\s|not null)?(?P<extras>.*)?,/', $lines[$i], $matches) ) {
 				if( !isset($fields[$matches['field']]['name']) ) {
 					$fields[$matches['field']]['name'] = $matches['field'];
 				}
