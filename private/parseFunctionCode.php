@@ -239,6 +239,28 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 			}
 		}
 	}
+
+	// 
+	// Find cron_log messages
+	//
+	if( preg_match_all('/ciniki_cron_logMsg.*array\(\'code\'=>\'(.*)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
+		foreach($matches as $val) {
+			if( isset($rsp['errors'][$val[1]]) ) {
+				$rsp['errors'][$val[1]]['dup'] = 'yes';
+				if( !isset($rsp['duperrors']) ) {
+					$rsp['duperrors'] = array();
+				}
+				array_push($rsp['duperrors'], array('error'=>array('package'=>'ciniki', 'module'=>$module, 'type'=>$type, 'file'=>$file, 'code'=>$val[1], 'msg'=>$val[2], 'pmsg'=>'')));
+			} else {
+				$rsp['errors'][$val[1]] = array('package'=>'ciniki', 'code'=>$val[1], 'msg'=>$val[2], 'pmsg'=>'', 'dup'=>'no');
+				// FIXME: Add back code for pmsg
+//				if( isset($val[6]) ) {
+//					$rsp['errors'][$val[2]]['pmsg'] = $val[8];
+//				}
+			}
+		}
+	}
+
 	//
 	// Find all function calls
 	//
