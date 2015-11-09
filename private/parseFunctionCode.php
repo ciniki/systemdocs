@@ -222,7 +222,7 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 	//
 	// Find mail_log message
 	//
-	if( preg_match_all('/ciniki_mail_logMsg.*array\(\'code\'=>\'(.*)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
+	if( preg_match_all('/ciniki_mail_logMsg.*array\(\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
 		foreach($matches as $val) {
 			if( isset($rsp['errors'][$val[1]]) ) {
 				$rsp['errors'][$val[1]]['dup'] = 'yes';
@@ -243,7 +243,7 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 	// 
 	// Find cron_log messages
 	//
-	if( preg_match_all('/ciniki_cron_logMsg.*array\(\'code\'=>\'(.*)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
+	if( preg_match_all('/ciniki_cron_logMsg.*array\(\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
 		foreach($matches as $val) {
 			if( isset($rsp['errors'][$val[1]]) ) {
 				$rsp['errors'][$val[1]]['dup'] = 'yes';
