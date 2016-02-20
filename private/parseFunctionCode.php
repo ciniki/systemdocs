@@ -222,7 +222,23 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 	//
 	// Find mail_log message
 	//
-	if( preg_match_all('/ciniki_mail_logMsg.*array\(\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
+	/*if( preg_match_all('/ciniki_mail_logMsg.*array\(\'pkg\'=>\'(^\']+)\',\s*\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
+		foreach($matches as $val) {
+			if( isset($rsp['errors'][$val[2]]) ) {
+				$rsp['errors'][$val[2]]['dup'] = 'yes';
+				if( !isset($rsp['duperrors']) ) {
+					$rsp['duperrors'] = array();
+				}
+				array_push($rsp['duperrors'], array('error'=>array('package'=>$val[1], 'module'=>$module, 'type'=>$type, 'file'=>$file, 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'')));
+			} else {
+				$rsp['errors'][$val[2]] = array('package'=>$val[1], 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'', 'dup'=>'no');
+				// FIXME: Add back code for pmsg
+//				if( isset($val[6]) ) {
+//					$rsp['errors'][$val[2]]['pmsg'] = $val[8];
+//				}
+			}
+		}
+	} else*/if( preg_match_all('/ciniki_mail_logMsg.*array\(\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
 		foreach($matches as $val) {
 			if( isset($rsp['errors'][$val[1]]) ) {
 				$rsp['errors'][$val[1]]['dup'] = 'yes';
@@ -243,7 +259,23 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 	//
 	// Find sms_log message
 	//
-	if( preg_match_all('/ciniki_sms_logMsg.*array\(\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
+	/*if( preg_match_all('/ciniki_sms_logMsg.*array\(\'pkg\'=>\'([^\']+)\',\s*\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
+		foreach($matches as $val) {
+			if( isset($rsp['errors'][$val[2]]) ) {
+				$rsp['errors'][$val[2]]['dup'] = 'yes';
+				if( !isset($rsp['duperrors']) ) {
+					$rsp['duperrors'] = array();
+				}
+				array_push($rsp['duperrors'], array('error'=>array('package'=>$val[1], 'module'=>$module, 'type'=>$type, 'file'=>$file, 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'')));
+			} else {
+				$rsp['errors'][$val[2]] = array('package'=>$val[1], 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'', 'dup'=>'no');
+				// FIXME: Add back code for pmsg
+//				if( isset($val[6]) ) {
+//					$rsp['errors'][$val[2]]['pmsg'] = $val[8];
+//				}
+			}
+		}
+	} else*/if( preg_match_all('/ciniki_sms_logMsg.*array\(\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
 		foreach($matches as $val) {
 			if( isset($rsp['errors'][$val[1]]) ) {
 				$rsp['errors'][$val[1]]['dup'] = 'yes';
@@ -264,7 +296,23 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
 	// 
 	// Find cron_log messages
 	//
-	if( preg_match_all('/ciniki_cron_logMsg.*array\(\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
+	/*if( preg_match_all('/ciniki_cron_logMsg.*array\(\'pkg\'=>\'([^\']+)\',\s*\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
+		foreach($matches as $val) {
+			if( isset($rsp['errors'][$val[2]]) ) {
+				$rsp['errors'][$val[2]]['dup'] = 'yes';
+				if( !isset($rsp['duperrors']) ) {
+					$rsp['duperrors'] = array();
+				}
+				array_push($rsp['duperrors'], array('error'=>array('package'=>$val[1], 'module'=>$module, 'type'=>$type, 'file'=>$file, 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'')));
+			} else {
+				$rsp['errors'][$val[2]] = array('package'=>$val[1], 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'', 'dup'=>'no');
+				// FIXME: Add back code for pmsg
+//				if( isset($val[6]) ) {
+//					$rsp['errors'][$val[2]]['pmsg'] = $val[8];
+//				}
+			}
+		}
+	} else*/if( preg_match_all('/ciniki_cron_logMsg.*array\(\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
 		foreach($matches as $val) {
 			if( isset($rsp['errors'][$val[1]]) ) {
 				$rsp['errors'][$val[1]]['dup'] = 'yes';
