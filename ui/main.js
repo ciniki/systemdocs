@@ -836,7 +836,7 @@ function ciniki_systemdocs_main() {
 					return false;
 				}
 				for(i in rsp.packages) {
-					p.sections[rsp.packages[i].package.name] = {'label':rsp.packages[i].package.name + ' gaps, last code: ' + rsp.lastcode + ']', 
+					p.sections[rsp.packages[i].package.name] = {'label':rsp.packages[i].package.name + ' gaps, last code: ' + rsp.lastcodes[rsp.packages[i].package.name] + ']', 
 						'type':'simplegrid', 'num_cols':2,
 						'headerValues':null,
 						'cellClasses':['', ''],

@@ -70,7 +70,7 @@ function ciniki_systemdocs_toolsGapErrors($ciniki) {
 		return array('stat'=>'ok', 'packages'=>array());
 	}
 	
-	$rsp = array('stat'=>'ok', 'packages'=>array());
+	$rsp = array('stat'=>'ok', 'packages'=>array(), 'lastcodes'=>array());
 	foreach($rc['packages'] as $pnum => $package) {	
 		$prev_code = 0;
 		$rsp['packages'][$pnum] = array('package'=>array('name'=>$package['package']['name'], 'gaps'=>array()));
@@ -85,6 +85,7 @@ function ciniki_systemdocs_toolsGapErrors($ciniki) {
 			}
 			$prev_code = $error['error']['code'];
 		}
+        $rsp['lastcodes'][$package['package']['name']] = $prev_code;
 	}
 
 	$rsp['lastcode'] = $prev_code;
