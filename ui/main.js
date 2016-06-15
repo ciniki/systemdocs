@@ -2,606 +2,74 @@
 // This app will handle the listing, additions and deletions of events.  These are associated business.
 //
 function ciniki_systemdocs_main() {
-	//
-	// Panels
-	//
-	this.init = function() {
-		//
-		// events panel
-		//
-		this.menu = new M.panel('System Documentation',
-			'ciniki_systemdocs_main', 'menu',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.menu');
-		this.menu.data = [];
-        this.menu.sections = {};
-		this.menu.liveSearchCb = function(s, i, value) {
-			if( s == 'search' && value != '' ) {
-				M.api.getJSONBgCb('ciniki.systemdocs.searchQuick', {'start_needle':value, 'limit':'25'}, 
-					function(rsp) { 
-						M.ciniki_systemdocs_main.menu.liveSearchShow('search', null, M.gE(M.ciniki_systemdocs_main.menu.panelUID + '_' + s), rsp.results); 
-					});
-				return true;
-			}
-		};
-		this.menu.liveSearchResultValue = function(s, f, i, j, d) {
-			if( s == 'search' && j == 0 ) { return d.result.package + '.' + d.result.module; }
-			if( s == 'search' && j == 1 ) {
-				switch (d.result.type) {
-					case 'function': return d.result.name;
-					case 'table': return d.result.name;
-				}
-			}
-			return '';
-		}
-		this.menu.liveSearchResultCellFn = function(s, f, i, j, d) {
-			if( s == 'search' && j == 0 ) { return 'M.ciniki_systemdocs_main.showModule(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.result.package + '\',\'' + d.result.module + '\');'; }
-		}
-		this.menu.liveSearchResultRowFn = function(s, f, i, j, d) { 
-			switch (d.result.type) {
-				case 'function': return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.result.id + '\');';
-				case 'table': return 'M.ciniki_systemdocs_main.showTable(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.result.id + '\');';
-			}
-		};
+    //
+    // events panel
+    //
+    this.menu = new M.panel('System Documentation',
+        'ciniki_systemdocs_main', 'menu',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.menu');
+    this.menu.data = [];
+    this.menu.sections = {};
+    this.menu.liveSearchCb = function(s, i, value) {
+        if( s == 'search' && value != '' ) {
+            M.api.getJSONBgCb('ciniki.systemdocs.searchQuick', {'start_needle':value, 'limit':'25'}, 
+                function(rsp) { 
+                    M.ciniki_systemdocs_main.menu.liveSearchShow('search', null, M.gE(M.ciniki_systemdocs_main.menu.panelUID + '_' + s), rsp.results); 
+                });
+            return true;
+        }
+    };
+    this.menu.liveSearchResultValue = function(s, f, i, j, d) {
+        if( s == 'search' && j == 0 ) { return d.result.package + '.' + d.result.module; }
+        if( s == 'search' && j == 1 ) {
+            switch (d.result.type) {
+                case 'function': return d.result.name;
+                case 'table': return d.result.name;
+            }
+        }
+        return '';
+    }
+    this.menu.liveSearchResultCellFn = function(s, f, i, j, d) {
+        if( s == 'search' && j == 0 ) { return 'M.ciniki_systemdocs_main.showModule(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.result.package + '\',\'' + d.result.module + '\');'; }
+    }
+    this.menu.liveSearchResultRowFn = function(s, f, i, j, d) { 
+        switch (d.result.type) {
+            case 'function': return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.result.id + '\');';
+            case 'table': return 'M.ciniki_systemdocs_main.showTable(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.result.id + '\');';
+        }
+    };
 //		this.main.liveSearchSubmitFn = function(s, search_str) {
 //			M.ciniki_customers_main.searchCustomers('M.ciniki_customers_main.showMain();', search_str);
 //		};
-		this.menu.sectionData = function(s) { return this.sections[s].list; return this.data[s]; }
-		this.menu.noData = function(s) { return this.sections[s].noData; }
-		this.menu.listValue = function(s, i, d) { return d.label; }
-		this.menu.listFn = function(s, i, d) { return d.fn; }
-		this.menu.cellValue = function(s, i, j, d) {
-			if( s == '_' ) {
-				if( j == 0 ) { return d.package.name; }
-				if( j == 1 ) { return 'Errors'; }
-			}
-			if( s == 'modules' ) {
-				if( j == 0 ) { return d.module.package; }
-				if( j == 1 ) { return d.module.name; }
-			}
-		};
-		this.menu.rowFn = function(s, i, d) {
-			if( s == '_' ) { return 'M.ciniki_systemdocs_main.showErrors(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.package.name + '\');'; }
-			if( s == 'modules' ) { return 'M.ciniki_systemdocs_main.showModule(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.module.package + '\',\'' + d.module.name + '\');'; }
-		};
-		this.menu.addButton('update', 'Update', 'M.ciniki_systemdocs_main.updateDocs();');
-		this.menu.addButton('clear', 'Clear', 'M.ciniki_systemdocs_main.clearDocs();');
-		this.menu.addClose('Back');
-
-		//
-		// The panel to display a list of modules for a package
-		//
-		this.modules = new M.panel('System Documentation',
-			'ciniki_systemdocs_main', 'modules',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.modules');
-		this.modules.data = [];
-        this.modules.sections = {
-			'modules':{'label':'Modules', 'type':'simplegrid', 'num_cols':2, 'sortable':'yes',
-				'headerValues':['Name', 'Public'],
-				'sortTypes':['text', 'text'],
-				'cellClasses':['', ''],
-				'noData':'No modules'
-			}};
-		this.modules.sectionData = function(s) { return this.data[s]; }
-		this.modules.noData = function(s) { return this.sections[s].noData; }
-		this.modules.cellValue = function(s, i, j, d) {
-			if( s == 'modules' ) {
-				if( j == 0 ) { return d.module.proper_name; }
-				if( j == 1 ) { return d.module.public; }
-			}
-		};
-		this.modules.rowFn = function(s, i, d) {
-			if( s == 'modules' ) { return 'M.ciniki_systemdocs_main.showModule(\'M.ciniki_systemdocs_main.modules.show();\',\'' + d.module.package + '\',\'' + d.module.name + '\');'; }
-		};
-		this.modules.addClose('Back');
-
-		//
-		// The panel to display a list of tables for a package
-		//
-		this.tables = new M.panel('System Documentation',
-			'ciniki_systemdocs_main', 'tables',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.tables');
-		this.tables.data = [];
-        this.tables.sections = {
-			'tables':{'label':'Tables', 'type':'simplegrid', 'num_cols':2, 'sortable':'yes',
-				'headerValues':['Table', 'Version'],
-				'sortTypes':['text', 'text'],
-				'cellClasses':['', ''],
-				'noData':'No modules'
-			}};
-		this.tables.sectionData = function(s) { return this.data[s]; }
-		this.tables.noData = function(s) { return this.sections[s].noData; }
-		this.tables.cellValue = function(s, i, j, d) {
-			if( s == 'tables' ) {
-				if( j == 0 ) { return d.table.name; }
-				if( j == 1 ) { return d.table.version; }
-			}
-		};
-		this.tables.rowFn = function(s, i, d) {
-			if( s == 'tables' ) { return 'M.ciniki_systemdocs_main.showTable(\'M.ciniki_systemdocs_main.tables.show();\',\'' + d.table.id + '\');'; }
-		};
-		this.tables.addClose('Back');
-
-		//
-		// The panel to display module information
-		//
-		this.module = new M.panel('Module',
-			'ciniki_systemdocs_main', 'module',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.module');
-		this.module.data = {};
-		this.module.sections = {
-			'description':{'label':'Description', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'noData':'No description',
-				},
-			'overview':{'label':'Overview', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'noData':'No overview',
-				},
-			'notes':{'label':'Notes', 'visible':'no', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'noData':'No notes',
-				},
-			'tables':{'label':'Tables', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'noData':'No tables',
-				},
-			'scripts':{'label':'Scripts', 'visible':'no', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'noData':'No public methods',
-				},
-			'public':{'label':'Public', 'type':'simplegrid', 'num_cols':2, 'sortable':'yes',
-				'headerValues':['Method', 'Publish'],
-				'sortTypes':['text','text'],
-				'noData':'No public methods',
-				},
-			'private':{'label':'Private', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'noData':'No private functions',
-				},
-			'cron':{'label':'Cron', 'visible':'no', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'noData':'No cron methods',
-				},
-			'web':{'label':'Web', 'visible':'no', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'noData':'No web functions',
-				},
-		};
-		this.module.sectionData = function(s) { 
-			if( s == 'overview' ) { return [this.data.overview]; }
-			if( s == 'notes' ) { return [this.data.notes]; }
-			if( s == 'description' ) { return [this.data.description]; }
-			return this.data[s]; 
-		}
-		this.module.noData = function(s) { return this.sections[s].noData; }
-		this.module.cellValue = function(s, i, j, d) {
-			if( s == 'public' && j == 1 ) {
-				return d.function.publish;
-			}
-			switch (s) {
-				case 'overview': return this.data.overview;
-				case 'notes': return this.data.notes;
-				case 'description': return this.data.description;
-				case 'tables': return d.table.name;
-				case 'scripts': return d.function.name;
-				case 'public': return d.function.package + '.' + d.function.module + '.' + d.function.file;
-				case 'private': return d.function.name;
-				case 'cron': return d.function.name;
-				case 'web': return d.function.name;
-			}
-		}
-		this.module.rowFn = function(s, i, d) {
-			if( s == 'tables' ) { return 'M.ciniki_systemdocs_main.showTable(\'M.ciniki_systemdocs_main.module.show();\',\'' + d.table.id + '\');'; }
-			if( d != null && d.function != null ) { return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.module.show();\',\'' + d.function.id + '\');'; }
-		};
-		this.module.addClose('Back');
-
-		//
-		// Panel to display table information
-		//
-		this.table = new M.panel('Table',
-			'ciniki_systemdocs_main', 'table',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.table');
-		this.table.data = {};
-		this.table.sections = {
-			'description':{'label':'Description', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'cellClasses':[''],
-				'noData':'No description',
-				},
-			'fields':{'label':'Fields', 'type':'simplegrid', 'num_cols':2,
-				'headerValues':null,
-				'cellClasses':['multiline aligntop', 'multiline aligntop'],
-				},
-			'create_sql':{'label':'SQL', 'type':'configtext', 'num_cols':1,
-				'headerValues':null,
-				'noData':'No SQL',
-				},
-		};
-		this.table.sectionData = function(s) { return this.data[s]; }
-		this.table.noData = function(s) { return this.sections[s].noData; }
-		this.table.cellValue = function(s, i, j, d) {
-			if( s == 'fields' ) {
-				switch (j) {
-					case 0: return '<span class="maintext">' + d.field.name + '</span><span class="subtext">' + d.field.type + '</span>';
-					case 1: return d.field.description;
-				}
-			}
-			switch (s) {
-				case 'description': return this.data.description;
-				case 'create_sql': return this.data.create_sql;
-			}
-		}
-		this.table.addButton('update', 'Update', 'M.ciniki_systemdocs_main.updateDocsCb(\'M.ciniki_systemdocs_main.showTable(null,M.ciniki_systemdocs_main.table.table_id);\');');
-		this.table.addClose('Back');
-
-		//
-		// Panel to display function information
-		//
-		this.function = new M.panel('Function',
-			'ciniki_systemdocs_main', 'function',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.function');
-		this.function.cbStacked = 'yes';
-		this.function.data = {};
-		this.function.sections = {
-			'description':{'label':'Description', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'cellClasses':[''],
-				'noData':'No description',
-				},
-			'returns':{'label':'Returns', 'visible':'no', 'type':'configtext'},
-			'args':{'label':'Arguments', 'type':'simplegrid', 'num_cols':2,
-				'headerValues':null,
-				'cellClasses':['multiline aligntop', 'multiline aligntop'],
-				'noData':'No arguments',
-				},
-			'calls':{'label':'Calls', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'cellClasses':['', ''],
-				'noData':'No calls',
-				},
-			'errors':{'label':'Errors', 'type':'simplegrid', 'num_cols':2,
-				'headerValues':null,
-				'cellClasses':['', 'multiline'],
-				'noData':'No errors',
-				},
-			'extended_errors':{'label':'Extended Errors', 'type':'simplegrid', 'num_cols':2,
-				'headerValues':null,
-				'cellClasses':['', 'multiline'],
-				'noData':'No extended errors',
-				},
-		};
-		this.function.sectionData = function(s) { return this.data[s]; }
-		this.function.noData = function(s) { return this.sections[s].noData; }
-		this.function.cellValue = function(s, i, j, d) {
-			if( s == 'args' ) {
-				switch (j) {
-					case 0: return '<span class="maintext">' + d.argument.name + '</span><span class="subtext">' + d.argument.options + '</span>';
-					case 1: return d.argument.description;
-				}
-			}
-			if( s == 'calls' ) {
-				switch (j) {
-					case 0: return d.function.call;
-				}
-			}
-			if( s == 'errors' ) {
-				switch (j) {
-					case 0: return d.error.code;
-					case 1: return '<span class="maintext">' + d.error.msg + '</span><span class="subtext">' + d.error.pmsg + '</span>';
-				}
-			}
-			if( s == 'extended_errors' ) {
-				switch (j) {
-					case 0: return d.error.code;
-					case 1: return '<span class="maintext">' + d.error.name + '</span><span class="subtext">' + d.error.msg + '</span>';
-				}
-			}
-			switch (s) {
-				case 'description': return this.data.description;
-				case 'returns': return this.data.returns;
-			}
-		}
-		this.function.rowFn = function(s, i, d) {
-			if( s == 'calls' ) { return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.showFunction(null,' + this.function_id + ');\',\'' + d.function.id + '\');'; }
-			if( s == 'extended_errors' ) { return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.showFunction(null,' + this.function_id + ');\',\'' + d.error.function_id + '\');'; }
-			return null;
-		};
-		this.function.addButton('update', 'Update', 'M.ciniki_systemdocs_main.updateDocsCb(\'M.ciniki_systemdocs_main.showFunction(null,M.ciniki_systemdocs_main.function.function_id);\');');
-		this.function.addClose('Back');
-
-		//
-		// Panel to display list of errors
-		//
-		this.errors = new M.panel('Errors',
-			'ciniki_systemdocs_main', 'errors',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.errors');
-		this.errors.data = {};
-		this.errors.sections = {
-			'errors':{'label':'', 'type':'simplegrid', 'num_cols':2, 'sortable':'yes',
-				'headerValues':['Code', 'Msg'],
-				'sortTypes':['number', ''],
-				'cellClasses':['', 'multiline'],
-				'noData':'No errors',
-				},
-		};
-		this.errors.sectionData = function(s) { return this.data[s]; }
-		this.errors.noData = function(s) { return this.sections[s].noData; }
-		this.errors.cellValue = function(s, i, j, d) {
-			switch (j) {
-				case 0: return d.error.code;
-				case 1: return '<span class="maintext">' + d.error.msg + '</span><span class="subtext">' + d.error.pmsg + '</span>';
-			}
-		};
-		this.errors.rowFn = function(s, i, d) {
-			return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.errors.show();\',\'' + d.error.function_id + '\');';
-		};
-		this.errors.addClose('Back');
-
-		//
-		// Panel to display missing table field descriptions
-		//
-		this.toolstableblankfields = new M.panel('Missing Table Field Description',
-			'ciniki_systemdocs_main', 'toolstableblankfields',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolstableblankfields');
-		this.toolstableblankfields.sections = {
-			'tables':{'label':'', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'cellClasses':['', ''],
-				'noData':'No missing table field descriptions',
-				},
-		};
-		this.toolstableblankfields.sectionData = function(s) { return this.data[s]; }
-		this.toolstableblankfields.noData = function(s) { return this.sections[s].noData; }
-		this.toolstableblankfields.cellValue = function(s, i, j, d) {
-			switch (j) {
-				case 0: return d.table.name;
-			}
-		};
-		this.toolstableblankfields.rowFn = function(s, i, d) {
-			return 'M.ciniki_systemdocs_main.showTable(\'M.ciniki_systemdocs_main.showTableBlankFields();\',\'' + d.table.id + '\');';
-//			return 'M.ciniki_systemdocs_main.showTable(\'M.ciniki_systemdocs_main.toolstableblankfields.show();\',\'' + d.table.id + '\');';
-		};
-		this.toolstableblankfields.addClose('Back');
-
-		//
-		// Panel to display missing table field types
-		//
-		this.toolstableunknownfields = new M.panel('Unknown Field Types',
-			'ciniki_systemdocs_main', 'toolstableunknownfields',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolstableunknownfields');
-		this.toolstableunknownfields.sections = {
-			'tables':{'label':'', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'cellClasses':['', ''],
-				'noData':'No unknown field types',
-				},
-		};
-		this.toolstableunknownfields.sectionData = function(s) { return this.data[s]; }
-		this.toolstableunknownfields.noData = function(s) { return this.sections[s].noData; }
-		this.toolstableunknownfields.cellValue = function(s, i, j, d) {
-			switch (j) {
-				case 0: return d.table.name;
-			}
-		};
-		this.toolstableunknownfields.rowFn = function(s, i, d) {
-			return 'M.ciniki_systemdocs_main.showTable(\'M.ciniki_systemdocs_main.toolstableunknownfields.show();\',\'' + d.table.id + '\');';
-		};
-		this.toolstableunknownfields.addClose('Back');
-
-		//
-		// Panel to display duplicate errors
-		//
-		this.toolsduperrors = new M.panel('Duplicate Errors',
-			'ciniki_systemdocs_main', 'toolsduperrors',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolsduperrors');
-		this.toolsduperrors.sections = {
-			'errors':{'label':'Duplicates', 'type':'simplegrid', 'num_cols':2,
-				'headerValues':null,
-				'cellClasses':['multiline', 'multiline'],
-				'noData':'No duplicate errors',
-				},
-		};
-		this.toolsduperrors.sectionData = function(s) { return this.data[s]; }
-		this.toolsduperrors.noData = function(s) { return this.sections[s].noData; }
-		this.toolsduperrors.cellValue = function(s, i, j, d) {
-			if( s == 'errors' ) {
-				switch (j) {
-					case 0: return '<span class="maintext">' + d.error.code + '</span><span class="subtext">' + d.error.package + '</span>';
-					case 1: return '<span class="maintext">' + d.error.package + '-api/' + d.error.module + '/' + d.error.type + '/' + d.error.file + '</span><span class="subtext">' + d.error.msg + '</span>';
-				}
-			} else {
-				switch (j) {
-					case 0: return d.error.package;
-					case 1: return d.error.code;
-				}
-			}
-		};
-		this.toolsduperrors.rowFn = function(s, i, d) {
-			return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.toolsduperrors.show();\',\'' + d.error.function_id + '\');';
-		};
-		this.toolsduperrors.addButton('update', 'Update', 'M.ciniki_systemdocs_main.updateDocsCb(\'M.ciniki_systemdocs_main.showDupErrors();\');');
-		this.toolsduperrors.addClose('Back');
-
-		//
-		// Panel to display error gaps 
-		//
-		this.toolsgaperrors = new M.panel('Gap Errors',
-			'ciniki_systemdocs_main', 'toolsgaperrors',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolsgaperrors');
-		this.toolsgaperrors.sections = {};
-		this.toolsgaperrors.sectionData = function(s) { return this.data[s]; }
-		this.toolsgaperrors.noData = function(s) { return this.sections[s].noData; }
-		this.toolsgaperrors.cellValue = function(s, i, j, d) {
-			switch (j) {
-				case 0: return d.error.package;
-				case 1: return d.error.code;
-			}
-		};
-		this.toolsgaperrors.addClose('Back');
-
-		//
-		// Panel to display module missing overview.txt
-		//
-		this.toolsnooverview = new M.panel('Modules Missing overview.txt',
-			'ciniki_systemdocs_main', 'toolsnooverview',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolsnooverview');
-		this.toolsnooverview.sections = {
-			'modules':{'label':'', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'cellClasses':['', ''],
-				'noData':'No modules missing overview.txt',
-				},
-		};
-		this.toolsnooverview.sectionData = function(s) { return this.data[s]; }
-		this.toolsnooverview.noData = function(s) { return this.sections[s].noData; }
-		this.toolsnooverview.cellValue = function(s, i, j, d) {
-			switch (j) {
-				case 0: return d.module.package + '.' + d.module.name;
-			}
-		};
-		this.toolsnooverview.rowFn = function(s, i, d) {
-			return 'M.ciniki_systemdocs_main.showModule(\'M.ciniki_systemdocs_main.toolsnooverview.show();\',\'' + d.module.package + '\',\'' + d.module.name + '\');';
-		};
-		this.toolsnooverview.addClose('Back');
-
-		//
-		// Panel to display improper calls to checkAccess
-		//
-		this.toolsimpropercheckaccess = new M.panel('Improper checkAccess Calls',
-			'ciniki_systemdocs_main', 'toolsimpropercheckaccess',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolsimpropercheckaccess');
-		this.toolsimpropercheckaccess.sections = {
-			'functions':{'label':'', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'cellClasses':['', ''],
-				'noData':'No improper check access calls',
-				},
-		};
-		this.toolsimpropercheckaccess.sectionData = function(s) { return this.data[s]; }
-		this.toolsimpropercheckaccess.noData = function(s) { return this.sections[s].noData; }
-		this.toolsimpropercheckaccess.cellValue = function(s, i, j, d) {
-			switch (j) {
-				case 0: return d.function.package + '.' + d.function.module + '.' + d.function.file;
-			}
-		};
-		this.toolsimpropercheckaccess.rowFn = function(s, i, d) {
-			return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.toolsimpropercheckaccess.show();\',\'' + d.function.id + '\');';
-		};
-		this.toolsimpropercheckaccess.addClose('Back');
-
-		//
-		// Panel to display functions with missing argument descriptions
-		//
-		this.toolsnoargdesc = new M.panel('No argument descriptions',
-			'ciniki_systemdocs_main', 'toolsnoargdesc',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolsnoargdesc');
-		this.toolsnoargdesc.sections = {
-			'functions':{'label':'', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'cellClasses':['', ''],
-				'noData':'No missing argument descriptions',
-				},
-		};
-		this.toolsnoargdesc.sectionData = function(s) { return this.data[s]; }
-		this.toolsnoargdesc.noData = function(s) { return this.sections[s].noData; }
-		this.toolsnoargdesc.cellValue = function(s, i, j, d) {
-			switch (j) {
-				case 0: return d.function.package + '-api/' + d.function.module + '/' + d.function.type + '/' + d.function.file;
-			}
-		};
-		this.toolsnoargdesc.rowFn = function(s, i, d) {
-			return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.toolsnoargdesc.show();\',\'' + d.function.id + '\');';
-		};
-		this.toolsnoargdesc.addClose('Back');
-
-		//
-		// Panel to display functions with missing api_key or auth_token arguments
-		//
-		this.toolsnoapikeyarg = new M.panel('No api_key args',
-			'ciniki_systemdocs_main', 'toolsnoapikeyarg',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolsnoapikeyarg');
-		this.toolsnoapikeyarg.sections = {
-			'functions':{'label':'', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'cellClasses':['', ''],
-				'noData':'No functions missing api_key',
-				},
-		};
-		this.toolsnoapikeyarg.sectionData = function(s) { return this.data[s]; }
-		this.toolsnoapikeyarg.noData = function(s) { return this.sections[s].noData; }
-		this.toolsnoapikeyarg.cellValue = function(s, i, j, d) {
-			switch (j) {
-				case 0: return d.function.package + '-api/' + d.function.module + '/' + d.function.type + '/' + d.function.file;
-			}
-		};
-		this.toolsnoapikeyarg.rowFn = function(s, i, d) {
-			return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.toolsnoapikeyarg.show();\',\'' + d.function.id + '\');';
-		};
-		this.toolsnoapikeyarg.addClose('Back');
-
-		//
-		// Panel to display functions missing return values
-		//
-		this.toolsnoreturnvalue = new M.panel('No return values',
-			'ciniki_systemdocs_main', 'toolsnoreturnvalue',
-			'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolsnoreturnvalue');
-		this.toolsnoreturnvalue.sections = {
-			'functions':{'label':'', 'type':'simplegrid', 'num_cols':1,
-				'headerValues':null,
-				'cellClasses':['', ''],
-				'noData':'No missing return values',
-				},
-		};
-		this.toolsnoreturnvalue.sectionData = function(s) { return this.data[s]; }
-		this.toolsnoreturnvalue.noData = function(s) { return this.sections[s].noData; }
-		this.toolsnoreturnvalue.cellValue = function(s, i, j, d) {
-			switch (j) {
-				case 0: return d.function.package + '-api/' + d.function.module + '/' + d.function.type + '/' + d.function.file;
-			}
-		};
-		this.toolsnoreturnvalue.rowFn = function(s, i, d) {
-			return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.toolsnoreturnvalue.show();\',\'' + d.function.id + '\');';
-		};
-		this.toolsnoreturnvalue.addClose('Back');
-
-	}
-
-	//
-	// Arguments:
-	// aG - The arguments to be parsed into args
-	//
-	this.start = function(cb, appPrefix, aG) {
-		args = {};
-		if( aG != null ) {
-			args = eval(aG);
-		}
-
-		//
-		// Create the app container if it doesn't exist, and clear it out
-		// if it does exist.
-		//
-		var appContainer = M.createContainer(appPrefix, 'ciniki_systemdocs_main', 'yes');
-		if( appContainer == null ) {
-			alert('App Error');
-			return false;
-		} 
-
-		this.showMenu(cb);
-	}
-
-	this.showMenu = function(cb) {
-		this.menu.data = {};
-		var rsp = M.api.getJSONCb('ciniki.systemdocs.packages', {}, function(rsp) {
+    this.menu.sectionData = function(s) { return this.sections[s].list; return this.data[s]; }
+    this.menu.noData = function(s) { return this.sections[s].noData; }
+    this.menu.listValue = function(s, i, d) { return d.label; }
+    this.menu.listFn = function(s, i, d) { return d.fn; }
+    this.menu.cellValue = function(s, i, j, d) {
+        if( s == '_' ) {
+            if( j == 0 ) { return d.package.name; }
+            if( j == 1 ) { return 'Errors'; }
+        }
+        if( s == 'modules' ) {
+            if( j == 0 ) { return d.module.package; }
+            if( j == 1 ) { return d.module.name; }
+        }
+    };
+    this.menu.rowFn = function(s, i, d) {
+        if( s == '_' ) { return 'M.ciniki_systemdocs_main.showErrors(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.package.name + '\');'; }
+        if( s == 'modules' ) { return 'M.ciniki_systemdocs_main.showModule(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.module.package + '\',\'' + d.module.name + '\');'; }
+    };
+	this.menu.open = function(cb) {
+		this.data = {};
+		M.api.getJSONCb('ciniki.systemdocs.packages', {}, function(rsp) {
 			if( rsp.stat != 'ok' ) {
 				M.api.err(rsp);
 				return false;
 			}
-			M.ciniki_systemdocs_main.showMenuFinish(cb, rsp);
+			M.ciniki_systemdocs_main.menu.openFinish(cb, rsp);
 		});
 	}
-
-	this.showMenuFinish = function(cb, rsp) {
+	this.menu.openFinish = function(cb, rsp) {
 		var p = M.ciniki_systemdocs_main.menu;
 		p.data['_'] = rsp.packages;
 		p.data['modules'] = [];
@@ -647,9 +115,532 @@ function ciniki_systemdocs_main() {
 		p.refresh();
 		p.show(cb);
 	};
+    this.menu.addButton('update', 'Update', 'M.ciniki_systemdocs_main.updateDocs();');
+    this.menu.addButton('clear', 'Clear', 'M.ciniki_systemdocs_main.clearDocs();');
+    this.menu.addClose('Back');
+
+    //
+    // The panel to display a list of modules for a package
+    //
+    this.modules = new M.panel('System Documentation',
+        'ciniki_systemdocs_main', 'modules',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.modules');
+    this.modules.data = [];
+    this.modules.sections = {
+        'modules':{'label':'Modules', 'type':'simplegrid', 'num_cols':2, 'sortable':'yes',
+            'headerValues':['Name', 'Public'],
+            'sortTypes':['text', 'text'],
+            'cellClasses':['', ''],
+            'noData':'No modules'
+        }};
+    this.modules.sectionData = function(s) { return this.data[s]; }
+    this.modules.noData = function(s) { return this.sections[s].noData; }
+    this.modules.cellValue = function(s, i, j, d) {
+        if( s == 'modules' ) {
+            if( j == 0 ) { return d.module.proper_name; }
+            if( j == 1 ) { return d.module.public; }
+        }
+    };
+    this.modules.rowFn = function(s, i, d) {
+        if( s == 'modules' ) { return 'M.ciniki_systemdocs_main.showModule(\'M.ciniki_systemdocs_main.modules.show();\',\'' + d.module.package + '\',\'' + d.module.name + '\');'; }
+    };
+    this.modules.addClose('Back');
+
+    //
+    // The panel to display a list of tables for a package
+    //
+    this.tables = new M.panel('System Documentation',
+        'ciniki_systemdocs_main', 'tables',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.tables');
+    this.tables.data = [];
+    this.tables.sections = {
+        'tables':{'label':'Tables', 'type':'simplegrid', 'num_cols':2, 'sortable':'yes',
+            'headerValues':['Table', 'Version'],
+            'sortTypes':['text', 'text'],
+            'cellClasses':['', ''],
+            'noData':'No modules'
+        }};
+    this.tables.sectionData = function(s) { return this.data[s]; }
+    this.tables.noData = function(s) { return this.sections[s].noData; }
+    this.tables.cellValue = function(s, i, j, d) {
+        if( s == 'tables' ) {
+            if( j == 0 ) { return d.table.name; }
+            if( j == 1 ) { return d.table.version; }
+        }
+    };
+    this.tables.rowFn = function(s, i, d) {
+        if( s == 'tables' ) { return 'M.ciniki_systemdocs_main.showTable(\'M.ciniki_systemdocs_main.tables.show();\',\'' + d.table.id + '\');'; }
+    };
+    this.tables.addButton('update', 'Update', 'M.ciniki_systemdocs_main.updateDocs();');
+    this.tables.addClose('Back');
+
+    //
+    // The panel to display module information
+    //
+    this.module = new M.panel('Module',
+        'ciniki_systemdocs_main', 'module',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.module');
+    this.module.data = {};
+    this.module.sections = {
+        'description':{'label':'Description', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'noData':'No description',
+            },
+        'overview':{'label':'Overview', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'noData':'No overview',
+            },
+        'notes':{'label':'Notes', 'visible':'no', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'noData':'No notes',
+            },
+        'tables':{'label':'Tables', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'noData':'No tables',
+            },
+        'scripts':{'label':'Scripts', 'visible':'no', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'noData':'No public methods',
+            },
+        'public':{'label':'Public', 'type':'simplegrid', 'num_cols':2, 'sortable':'yes',
+            'headerValues':['Method', 'Publish'],
+            'sortTypes':['text','text'],
+            'noData':'No public methods',
+            },
+        'private':{'label':'Private', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'noData':'No private functions',
+            },
+        'cron':{'label':'Cron', 'visible':'no', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'noData':'No cron methods',
+            },
+        'web':{'label':'Web', 'visible':'no', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'noData':'No web functions',
+            },
+    };
+    this.module.sectionData = function(s) { 
+        if( s == 'overview' ) { return [this.data.overview]; }
+        if( s == 'notes' ) { return [this.data.notes]; }
+        if( s == 'description' ) { return [this.data.description]; }
+        return this.data[s]; 
+    }
+    this.module.noData = function(s) { return this.sections[s].noData; }
+    this.module.cellValue = function(s, i, j, d) {
+        if( s == 'public' && j == 1 ) {
+            return d.function.publish;
+        }
+        switch (s) {
+            case 'overview': return this.data.overview;
+            case 'notes': return this.data.notes;
+            case 'description': return this.data.description;
+            case 'tables': return d.table.name;
+            case 'scripts': return d.function.name;
+            case 'public': return d.function.package + '.' + d.function.module + '.' + d.function.file;
+            case 'private': return d.function.name;
+            case 'cron': return d.function.name;
+            case 'web': return d.function.name;
+        }
+    }
+    this.module.rowFn = function(s, i, d) {
+        if( s == 'tables' ) { return 'M.ciniki_systemdocs_main.showTable(\'M.ciniki_systemdocs_main.module.show();\',\'' + d.table.id + '\');'; }
+        if( d != null && d.function != null ) { return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.module.show();\',\'' + d.function.id + '\');'; }
+    };
+    this.module.addClose('Back');
+
+    //
+    // Panel to display table information
+    //
+    this.table = new M.panel('Table',
+        'ciniki_systemdocs_main', 'table',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.table');
+    this.table.data = {};
+    this.table.sections = {
+        'description':{'label':'Description', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'cellClasses':[''],
+            'noData':'No description',
+            },
+        'fields':{'label':'Fields', 'type':'simplegrid', 'num_cols':2,
+            'headerValues':null,
+            'cellClasses':['multiline aligntop', 'multiline aligntop'],
+            },
+        'create_sql':{'label':'SQL', 'type':'configtext', 'num_cols':1,
+            'headerValues':null,
+            'noData':'No SQL',
+            },
+    };
+    this.table.sectionData = function(s) { return this.data[s]; }
+    this.table.noData = function(s) { return this.sections[s].noData; }
+    this.table.cellValue = function(s, i, j, d) {
+        if( s == 'fields' ) {
+            switch (j) {
+                case 0: return '<span class="maintext">' + d.field.name + '</span><span class="subtext">' + d.field.type + '</span>';
+                case 1: return d.field.description;
+            }
+        }
+        switch (s) {
+            case 'description': return this.data.description;
+            case 'create_sql': return this.data.create_sql;
+        }
+    }
+    this.table.addButton('update', 'Update', 'M.ciniki_systemdocs_main.updateDocsCb(\'M.ciniki_systemdocs_main.showTable(null,M.ciniki_systemdocs_main.table.table_id);\');');
+    this.table.addClose('Back');
+
+    //
+    // Panel to display function information
+    //
+    this.function = new M.panel('Function',
+        'ciniki_systemdocs_main', 'function',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.function');
+    this.function.cbStacked = 'yes';
+    this.function.data = {};
+    this.function.sections = {
+        'description':{'label':'Description', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'cellClasses':[''],
+            'noData':'No description',
+            },
+        'returns':{'label':'Returns', 'visible':'no', 'type':'configtext'},
+        'args':{'label':'Arguments', 'type':'simplegrid', 'num_cols':2,
+            'headerValues':null,
+            'cellClasses':['multiline aligntop', 'multiline aligntop'],
+            'noData':'No arguments',
+            },
+        'calls':{'label':'Calls', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'cellClasses':['', ''],
+            'noData':'No calls',
+            },
+        'errors':{'label':'Errors', 'type':'simplegrid', 'num_cols':2,
+            'headerValues':null,
+            'cellClasses':['', 'multiline'],
+            'noData':'No errors',
+            },
+        'extended_errors':{'label':'Extended Errors', 'type':'simplegrid', 'num_cols':2,
+            'headerValues':null,
+            'cellClasses':['', 'multiline'],
+            'noData':'No extended errors',
+            },
+    };
+    this.function.sectionData = function(s) { return this.data[s]; }
+    this.function.noData = function(s) { return this.sections[s].noData; }
+    this.function.cellValue = function(s, i, j, d) {
+        if( s == 'args' ) {
+            switch (j) {
+                case 0: return '<span class="maintext">' + d.argument.name + '</span><span class="subtext">' + d.argument.options + '</span>';
+                case 1: return d.argument.description;
+            }
+        }
+        if( s == 'calls' ) {
+            switch (j) {
+                case 0: return d.function.call;
+            }
+        }
+        if( s == 'errors' ) {
+            switch (j) {
+                case 0: return d.error.code;
+                case 1: return '<span class="maintext">' + d.error.msg + '</span><span class="subtext">' + d.error.pmsg + '</span>';
+            }
+        }
+        if( s == 'extended_errors' ) {
+            switch (j) {
+                case 0: return d.error.code;
+                case 1: return '<span class="maintext">' + d.error.name + '</span><span class="subtext">' + d.error.msg + '</span>';
+            }
+        }
+        switch (s) {
+            case 'description': return this.data.description;
+            case 'returns': return this.data.returns;
+        }
+    }
+    this.function.rowFn = function(s, i, d) {
+        if( s == 'calls' ) { return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.showFunction(null,' + this.function_id + ');\',\'' + d.function.id + '\');'; }
+        if( s == 'extended_errors' ) { return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.showFunction(null,' + this.function_id + ');\',\'' + d.error.function_id + '\');'; }
+        return null;
+    };
+    this.function.addButton('update', 'Update', 'M.ciniki_systemdocs_main.updateDocsCb(\'M.ciniki_systemdocs_main.showFunction(null,M.ciniki_systemdocs_main.function.function_id);\');');
+    this.function.addClose('Back');
+
+    //
+    // Panel to display list of errors
+    //
+    this.errors = new M.panel('Errors',
+        'ciniki_systemdocs_main', 'errors',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.errors');
+    this.errors.data = {};
+    this.errors.sections = {
+        'errors':{'label':'', 'type':'simplegrid', 'num_cols':2, 'sortable':'yes',
+            'headerValues':['Code', 'Msg'],
+            'sortTypes':['number', ''],
+            'cellClasses':['', 'multiline'],
+            'noData':'No errors',
+            },
+    };
+    this.errors.sectionData = function(s) { return this.data[s]; }
+    this.errors.noData = function(s) { return this.sections[s].noData; }
+    this.errors.cellValue = function(s, i, j, d) {
+        switch (j) {
+            case 0: return d.error.code;
+            case 1: return '<span class="maintext">' + d.error.msg + '</span><span class="subtext">' + d.error.pmsg + '</span>';
+        }
+    };
+    this.errors.rowFn = function(s, i, d) {
+        return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.errors.show();\',\'' + d.error.function_id + '\');';
+    };
+    this.errors.addClose('Back');
+
+    //
+    // Panel to display missing table field descriptions
+    //
+    this.toolstableblankfields = new M.panel('Missing Table Field Description',
+        'ciniki_systemdocs_main', 'toolstableblankfields',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolstableblankfields');
+    this.toolstableblankfields.sections = {
+        'tables':{'label':'', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'cellClasses':['', ''],
+            'noData':'No missing table field descriptions',
+            },
+    };
+    this.toolstableblankfields.sectionData = function(s) { return this.data[s]; }
+    this.toolstableblankfields.noData = function(s) { return this.sections[s].noData; }
+    this.toolstableblankfields.cellValue = function(s, i, j, d) {
+        switch (j) {
+            case 0: return d.table.name;
+        }
+    };
+    this.toolstableblankfields.rowFn = function(s, i, d) {
+        return 'M.ciniki_systemdocs_main.showTable(\'M.ciniki_systemdocs_main.showTableBlankFields();\',\'' + d.table.id + '\');';
+    };
+    this.toolstableblankfields.addButton('update', 'Update', 'M.ciniki_systemdocs_main.updateDocsCb(\'M.ciniki_systemdocs_main.toolstableblankfields.show();\');');
+    this.toolstableblankfields.addClose('Back');
+
+    //
+    // Panel to display missing table field types
+    //
+    this.toolstableunknownfields = new M.panel('Unknown Field Types',
+        'ciniki_systemdocs_main', 'toolstableunknownfields',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolstableunknownfields');
+    this.toolstableunknownfields.sections = {
+        'tables':{'label':'', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'cellClasses':['', ''],
+            'noData':'No unknown field types',
+            },
+    };
+    this.toolstableunknownfields.sectionData = function(s) { return this.data[s]; }
+    this.toolstableunknownfields.noData = function(s) { return this.sections[s].noData; }
+    this.toolstableunknownfields.cellValue = function(s, i, j, d) {
+        switch (j) {
+            case 0: return d.table.name;
+        }
+    };
+    this.toolstableunknownfields.rowFn = function(s, i, d) {
+        return 'M.ciniki_systemdocs_main.showTable(\'M.ciniki_systemdocs_main.toolstableunknownfields.show();\',\'' + d.table.id + '\');';
+    };
+    this.toolstableunknownfields.addClose('Back');
+
+    //
+    // Panel to display duplicate errors
+    //
+    this.toolsduperrors = new M.panel('Duplicate Errors',
+        'ciniki_systemdocs_main', 'toolsduperrors',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolsduperrors');
+    this.toolsduperrors.sections = {
+        'errors':{'label':'Duplicates', 'type':'simplegrid', 'num_cols':2,
+            'headerValues':null,
+            'cellClasses':['multiline', 'multiline'],
+            'noData':'No duplicate errors',
+            },
+    };
+    this.toolsduperrors.sectionData = function(s) { return this.data[s]; }
+    this.toolsduperrors.noData = function(s) { return this.sections[s].noData; }
+    this.toolsduperrors.cellValue = function(s, i, j, d) {
+        if( s == 'errors' ) {
+            switch (j) {
+                case 0: return '<span class="maintext">' + d.error.code + '</span><span class="subtext">' + d.error.package + '</span>';
+                case 1: return '<span class="maintext">' + d.error.package + '-api/' + d.error.module + '/' + d.error.type + '/' + d.error.file + '</span><span class="subtext">' + d.error.msg + '</span>';
+            }
+        } else {
+            switch (j) {
+                case 0: return d.error.package;
+                case 1: return d.error.code;
+            }
+        }
+    };
+    this.toolsduperrors.rowFn = function(s, i, d) {
+        return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.toolsduperrors.show();\',\'' + d.error.function_id + '\');';
+    };
+    this.toolsduperrors.addButton('update', 'Update', 'M.ciniki_systemdocs_main.updateDocsCb(\'M.ciniki_systemdocs_main.showDupErrors();\');');
+    this.toolsduperrors.addClose('Back');
+
+    //
+    // Panel to display error gaps 
+    //
+    this.toolsgaperrors = new M.panel('Gap Errors',
+        'ciniki_systemdocs_main', 'toolsgaperrors',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolsgaperrors');
+    this.toolsgaperrors.sections = {};
+    this.toolsgaperrors.sectionData = function(s) { return this.data[s]; }
+    this.toolsgaperrors.noData = function(s) { return this.sections[s].noData; }
+    this.toolsgaperrors.cellValue = function(s, i, j, d) {
+        switch (j) {
+            case 0: return d.error.package;
+            case 1: return d.error.code;
+        }
+    };
+    this.toolsgaperrors.addClose('Back');
+
+    //
+    // Panel to display module missing overview.txt
+    //
+    this.toolsnooverview = new M.panel('Modules Missing overview.txt',
+        'ciniki_systemdocs_main', 'toolsnooverview',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolsnooverview');
+    this.toolsnooverview.sections = {
+        'modules':{'label':'', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'cellClasses':['', ''],
+            'noData':'No modules missing overview.txt',
+            },
+    };
+    this.toolsnooverview.sectionData = function(s) { return this.data[s]; }
+    this.toolsnooverview.noData = function(s) { return this.sections[s].noData; }
+    this.toolsnooverview.cellValue = function(s, i, j, d) {
+        switch (j) {
+            case 0: return d.module.package + '.' + d.module.name;
+        }
+    };
+    this.toolsnooverview.rowFn = function(s, i, d) {
+        return 'M.ciniki_systemdocs_main.showModule(\'M.ciniki_systemdocs_main.toolsnooverview.show();\',\'' + d.module.package + '\',\'' + d.module.name + '\');';
+    };
+    this.toolsnooverview.addClose('Back');
+
+    //
+    // Panel to display improper calls to checkAccess
+    //
+    this.toolsimpropercheckaccess = new M.panel('Improper checkAccess Calls',
+        'ciniki_systemdocs_main', 'toolsimpropercheckaccess',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolsimpropercheckaccess');
+    this.toolsimpropercheckaccess.sections = {
+        'functions':{'label':'', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'cellClasses':['', ''],
+            'noData':'No improper check access calls',
+            },
+    };
+    this.toolsimpropercheckaccess.sectionData = function(s) { return this.data[s]; }
+    this.toolsimpropercheckaccess.noData = function(s) { return this.sections[s].noData; }
+    this.toolsimpropercheckaccess.cellValue = function(s, i, j, d) {
+        switch (j) {
+            case 0: return d.function.package + '.' + d.function.module + '.' + d.function.file;
+        }
+    };
+    this.toolsimpropercheckaccess.rowFn = function(s, i, d) {
+        return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.toolsimpropercheckaccess.show();\',\'' + d.function.id + '\');';
+    };
+    this.toolsimpropercheckaccess.addClose('Back');
+
+    //
+    // Panel to display functions with missing argument descriptions
+    //
+    this.toolsnoargdesc = new M.panel('No argument descriptions',
+        'ciniki_systemdocs_main', 'toolsnoargdesc',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolsnoargdesc');
+    this.toolsnoargdesc.sections = {
+        'functions':{'label':'', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'cellClasses':['', ''],
+            'noData':'No missing argument descriptions',
+            },
+    };
+    this.toolsnoargdesc.sectionData = function(s) { return this.data[s]; }
+    this.toolsnoargdesc.noData = function(s) { return this.sections[s].noData; }
+    this.toolsnoargdesc.cellValue = function(s, i, j, d) {
+        switch (j) {
+            case 0: return d.function.package + '-api/' + d.function.module + '/' + d.function.type + '/' + d.function.file;
+        }
+    };
+    this.toolsnoargdesc.rowFn = function(s, i, d) {
+        return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.toolsnoargdesc.show();\',\'' + d.function.id + '\');';
+    };
+    this.toolsnoargdesc.addClose('Back');
+
+    //
+    // Panel to display functions with missing api_key or auth_token arguments
+    //
+    this.toolsnoapikeyarg = new M.panel('No api_key args',
+        'ciniki_systemdocs_main', 'toolsnoapikeyarg',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolsnoapikeyarg');
+    this.toolsnoapikeyarg.sections = {
+        'functions':{'label':'', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'cellClasses':['', ''],
+            'noData':'No functions missing api_key',
+            },
+    };
+    this.toolsnoapikeyarg.sectionData = function(s) { return this.data[s]; }
+    this.toolsnoapikeyarg.noData = function(s) { return this.sections[s].noData; }
+    this.toolsnoapikeyarg.cellValue = function(s, i, j, d) {
+        switch (j) {
+            case 0: return d.function.package + '-api/' + d.function.module + '/' + d.function.type + '/' + d.function.file;
+        }
+    };
+    this.toolsnoapikeyarg.rowFn = function(s, i, d) {
+        return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.toolsnoapikeyarg.show();\',\'' + d.function.id + '\');';
+    };
+    this.toolsnoapikeyarg.addClose('Back');
+
+    //
+    // Panel to display functions missing return values
+    //
+    this.toolsnoreturnvalue = new M.panel('No return values',
+        'ciniki_systemdocs_main', 'toolsnoreturnvalue',
+        'mc', 'medium', 'sectioned', 'ciniki.systemdocs.main.toolsnoreturnvalue');
+    this.toolsnoreturnvalue.sections = {
+        'functions':{'label':'', 'type':'simplegrid', 'num_cols':1,
+            'headerValues':null,
+            'cellClasses':['', ''],
+            'noData':'No missing return values',
+            },
+    };
+    this.toolsnoreturnvalue.sectionData = function(s) { return this.data[s]; }
+    this.toolsnoreturnvalue.noData = function(s) { return this.sections[s].noData; }
+    this.toolsnoreturnvalue.cellValue = function(s, i, j, d) {
+        switch (j) {
+            case 0: return d.function.package + '-api/' + d.function.module + '/' + d.function.type + '/' + d.function.file;
+        }
+    };
+    this.toolsnoreturnvalue.rowFn = function(s, i, d) {
+        return 'M.ciniki_systemdocs_main.showFunction(\'M.ciniki_systemdocs_main.toolsnoreturnvalue.show();\',\'' + d.function.id + '\');';
+    };
+    this.toolsnoreturnvalue.addClose('Back');
+
+	//
+	// Arguments:
+	// aG - The arguments to be parsed into args
+	//
+	this.start = function(cb, appPrefix, aG) {
+		args = {};
+		if( aG != null ) { args = eval(aG); }
+
+		//
+		// Create the app container if it doesn't exist, and clear it out
+		// if it does exist.
+		//
+		var appContainer = M.createContainer(appPrefix, 'ciniki_systemdocs_main', 'yes');
+		if( appContainer == null ) {
+			alert('App Error');
+			return false;
+		} 
+
+		this.menu.open(cb);
+	}
 
 	this.updateDocs = function() {
-		M.api.getJSONCb('ciniki.systemdocs.update', {}, function() {M.ciniki_systemdocs_main.showMenu();});
+		M.api.getJSONCb('ciniki.systemdocs.update', {}, function() {M.ciniki_systemdocs_main.menu.open();});
 	};
 
 	this.updateDocsCb = function(cb) {
@@ -658,7 +649,7 @@ function ciniki_systemdocs_main() {
 	};
 
 	this.clearDocs = function() {
-		M.api.getJSONCb('ciniki.systemdocs.clear', {}, function() {M.ciniki_systemdocs_main.showMenu();});
+		M.api.getJSONCb('ciniki.systemdocs.clear', {}, function() {M.ciniki_systemdocs_main.menu.open();});
 	};
 
 	this.showTables = function(cb, package) {
@@ -937,5 +928,4 @@ function ciniki_systemdocs_main() {
 			p.show(cb);
 		});
 	};
-
 }
