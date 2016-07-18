@@ -6,26 +6,26 @@
 #
 # Fields
 # ------
-# id: 				The database id for each function.
+# id:               The database id for each function.
 #
-# package:			The package the module is contained in.
-# module:			The module within the package.
+# package:          The package the module is contained in.
+# module:           The module within the package.
 #
-# detail_key:		The name of the detail, eg: overview.
+# detail_key:       The name of the detail, eg: overview.
 #
-# details:			The detail string.
-# html_details:		The detail string, processed into html.
+# details:          The detail string.
+# html_details:     The detail string, processed into html.
 #
-# last_updated:		The UTC date and time the file was last updated.
+# last_updated:     The UTC date and time the file was last updated.
 # 
 create table ciniki_systemdocs_api_module_details (
-	id int not null auto_increment,
-	package varchar(100) not null,
-	module varchar(100) not null,
-	detail_key varchar(50) not null,
-	details varchar(6000) not null,
-	html_details varchar(6000) not null,
-	last_updated datetime not null,
-	primary key (id),
-	unique index (package, module, detail_key)
+    id int not null auto_increment,
+    package varchar(100) not null,
+    module varchar(100) not null,
+    detail_key varchar(50) not null,
+    details varchar(6000) not null,
+    html_details varchar(6000) not null,
+    last_updated datetime not null,
+    primary key (id),
+    unique index (package, module, detail_key)
 ) ENGINE='InnoDB', COMMENT='v1.01';

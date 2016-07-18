@@ -5,31 +5,31 @@
 #
 # Fields
 # ------
-# id: 				The field database id for each table.
+# id:               The field database id for each table.
 #
-# table_id:			The ID for the table, references back to ciniki_systemdocs_api_tables.
+# table_id:         The ID for the table, references back to ciniki_systemdocs_api_tables.
 #
-# sequence:			The order of the arguments.
+# sequence:         The order of the arguments.
 # 
-# name:				The field within the table.
+# name:             The field within the table.
 #
-# type:				The type of field, int, tinying, varchar, etc...
+# type:             The type of field, int, tinying, varchar, etc...
 #
-# indexed:			The type of index on the field P, U, I (Primary, Unique or Indexed).  If blank, no index.
+# indexed:          The type of index on the field P, U, I (Primary, Unique or Indexed).  If blank, no index.
 #
-# description:		The function description.
-# html_description:	The function description, processes into html.
+# description:      The function description.
+# html_description: The function description, processes into html.
 #
 create table ciniki_systemdocs_api_table_fields (
-	id int not null auto_increment,
-	table_id int not null,
-	sequence int not null,
-	name varchar(100) not null,
-	description varchar(6000) not null,
-	html_description varchar(6000) not null,
-	type varchar(50) not null,
-	indexed varchar(10) not null,
-	primary key (id),
-	unique index (table_id, name)
+    id int not null auto_increment,
+    table_id int not null,
+    sequence int not null,
+    name varchar(100) not null,
+    description varchar(6000) not null,
+    html_description varchar(6000) not null,
+    type varchar(50) not null,
+    indexed varchar(10) not null,
+    primary key (id),
+    unique index (table_id, name)
 ) ENGINE='InnoDB', COMMENT='v1.01';
 

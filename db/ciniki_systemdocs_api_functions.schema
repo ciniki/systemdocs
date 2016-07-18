@@ -5,60 +5,60 @@
 #
 # Fields
 # ------
-# id: 				The database id for each function.
+# id:               The database id for each function.
 #
-# status:			0 - unknown
-#					1 - active
-#					60 - deprecated
+# status:           0 - unknown
+#                   1 - active
+#                   60 - deprecated
 #
-# package:			The package that contains the function, typically 'ciniki'.
-# module:			The module within the package.
-# type:				The type of method which also is where it's located, (script/private/public/web/cron).
-# file:				The name of the file.
-# suffix:			The suffix of the file, typically .php, but available incase future modules are other.
+# package:          The package that contains the function, typically 'ciniki'.
+# module:           The module within the package.
+# type:             The type of method which also is where it's located, (script/private/public/web/cron).
+# file:             The name of the file.
+# suffix:           The suffix of the file, typically .php, but available incase future modules are other.
 #
-# name:				The complete name of the function (ciniki_core_dbQuote).
+# name:             The complete name of the function (ciniki_core_dbQuote).
 #
-# description:		The function description, which will be displayed publically on the API documentation.
-# html_description:	The function description, processes into html.
+# description:      The function description, which will be displayed publically on the API documentation.
+# html_description: The function description, processes into html.
 #
-# notes:			Internal function notes for developers, this will not be displayed on the public API docs.
-# html_notes:		Same as notes, but formatted in html.
+# notes:            Internal function notes for developers, this will not be displayed on the public API docs.
+# html_notes:       Same as notes, but formatted in html.
 #
-# returns:			What is returned from the function, typically described as an XML structure.
+# returns:          What is returned from the function, typically described as an XML structure.
 #
-# fsize:			The size of the file in bytes.
-# flines:			The number of lines in the file.
-# blines:			The number of blank lines in the file.
-# clines:			The number of comment lines in the file.
-# plines:			The number of lines of code in the file.
+# fsize:            The size of the file in bytes.
+# flines:           The number of lines in the file.
+# blines:           The number of blank lines in the file.
+# clines:           The number of comment lines in the file.
+# plines:           The number of lines of code in the file.
 #
-# publish:			Should this method be published in the API spec.
+# publish:          Should this method be published in the API spec.
 #
-# last_updated:		The UTC date and time the file was last updated.
+# last_updated:     The UTC date and time the file was last updated.
 # 
 create table ciniki_systemdocs_api_functions (
-	id int not null auto_increment,
-	status tinyint unsigned not null,
-	package varchar(100) not null,
-	module varchar(100) not null,
-	type varchar(100) not null,
-	file varchar(100) not null,
-	suffix varchar(50) not null,
-	name varchar(150) not null,
-	description varchar(6000) not null,
-	html_description varchar(6000) not null,
-	notes varchar(6000) not null,
-	html_notes varchar(6000) not null,
-	returns varchar(6000) not null,
-	fsize int not null,
-	flines int not null,
-	blines int not null,
-	clines int not null,
-	plines int not null,
-	publish varchar(20) not null,
-	last_updated datetime not null,
-	primary key (id),
-	unique index (package, module, type, file, suffix),
-	index (status, publish)
+    id int not null auto_increment,
+    status tinyint unsigned not null,
+    package varchar(100) not null,
+    module varchar(100) not null,
+    type varchar(100) not null,
+    file varchar(100) not null,
+    suffix varchar(50) not null,
+    name varchar(150) not null,
+    description varchar(6000) not null,
+    html_description varchar(6000) not null,
+    notes varchar(6000) not null,
+    html_notes varchar(6000) not null,
+    returns varchar(6000) not null,
+    fsize int not null,
+    flines int not null,
+    blines int not null,
+    clines int not null,
+    plines int not null,
+    publish varchar(20) not null,
+    last_updated datetime not null,
+    primary key (id),
+    unique index (package, module, type, file, suffix),
+    index (status, publish)
 ) ENGINE='InnoDB', COMMENT='v1.01';

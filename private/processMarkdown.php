@@ -10,8 +10,8 @@
 //
 // Arguments
 // ---------
-// ciniki:			
-// content:			The content containing the markdown which needs to be processed.
+// ciniki:          
+// content:         The content containing the markdown which needs to be processed.
 // 
 // Returns
 // -------
@@ -19,99 +19,99 @@
 //
 function ciniki_systemdocs_processMarkdown($ciniki, $content) {
 
-	//
-	// Escape any existing html
-	//
-	$content = htmlspecialchars($content);
+    //
+    // Escape any existing html
+    //
+    $content = htmlspecialchars($content);
 
-	//
-	// Break into lines
-	//
-	$lines = explode("\n", $content);
+    //
+    // Break into lines
+    //
+    $lines = explode("\n", $content);
 
-	//
-	// Check for lists
-	//
-	$prev_line = '';
-	$list_level = 0;
-	$list_type = '';
-	$paragraph = 0;
-	foreach($lines as $lnum => $line) {
-		// Check for list item
-		// or for hex number or number unordered list
-		if( preg_match('/^\s*[+-]\s*(.*)$/', $line, $matches) ) {
-			if( $list_level == 0 ) {
-				if( $paragraph > 0 ) {
-					$lines[$lnum-1] .= "</p>";
-					$paragraph = 0;
-				}
-				$lines[$lnum] = "<ul>\n" . '<li>' . $matches[1];
-				$list_level++;
-				$list_type = 'ul';
-			} else {
-				$lines[$lnum] = '<li>' . $matches[1];
-			}
-		}
-		elseif( preg_match('/^\s*((0x[0-9]+|[0-9]+)\s*-\s*(.*))$/', $line, $matches) ) {
-			if( $list_level == 0 ) {
-				if( $paragraph > 0 ) {
-					$lines[$lnum-1] .= "</p>";
-					$paragraph = 0;
-				}
-				$lines[$lnum] = "<dl>\n" . '<dt>' . $matches[2] . '</dt><dd>' . $matches[3];
-				$list_level++;
-				$list_type == 'dl';
-			} else {
-				$lines[$lnum] = '</dd><dt>' . $matches[2] . '</dt><dd>' . $matches[3];
-			}
-		}
-		// Check for text line
-		elseif( $paragraph == 0 && $list_level == 0 && preg_match('/[a-zA-Z0-9]/', $line) ) {
-			$lines[$lnum] = '<p>' . $line;
-			$paragraph = 1;
-		}
-		// Check for blank line, end of list
-		elseif( $list_level > 0 && preg_match('/^\s*$/', $line) ) {
-			if( $list_type == 'dl' ) {
-				$lines[$lnum] = '</dd></dl>';
-			} else {
-				$lines[$lnum] = '</ul>';
-			}
-			$list_level = 0;
-		}
-		// Check for blank line, end of paragraph
-		elseif( $paragraph > 0 && preg_match('/^\s*$/', $line) ) {
-			$lines[$lnum] = '</p>';
-			$paragraph = 0;
-		}
-		//
-		// Check for emphasis
-		// *em*, or **strong**
-		//
-		$lines[$lnum] = preg_replace('/\*\*([^\*]+)\*\*/', '<strong>$1</strong>', $lines[$lnum]);
-		$lines[$lnum] = preg_replace('/\*([^\*]+)\*/', '<em>$1</em>', $lines[$lnum]);
-	}
-	if( $list_level > 0 ) {
-		if( $list_type == 'dl' ) {
-			$lines[$lnum+1] = '</dd></dl>';
-		} else {
-			$lines[$lnum+1] = '</ul>';
-		}
-	}
-	elseif( $paragraph > 0 ) {
-		$lines[$lnum+1] = '</p>';
-	}
+    //
+    // Check for lists
+    //
+    $prev_line = '';
+    $list_level = 0;
+    $list_type = '';
+    $paragraph = 0;
+    foreach($lines as $lnum => $line) {
+        // Check for list item
+        // or for hex number or number unordered list
+        if( preg_match('/^\s*[+-]\s*(.*)$/', $line, $matches) ) {
+            if( $list_level == 0 ) {
+                if( $paragraph > 0 ) {
+                    $lines[$lnum-1] .= "</p>";
+                    $paragraph = 0;
+                }
+                $lines[$lnum] = "<ul>\n" . '<li>' . $matches[1];
+                $list_level++;
+                $list_type = 'ul';
+            } else {
+                $lines[$lnum] = '<li>' . $matches[1];
+            }
+        }
+        elseif( preg_match('/^\s*((0x[0-9]+|[0-9]+)\s*-\s*(.*))$/', $line, $matches) ) {
+            if( $list_level == 0 ) {
+                if( $paragraph > 0 ) {
+                    $lines[$lnum-1] .= "</p>";
+                    $paragraph = 0;
+                }
+                $lines[$lnum] = "<dl>\n" . '<dt>' . $matches[2] . '</dt><dd>' . $matches[3];
+                $list_level++;
+                $list_type == 'dl';
+            } else {
+                $lines[$lnum] = '</dd><dt>' . $matches[2] . '</dt><dd>' . $matches[3];
+            }
+        }
+        // Check for text line
+        elseif( $paragraph == 0 && $list_level == 0 && preg_match('/[a-zA-Z0-9]/', $line) ) {
+            $lines[$lnum] = '<p>' . $line;
+            $paragraph = 1;
+        }
+        // Check for blank line, end of list
+        elseif( $list_level > 0 && preg_match('/^\s*$/', $line) ) {
+            if( $list_type == 'dl' ) {
+                $lines[$lnum] = '</dd></dl>';
+            } else {
+                $lines[$lnum] = '</ul>';
+            }
+            $list_level = 0;
+        }
+        // Check for blank line, end of paragraph
+        elseif( $paragraph > 0 && preg_match('/^\s*$/', $line) ) {
+            $lines[$lnum] = '</p>';
+            $paragraph = 0;
+        }
+        //
+        // Check for emphasis
+        // *em*, or **strong**
+        //
+        $lines[$lnum] = preg_replace('/\*\*([^\*]+)\*\*/', '<strong>$1</strong>', $lines[$lnum]);
+        $lines[$lnum] = preg_replace('/\*([^\*]+)\*/', '<em>$1</em>', $lines[$lnum]);
+    }
+    if( $list_level > 0 ) {
+        if( $list_type == 'dl' ) {
+            $lines[$lnum+1] = '</dd></dl>';
+        } else {
+            $lines[$lnum+1] = '</ul>';
+        }
+    }
+    elseif( $paragraph > 0 ) {
+        $lines[$lnum+1] = '</p>';
+    }
 
-	$html_content = implode("\n", $lines);
-	
-	//
-	// Check for URL's
-	//
-	// URL's with a title
-	$html_content = preg_replace('/\[([^\]]+)\]\((http[^\)]+)\)/', '<a target="_blank" href="$2">$1</a>', $html_content);
-	// URL's without a title
-	$html_content = preg_replace('/([^\"])(http[^ ]+)/', '$1<a target="_blank" href="$2">$2</a>', $html_content);
+    $html_content = implode("\n", $lines);
+    
+    //
+    // Check for URL's
+    //
+    // URL's with a title
+    $html_content = preg_replace('/\[([^\]]+)\]\((http[^\)]+)\)/', '<a target="_blank" href="$2">$1</a>', $html_content);
+    // URL's without a title
+    $html_content = preg_replace('/([^\"])(http[^ ]+)/', '$1<a target="_blank" href="$2">$2</a>', $html_content);
 
-	return array('stat'=>'ok', 'html_content'=>$html_content);
+    return array('stat'=>'ok', 'html_content'=>$html_content);
 }
 ?>
