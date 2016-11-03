@@ -72,6 +72,6 @@ function ciniki_systemdocs_table($ciniki) {
         return array('stat'=>'ok', 'table'=>$rc['tables'][0]['table']);
     }
     
-    return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'802', 'msg'=>'Unable to find table'));
+    return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.26', 'msg'=>'Unable to find table'));
 }
 ?>

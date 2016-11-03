@@ -62,7 +62,7 @@ function ciniki_systemdocs_toolsNoAPIKeyArg($ciniki) {
             'fields'=>array('id', 'package', 'module', 'type', 'file', 'name')),
         ));
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'640', 'msg'=>'Unable to find any functions', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.31', 'msg'=>'Unable to find any functions', 'err'=>$rc['err']));
     }
     if( !isset($rc['functions']) ) {    
         return array('stat'=>'ok', 'functions'=>array());

@@ -64,7 +64,7 @@ function ciniki_systemdocs_toolsImproperCheckAccess($ciniki) {
             'fields'=>array('id', 'package', 'module', 'file', 'args')),
         ));
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'697', 'msg'=>'Unable to find any functions', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.30', 'msg'=>'Unable to find any functions', 'err'=>$rc['err']));
     }
     if( !isset($rc['functions']) ) {    
         return array('stat'=>'ok', 'functions'=>array());

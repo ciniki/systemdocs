@@ -47,7 +47,7 @@ function ciniki_systemdocs_updateFunctions($ciniki) {
         foreach($packages as $package) {
             $rc = ciniki_systemdocs_updatePackageFunctions($ciniki, $package);
             if( $rc['stat'] != 'ok' ) {
-                return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'786', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
+                return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.41', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
             }
         }
     } else {
@@ -57,7 +57,7 @@ function ciniki_systemdocs_updateFunctions($ciniki) {
         }
         $rc = ciniki_systemdocs_updatePackageFunctions($ciniki, $package);
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'787', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.42', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
         }
     }
 

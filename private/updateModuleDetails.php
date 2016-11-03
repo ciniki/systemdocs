@@ -34,7 +34,7 @@ function ciniki_systemdocs_updateModuleDetails($ciniki, $package, $module) {
         . "";
     $rc = ciniki_core_dbHashIDQuery($ciniki, $strsql, 'ciniki.systemdocs', 'details', 'full_name');
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'813', 'msg'=>'Unable to locate details', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.4', 'msg'=>'Unable to locate details', 'err'=>$rc['err']));
     }
     $db_details = array();
     if( isset($rc['details']) ) {

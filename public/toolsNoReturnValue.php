@@ -59,7 +59,7 @@ function ciniki_systemdocs_toolsNoReturnValue($ciniki) {
             'fields'=>array('id', 'package', 'module', 'type', 'file')),
         ));
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'675', 'msg'=>'Unable to find any functions', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.34', 'msg'=>'Unable to find any functions', 'err'=>$rc['err']));
     }
     if( !isset($rc['functions']) ) {    
         return array('stat'=>'ok', 'functions'=>array());

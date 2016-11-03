@@ -58,7 +58,7 @@ function ciniki_systemdocs_toolsTableUnknownFields($ciniki) {
             'fields'=>array('id', 'package', 'name')),
         ));
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'636', 'msg'=>'Unable to find any tables', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.36', 'msg'=>'Unable to find any tables', 'err'=>$rc['err']));
     }
     if( !isset($rc['tables']) ) {   
         return array('stat'=>'ok', 'tables'=>array());

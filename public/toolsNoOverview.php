@@ -60,7 +60,7 @@ function ciniki_systemdocs_toolsNoOverview($ciniki) {
             'fields'=>array('package', 'name'=>'module', 'overview')),
         ));
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'641', 'msg'=>'Unable to find any modules', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.33', 'msg'=>'Unable to find any modules', 'err'=>$rc['err']));
     }
     if( !isset($rc['modules']) ) {  
         return array('stat'=>'ok', 'modules'=>array());

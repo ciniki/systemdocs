@@ -42,7 +42,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
         . "";
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.systemdocs', 'function');
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'792', 'msg'=>'Unable to locate function', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.5', 'msg'=>'Unable to locate function', 'err'=>$rc['err']));
     }
     $db_function = NULL;
     if( isset($rc['function']) ) {
@@ -56,7 +56,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
             . "";
         $rc = ciniki_core_dbHashIDQuery($ciniki, $strsql, 'ciniki.systemdocs', 'args', 'name');
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'794', 'msg'=>'Unable to locate function arguments', 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.6', 'msg'=>'Unable to locate function arguments', 'err'=>$rc['err']));
         }
         $db_function['args'] = $rc['args'];
 
@@ -69,7 +69,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
             . "";
         $rc = ciniki_core_dbHashIDQuery($ciniki, $strsql, 'ciniki.systemdocs', 'calls', 'fcall');
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'795', 'msg'=>'Unable to locate function calls', 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.7', 'msg'=>'Unable to locate function calls', 'err'=>$rc['err']));
         }
         $db_function['calls'] = $rc['calls'];
 
@@ -82,7 +82,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
             . "";
         $rc = ciniki_core_dbHashIDQuery($ciniki, $strsql, 'ciniki.systemdocs', 'errors', 'code');
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'796', 'msg'=>'Unable to locate function errors', 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.8', 'msg'=>'Unable to locate function errors', 'err'=>$rc['err']));
         }
         $db_function['errors'] = $rc['errors'];
     }
@@ -95,7 +95,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
     if( is_file($filename) ) {
         $rc = ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, $file, $suffix);
         if( $rc['stat'] != 'ok' ) { 
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'793', 'msg'=>'Unable to parse function', 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.9', 'msg'=>'Unable to parse function', 'err'=>$rc['err']));
         }
         $mod_function = $rc['function'];
         if( isset($rc['function']['duperrors']) ) {

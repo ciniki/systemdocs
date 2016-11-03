@@ -35,7 +35,7 @@ function ciniki_systemdocs_errors($ciniki) {
     $args = $rc['args'];    
 
     if( isset($args['modules']) && !isset($args['package']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'817', 'msg'=>'Package not specified with module'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.21', 'msg'=>'Package not specified with module'));
     }
 
     //
@@ -82,7 +82,7 @@ function ciniki_systemdocs_errors($ciniki) {
             'fields'=>array('function_id', 'package', 'code', 'module', 'type', 'file', 'msg', 'pmsg')),
         ));
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'818', 'msg'=>'Unable to find any errors', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.22', 'msg'=>'Unable to find any errors', 'err'=>$rc['err']));
     }
     if( !isset($rc['errors']) ) {   
         return array('stat'=>'ok', 'errors'=>array());

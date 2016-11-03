@@ -19,7 +19,7 @@ function ciniki_systemdocs_updatePackageFunctions($ciniki, $package) {
     // Check if package exists
     //
     if( !is_dir($ciniki['config']['core']['root_dir'] . "/{$package}-mods") ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'790', 'msg'=>'Package does not exist'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.12', 'msg'=>'Package does not exist'));
     }
 
     $duperrors = array();

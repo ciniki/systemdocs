@@ -36,7 +36,7 @@ function ciniki_systemdocs_updateModuleFunctions($ciniki, $package, $module) {
         . "";
     $rc = ciniki_core_dbHashIDQuery($ciniki, $strsql, 'ciniki.systemdocs', 'functions', 'full_name');
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'791', 'msg'=>'Unable to locate tables', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.10', 'msg'=>'Unable to locate tables', 'err'=>$rc['err']));
     }
     $db_functions = array();
     if( isset($rc['functions']) ) {

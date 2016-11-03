@@ -71,7 +71,7 @@ function ciniki_systemdocs_toolsDupErrors($ciniki) {
             'fields'=>array('function_id', 'package', 'module', 'type', 'file', 'code', 'msg', 'pmsg', 'dup')),
         ));
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'812', 'msg'=>'Unable to find any errors', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.28', 'msg'=>'Unable to find any errors', 'err'=>$rc['err']));
     }
     if( !isset($rc['errors']) ) {   
         return array('stat'=>'ok', 'errors'=>array());

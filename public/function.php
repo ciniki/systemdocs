@@ -67,7 +67,7 @@ function ciniki_systemdocs_function($ciniki) {
         return $rc;
     }
     if( !isset($rc['functions'][0]['function']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'804', 'msg'=>'Unable to find function'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.23', 'msg'=>'Unable to find function'));
     }
     $function = $rc['functions'][0]['function'];
 

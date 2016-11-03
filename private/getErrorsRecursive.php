@@ -79,7 +79,7 @@ function ciniki_systemdocs_getErrorsRecursive($ciniki, $function_id, $extended_o
             'fields'=>array('function_id', 'package', 'code', 'module', 'type', 'file', 'name', 'msg', 'pmsg')),
         ));
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'819', 'msg'=>'Unable to find any errors', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.2', 'msg'=>'Unable to find any errors', 'err'=>$rc['err']));
     }
 
     return $rc;

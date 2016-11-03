@@ -64,7 +64,7 @@ function ciniki_systemdocs_toolsGapErrors($ciniki) {
             'fields'=>array('package', 'code')),
         ));
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'811', 'msg'=>'Unable to find any errors', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.29', 'msg'=>'Unable to find any errors', 'err'=>$rc['err']));
     }
     if( !isset($rc['packages']) ) {
         return array('stat'=>'ok', 'packages'=>array());

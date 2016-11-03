@@ -66,7 +66,7 @@ function ciniki_systemdocs_parsePackageCode($ciniki, $package) {
     $rsp = array('name'=>$package, 'errors'=>array(), 'modules'=>array());
 
     if( !is_dir($ciniki['config']['core']['root_dir'] . "/{$package}-mods") ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'455', 'msg'=>'Package does not exist'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.3', 'msg'=>'Package does not exist'));
     }
     
     $fp = opendir($ciniki['config']['core']['root_dir'] . "/{$package}-mods");

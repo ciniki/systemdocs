@@ -45,7 +45,7 @@ function ciniki_systemdocs_updateModuleTables($ciniki, $package, $module) {
             'fields'=>array('id'=>'field_id', 'name'=>'field_name', 'description'=>'field_description', 'type', 'indexed', 'sequence')),
         ));
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'785', 'msg'=>'Unable to locate tables', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.11', 'msg'=>'Unable to locate tables', 'err'=>$rc['err']));
     }
     $db_tables = array();
     if( isset($rc['tables']) ) {

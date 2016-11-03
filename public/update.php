@@ -50,12 +50,12 @@ function ciniki_systemdocs_update($ciniki) {
         foreach($packages as $package) {
             $rc = ciniki_systemdocs_updatePackageFunctions($ciniki, $package);
             if( $rc['stat'] != 'ok' ) {
-                return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'799', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
+                return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.37', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
             }
             $duperrors = array_merge($duperrors, $rc['duplicate_errors']);
             $rc = ciniki_systemdocs_updatePackageTables($ciniki, $package);
             if( $rc['stat'] != 'ok' ) {
-                return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'803', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
+                return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.38', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
             }
         }
     } else {
@@ -65,12 +65,12 @@ function ciniki_systemdocs_update($ciniki) {
         }
         $rc = ciniki_systemdocs_updatePackageFunctions($ciniki, $package);
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'800', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.39', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
         }
         $duperrors = array_merge($duperrors, $rc['duplicate_errors']);
         $rc = ciniki_systemdocs_updatePackageTables($ciniki, $package);
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'801', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.40', 'msg'=>"Unable to update the package '$package'", 'err'=>$rc['err']));
         }
     }
 

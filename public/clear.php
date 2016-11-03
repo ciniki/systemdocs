@@ -43,37 +43,37 @@ function ciniki_systemdocs_clear($ciniki) {
     $strsql = "DELETE FROM ciniki_systemdocs_api_functions ";
     $rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'805', 'msg'=>'Unable to clear function documentation', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.14', 'msg'=>'Unable to clear function documentation', 'err'=>$rc['err']));
     }
     $strsql = "DELETE FROM ciniki_systemdocs_api_function_args ";
     $rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'806', 'msg'=>'Unable to clear function argument documentation', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.15', 'msg'=>'Unable to clear function argument documentation', 'err'=>$rc['err']));
     }
     $strsql = "DELETE FROM ciniki_systemdocs_api_function_calls ";
     $rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'807', 'msg'=>'Unable to clear function call documentation', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.16', 'msg'=>'Unable to clear function call documentation', 'err'=>$rc['err']));
     }
     $strsql = "DELETE FROM ciniki_systemdocs_api_function_errors ";
     $rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'808', 'msg'=>'Unable to clear function errors documentation', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.17', 'msg'=>'Unable to clear function errors documentation', 'err'=>$rc['err']));
     }
     $strsql = "DELETE FROM ciniki_systemdocs_api_tables ";
     $rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'809', 'msg'=>'Unable to clear table documentation', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.18', 'msg'=>'Unable to clear table documentation', 'err'=>$rc['err']));
     }
     $strsql = "DELETE FROM ciniki_systemdocs_api_table_fields ";
     $rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'810', 'msg'=>'Unable to clear table fields documentation', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.19', 'msg'=>'Unable to clear table fields documentation', 'err'=>$rc['err']));
     }
     $strsql = "DELETE FROM ciniki_systemdocs_api_module_details ";
     $rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.systemdocs');
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'815', 'msg'=>'Unable to clear table fields documentation', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.20', 'msg'=>'Unable to clear table fields documentation', 'err'=>$rc['err']));
     }
 
     return array('stat'=>'ok');

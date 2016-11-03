@@ -26,6 +26,6 @@ function ciniki_systemdocs_checkAccess($ciniki, $method) {
     //
     // By default, fail
     //
-    return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'454', 'msg'=>'Access denied.'));
+    return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.1', 'msg'=>'Access denied.'));
 }
 ?>

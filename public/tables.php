@@ -61,7 +61,7 @@ function ciniki_systemdocs_tables($ciniki) {
         array('container'=>'tables', 'fname'=>'name', 'name'=>'table', 'fields'=>array('id', 'name', 'package', 'module', 'version')),
         ));
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'816', 'msg'=>'Unable to find any modules', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.27', 'msg'=>'Unable to find any modules', 'err'=>$rc['err']));
     }
     if( !isset($rc['packages']) ) { 
         return array('stat'=>'ok', 'packages'=>array());
