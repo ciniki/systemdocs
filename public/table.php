@@ -58,9 +58,9 @@ function ciniki_systemdocs_table($ciniki) {
         . "WHERE ciniki_systemdocs_api_tables.id = '" . ciniki_core_dbQuote($ciniki, $args['table_id']) . "' "
         . "ORDER BY ciniki_systemdocs_api_tables.name, ciniki_systemdocs_api_table_fields.sequence "
         . "";
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'tables', 'fname'=>'table_id', 'name'=>'table',
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'tables', 'fname'=>'table_id',
             'fields'=>array('id'=>'table_id', 'name'=>'table_name', 'package', 'module', 'description'=>'table_description', 'create_sql', 'version')),
         array('container'=>'fields', 'fname'=>'field_id', 'name'=>'field',
             'fields'=>array('id'=>'field_id', 'name'=>'field_name', 'description'=>'field_description', 'type', 'indexed')),

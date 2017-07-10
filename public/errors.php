@@ -76,9 +76,9 @@ function ciniki_systemdocs_errors($ciniki) {
         $strsql .= "LIMIT " . $args['limit'];
     }
     
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'errors', 'fname'=>'eid', 'name'=>'error', 
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'errors', 'fname'=>'eid',
             'fields'=>array('function_id', 'package', 'code', 'module', 'type', 'file', 'msg', 'pmsg')),
         ));
     if( $rc['stat'] != 'ok' ) {

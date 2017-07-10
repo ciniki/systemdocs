@@ -1,0 +1,6 @@
+#
+# Add the new module column
+#
+ALTER TABLE ciniki_systemdocs_api_function_errors ADD COLUMN module varchar(50) not null AFTER package;
+ALTER TABLE ciniki_systemdocs_api_function_errors COMMENT='v1.02';
+

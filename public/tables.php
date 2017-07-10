@@ -55,10 +55,10 @@ function ciniki_systemdocs_tables($ciniki) {
     }
     $strsql .= "ORDER BY package, module, name "
         . "";
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'packages', 'fname'=>'package', 'name'=>'package', 'fields'=>array('name'=>'package')),
-        array('container'=>'tables', 'fname'=>'name', 'name'=>'table', 'fields'=>array('id', 'name', 'package', 'module', 'version')),
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'packages', 'fname'=>'package', 'fields'=>array('name'=>'package')),
+        array('container'=>'tables', 'fname'=>'name', 'fields'=>array('id', 'name', 'package', 'module', 'version')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.27', 'msg'=>'Unable to find any modules', 'err'=>$rc['err']));

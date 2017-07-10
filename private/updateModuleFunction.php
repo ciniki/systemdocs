@@ -76,7 +76,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
         //
         // Get the function errors
         //
-        $strsql = "SELECT id, package, code, msg, pmsg, dup "
+        $strsql = "SELECT id, package, module, code, msg, pmsg, dup "
             . "FROM ciniki_systemdocs_api_function_errors "
             . "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
             . "";
@@ -259,6 +259,9 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
         //
         $db_updated = 0;
         foreach($mod_function['calls'] as $mod_call) {
+            if( $file == 'fundRecalc' ) {
+                error_log(print_r($mod_call, true));
+            }
             // If the function doesn't exist in the database, or the call doesn't exist, insert
             if( $db_function == NULL || !isset($db_function['calls'][$mod_call['call']]) ) {
                 $strsql = "INSERT INTO ciniki_systemdocs_api_function_calls (function_id, "
@@ -324,9 +327,10 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
             // If the function doesn't exist in the database, or the error doesn't exist, insert
             if( $db_function == NULL || !isset($db_function['errors'][$mod_error['code']]) ) {
                 $strsql = "INSERT INTO ciniki_systemdocs_api_function_errors (function_id, "
-                    . "package, code, msg, pmsg, dup) VALUES ("
+                    . "package, module, code, msg, pmsg, dup) VALUES ("
                     . "'" . ciniki_core_dbQuote($ciniki, $function_id) . "', "
                     . "'" . ciniki_core_dbQuote($ciniki, $mod_error['package']) . "', "
+                    . "'" . ciniki_core_dbQuote($ciniki, $mod_error['module']) . "', "
                     . "'" . ciniki_core_dbQuote($ciniki, $mod_error['code']) . "', "
                     . "'" . ciniki_core_dbQuote($ciniki, $mod_error['msg']) . "', "
                     . "'" . ciniki_core_dbQuote($ciniki, $mod_error['pmsg']) . "', "

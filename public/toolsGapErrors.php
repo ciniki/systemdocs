@@ -56,12 +56,10 @@ function ciniki_systemdocs_toolsGapErrors($ciniki) {
     $strsql .= "ORDER BY ciniki_systemdocs_api_function_errors.package, "
         . "ciniki_systemdocs_api_function_errors.code ASC "
         . "";
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'packages', 'fname'=>'package', 'name'=>'package',
-            'fields'=>array('name'=>'package')),
-        array('container'=>'errors', 'fname'=>'eid', 'name'=>'error', 
-            'fields'=>array('package', 'code')),
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'packages', 'fname'=>'package', 'fields'=>array('name'=>'package')),
+        array('container'=>'errors', 'fname'=>'eid', 'fields'=>array('package', 'code')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.29', 'msg'=>'Unable to find any errors', 'err'=>$rc['err']));

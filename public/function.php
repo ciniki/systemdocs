@@ -57,19 +57,19 @@ function ciniki_systemdocs_function($ciniki) {
         . "FROM ciniki_systemdocs_api_functions "
         . "WHERE id = '" . ciniki_core_dbQuote($ciniki, $args['function_id']) . "' "
         . "";
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'functions', 'fname'=>'id', 'name'=>'function',
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'functions', 'fname'=>'id',
             'fields'=>array('id', 'name', 'package', 'module', 'type', 'file', 'suffix', 
                 'description'=>'html_description', 'returns', 'size'=>'fsize', 'lines'=>'flines')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
-    if( !isset($rc['functions'][0]['function']) ) {
+    if( !isset($rc['functions'][0]) ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.23', 'msg'=>'Unable to find function'));
     }
-    $function = $rc['functions'][0]['function'];
+    $function = $rc['functions'][0];
 
     //
     // Get the args for the function
@@ -79,8 +79,8 @@ function ciniki_systemdocs_function($ciniki) {
         . "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $args['function_id']) . "' "
         . "ORDER BY sequence "
         . "";
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'args', 'fname'=>'id', 'name'=>'argument',
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'args', 'fname'=>'id',
             'fields'=>array('id', 'name', 'options', 'description'=>'html_description')),
         ));
     if( $rc['stat'] != 'ok' ) {
@@ -112,8 +112,8 @@ function ciniki_systemdocs_function($ciniki) {
             . ") "
         . "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $args['function_id']) . "' "
         . "";
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'calls', 'fname'=>'arg_id', 'name'=>'function',
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'calls', 'fname'=>'arg_id',
             'fields'=>array('id'=>'called_id', 'call'=>'called_name', 'args', 'package', 'module', 'type', 'name')),
         ));
     if( $rc['stat'] != 'ok' ) {
@@ -133,8 +133,8 @@ function ciniki_systemdocs_function($ciniki) {
         . "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $args['function_id']) . "' "
         . "ORDER BY code "
         . "";
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'errors', 'fname'=>'id', 'name'=>'error',
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'errors', 'fname'=>'id',
             'fields'=>array('id', 'package', 'code', 'msg', 'pmsg')),
         ));
     if( $rc['stat'] != 'ok' ) {

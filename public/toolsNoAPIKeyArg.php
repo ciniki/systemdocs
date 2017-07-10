@@ -56,10 +56,9 @@ function ciniki_systemdocs_toolsNoAPIKeyArg($ciniki) {
     $strsql .= "ORDER BY ciniki_systemdocs_api_functions.package, "
         . "ciniki_systemdocs_api_functions.module, ciniki_systemdocs_api_functions.file "
         . "";
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'functions', 'fname'=>'id', 'name'=>'function', 
-            'fields'=>array('id', 'package', 'module', 'type', 'file', 'name')),
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'functions', 'fname'=>'id', 'fields'=>array('id', 'package', 'module', 'type', 'file', 'name')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.31', 'msg'=>'Unable to find any functions', 'err'=>$rc['err']));

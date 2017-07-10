@@ -34,9 +34,9 @@ function ciniki_systemdocs_packages($ciniki) {
         . "FROM ciniki_systemdocs_api_functions "
         . "ORDER BY package "
         . "";
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'packages', 'fname'=>'package', 'name'=>'package', 'fields'=>array('name'=>'package')),
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'packages', 'fname'=>'package', 'fields'=>array('name'=>'package')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.25', 'msg'=>'Unable to find any modules', 'err'=>$rc['err']));

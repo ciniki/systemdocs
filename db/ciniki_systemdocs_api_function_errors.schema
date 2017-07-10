@@ -20,10 +20,11 @@ create table ciniki_systemdocs_api_function_errors (
     id int not null auto_increment,
     function_id int not null,
     package varchar(50) not null,
+    module varchar(50) not null,
     code int not null,
     msg varchar(1000) not null,
     pmsg varchar(1000) not null,
     dup varchar(10) not null,
     primary key (id),
-    index (function_id, package, code)
-) ENGINE='InnoDB', COMMENT='v1.01';
+    index (function_id, package, module, code)
+) ENGINE='InnoDB', COMMENT='v1.02';

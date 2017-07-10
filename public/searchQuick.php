@@ -45,7 +45,7 @@ function ciniki_systemdocs_searchQuick($ciniki) {
     //
     // If the search string is a number, then search for error code with that number
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
     if( is_numeric($args['start_needle']) ) {
         $strsql = "SELECT ciniki_systemdocs_api_functions.id, "
             . "ciniki_systemdocs_api_functions.package, "
@@ -57,9 +57,8 @@ function ciniki_systemdocs_searchQuick($ciniki) {
             . "AND ciniki_systemdocs_api_function_errors.function_id = ciniki_systemdocs_api_functions.id "
             . "LIMIT " . ciniki_core_dbQuote($ciniki, $args['limit']) . " "
             . "";
-        $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-            array('container'=>'results', 'fname'=>'id', 'name'=>'result',
-                'fields'=>array('type', 'id', 'package', 'module', 'name')),
+        $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+            array('container'=>'results', 'fname'=>'id', 'fields'=>array('type', 'id', 'package', 'module', 'name')),
             ));
         return $rc;
     }
@@ -77,9 +76,8 @@ function ciniki_systemdocs_searchQuick($ciniki) {
         . "WHERE ciniki_systemdocs_api_functions.file LIKE '" . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
         . "LIMIT " . ciniki_core_dbQuote($ciniki, $args['limit']) . " "
         . "";
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'results', 'fname'=>'id', 'name'=>'result',
-            'fields'=>array('type', 'id', 'package', 'module', 'name')),
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'results', 'fname'=>'id', 'fields'=>array('type', 'id', 'package', 'module', 'name')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;
@@ -104,9 +102,8 @@ function ciniki_systemdocs_searchQuick($ciniki) {
         . "OR ciniki_systemdocs_api_tables.name LIKE '%_" . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
         . "LIMIT " . ciniki_core_dbQuote($ciniki, $args['limit']) . " "
         . "";
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'results', 'fname'=>'id', 'name'=>'result',
-            'fields'=>array('type', 'id', 'package', 'module', 'name')),
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'results', 'fname'=>'id', 'fields'=>array('type', 'id', 'package', 'module', 'name')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;

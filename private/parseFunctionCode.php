@@ -201,16 +201,17 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
     //
     // Removed because it wasn't catching error msg with variable outside quotes
 //  if( preg_match_all('/array\(\'pkg\'=>\'([^\']+)\',\s*\'code\'=>\'(.*)\',\s*\'msg\'=>(\'|\")([^\'\"]+)(\'|\")(,\s*\'pmsg\'=>(\'|\")([^\'\"]+)(\'|\"))?/i', $contents, $matches, PREG_SET_ORDER) ) {
-    if( preg_match_all('/array\(\'pkg\'=>\'([^\']+)\',\s*\'code\'=>\'(.*)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
+//    if( preg_match_all('/array\(\'pkg\'=>\'([^\']+)\',\s*\'code\'=>\'(.*)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
+    if( preg_match_all('/array\(\'code\'=>\'(([^\']*)\.([^\']*)\.([^\']*))\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
         foreach($matches as $val) {
-            if( isset($rsp['errors'][$val[2]]) ) {
-                $rsp['errors'][$val[2]]['dup'] = 'yes';
+            if( isset($rsp['errors'][$val[1]]) ) {
+                $rsp['errors'][$val[1]]['dup'] = 'yes';
                 if( !isset($rsp['duperrors']) ) {
                     $rsp['duperrors'] = array();
                 }
-                array_push($rsp['duperrors'], array('error'=>array('package'=>$val[1], 'module'=>$module, 'type'=>$type, 'file'=>$file, 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'')));
+                array_push($rsp['duperrors'], array('error'=>array('package'=>$val[2], 'module'=>$val[3], 'type'=>$type, 'file'=>$file, 'code'=>$val[1], 'msg'=>$val[5], 'pmsg'=>'')));
             } else {
-                $rsp['errors'][$val[2]] = array('package'=>$val[1], 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'', 'dup'=>'no');
+                $rsp['errors'][$val[1]] = array('package'=>$val[2], 'module'=>$val[3], 'code'=>$val[4], 'msg'=>$val[5], 'pmsg'=>'', 'dup'=>'no');
                 // FIXME: Add back code for pmsg
 //              if( isset($val[6]) ) {
 //                  $rsp['errors'][$val[2]]['pmsg'] = $val[8];
@@ -222,32 +223,17 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
     //
     // Find mail_log message
     //
-    /*if( preg_match_all('/ciniki_mail_logMsg.*array\(\'pkg\'=>\'(^\']+)\',\s*\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
-        foreach($matches as $val) {
-            if( isset($rsp['errors'][$val[2]]) ) {
-                $rsp['errors'][$val[2]]['dup'] = 'yes';
-                if( !isset($rsp['duperrors']) ) {
-                    $rsp['duperrors'] = array();
-                }
-                array_push($rsp['duperrors'], array('error'=>array('package'=>$val[1], 'module'=>$module, 'type'=>$type, 'file'=>$file, 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'')));
-            } else {
-                $rsp['errors'][$val[2]] = array('package'=>$val[1], 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'', 'dup'=>'no');
-                // FIXME: Add back code for pmsg
-//              if( isset($val[6]) ) {
-//                  $rsp['errors'][$val[2]]['pmsg'] = $val[8];
-//              }
-            }
-        }
-    } else*/if( preg_match_all('/ciniki_mail_logMsg.*array\(\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
+    if( preg_match_all('/ciniki_mail_logMsg.*array\(\'code\'=>\'(([^\']*)\.([^\']*)\.([^\']*))\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
         foreach($matches as $val) {
             if( isset($rsp['errors'][$val[1]]) ) {
                 $rsp['errors'][$val[1]]['dup'] = 'yes';
                 if( !isset($rsp['duperrors']) ) {
                     $rsp['duperrors'] = array();
                 }
-                array_push($rsp['duperrors'], array('error'=>array('package'=>'ciniki', 'module'=>$module, 'type'=>$type, 'file'=>$file, 'code'=>$val[1], 'msg'=>$val[2], 'pmsg'=>'')));
+                array_push($rsp['duperrors'], array('error'=>array('package'=>$val[2], 'module'=>$val[3], 'type'=>$type, 'file'=>$file, 'code'=>$val[4], 'msg'=>$val[5], 'pmsg'=>'')));
             } else {
-                $rsp['errors'][$val[1]] = array('package'=>'ciniki', 'code'=>$val[1], 'msg'=>$val[2], 'pmsg'=>'', 'dup'=>'no');
+                $rsp['errors'][$val[1]] = array('package'=>$val[2], 'module'=>$val[3], 'code'=>$val[4], 'msg'=>$val[5], 'pmsg'=>'', 'dup'=>'no');
+//                $rsp['errors'][$val[1]] = array('package'=>'ciniki', 'code'=>$val[1], 'msg'=>$val[2], 'pmsg'=>'', 'dup'=>'no');
                 // FIXME: Add back code for pmsg
 //              if( isset($val[6]) ) {
 //                  $rsp['errors'][$val[2]]['pmsg'] = $val[8];
@@ -259,32 +245,17 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
     //
     // Find sms_log message
     //
-    /*if( preg_match_all('/ciniki_sms_logMsg.*array\(\'pkg\'=>\'([^\']+)\',\s*\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
-        foreach($matches as $val) {
-            if( isset($rsp['errors'][$val[2]]) ) {
-                $rsp['errors'][$val[2]]['dup'] = 'yes';
-                if( !isset($rsp['duperrors']) ) {
-                    $rsp['duperrors'] = array();
-                }
-                array_push($rsp['duperrors'], array('error'=>array('package'=>$val[1], 'module'=>$module, 'type'=>$type, 'file'=>$file, 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'')));
-            } else {
-                $rsp['errors'][$val[2]] = array('package'=>$val[1], 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'', 'dup'=>'no');
-                // FIXME: Add back code for pmsg
-//              if( isset($val[6]) ) {
-//                  $rsp['errors'][$val[2]]['pmsg'] = $val[8];
-//              }
-            }
-        }
-    } else*/if( preg_match_all('/ciniki_sms_logMsg.*array\(\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
+    if( preg_match_all('/ciniki_sms_logMsg.*array\(\'code\'=>\'(([^\']*)\.([^\']*)\.([^\']*))\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
         foreach($matches as $val) {
             if( isset($rsp['errors'][$val[1]]) ) {
                 $rsp['errors'][$val[1]]['dup'] = 'yes';
                 if( !isset($rsp['duperrors']) ) {
                     $rsp['duperrors'] = array();
                 }
-                array_push($rsp['duperrors'], array('error'=>array('package'=>'ciniki', 'module'=>$module, 'type'=>$type, 'file'=>$file, 'code'=>$val[1], 'msg'=>$val[2], 'pmsg'=>'')));
+                array_push($rsp['duperrors'], array('error'=>array('package'=>$val[2], 'module'=>$val[3], 'type'=>$type, 'file'=>$file, 'code'=>$val[4], 'msg'=>$val[5], 'pmsg'=>'')));
             } else {
-                $rsp['errors'][$val[1]] = array('package'=>'ciniki', 'code'=>$val[1], 'msg'=>$val[2], 'pmsg'=>'', 'dup'=>'no');
+                $rsp['errors'][$val[1]] = array('package'=>$val[2], 'module'=>$val[3], 'code'=>$val[4], 'msg'=>$val[5], 'pmsg'=>'', 'dup'=>'no');
+                //$rsp['errors'][$val[1]] = array('package'=>'ciniki', 'code'=>$val[1], 'msg'=>$val[2], 'pmsg'=>'', 'dup'=>'no');
                 // FIXME: Add back code for pmsg
 //              if( isset($val[6]) ) {
 //                  $rsp['errors'][$val[2]]['pmsg'] = $val[8];
@@ -296,32 +267,16 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
     // 
     // Find cron_log messages
     //
-    /*if( preg_match_all('/ciniki_cron_logMsg.*array\(\'pkg\'=>\'([^\']+)\',\s*\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
-        foreach($matches as $val) {
-            if( isset($rsp['errors'][$val[2]]) ) {
-                $rsp['errors'][$val[2]]['dup'] = 'yes';
-                if( !isset($rsp['duperrors']) ) {
-                    $rsp['duperrors'] = array();
-                }
-                array_push($rsp['duperrors'], array('error'=>array('package'=>$val[1], 'module'=>$module, 'type'=>$type, 'file'=>$file, 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'')));
-            } else {
-                $rsp['errors'][$val[2]] = array('package'=>$val[1], 'code'=>$val[2], 'msg'=>$val[3], 'pmsg'=>'', 'dup'=>'no');
-                // FIXME: Add back code for pmsg
-//              if( isset($val[6]) ) {
-//                  $rsp['errors'][$val[2]]['pmsg'] = $val[8];
-//              }
-            }
-        }
-    } else*/if( preg_match_all('/ciniki_cron_logMsg.*array\(\'code\'=>\'([0-9][0-9]+)\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
+    if( preg_match_all('/ciniki_cron_logMsg.*array\(\'code\'=>\'(([^\']*)\.([^\']*)\.([^\']*))\',\s*\'msg\'=>(.*)(,|\)\);)/i', $contents, $matches, PREG_SET_ORDER) ) {
         foreach($matches as $val) {
             if( isset($rsp['errors'][$val[1]]) ) {
                 $rsp['errors'][$val[1]]['dup'] = 'yes';
                 if( !isset($rsp['duperrors']) ) {
                     $rsp['duperrors'] = array();
                 }
-                array_push($rsp['duperrors'], array('error'=>array('package'=>'ciniki', 'module'=>$module, 'type'=>$type, 'file'=>$file, 'code'=>$val[1], 'msg'=>$val[2], 'pmsg'=>'')));
+                array_push($rsp['duperrors'], array('error'=>array('package'=>$val[2], 'module'=>$val[3], 'type'=>$type, 'file'=>$file, 'code'=>$val[4], 'msg'=>$val[5], 'pmsg'=>'')));
             } else {
-                $rsp['errors'][$val[1]] = array('package'=>'ciniki', 'code'=>$val[1], 'msg'=>$val[2], 'pmsg'=>'', 'dup'=>'no');
+                $rsp['errors'][$val[1]] = array('package'=>$val[2], 'module'=>$val[3], 'code'=>$val[4], 'msg'=>$val[5], 'pmsg'=>'', 'dup'=>'no');
                 // FIXME: Add back code for pmsg
 //              if( isset($val[6]) ) {
 //                  $rsp['errors'][$val[2]]['pmsg'] = $val[8];
@@ -336,8 +291,6 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
     if( preg_match_all('/(([a-zA-Z0-9]+)_([a-zA-Z0-9]+)_(|([a-zA-Z0-9]+)_)([a-zA-Z0-9]+))\(([^\)]*)\)/', $contents, $matches, PREG_SET_ORDER) ) {
         foreach($matches as $val) { 
             if( isset($ciniki['config']['ciniki.core']['packages']) && !preg_match('/' . $val[2] . '/', $ciniki['config']['ciniki.core']['packages']) ) {
-                continue;
-            } elseif( $val[2] != 'ciniki' ) {
                 continue;
             }
             // If unknown type

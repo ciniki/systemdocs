@@ -18,22 +18,22 @@ function ciniki_systemdocs_main() {
         }
     };
     this.menu.liveSearchResultValue = function(s, f, i, j, d) {
-        if( s == 'search' && j == 0 ) { return d.result.package + '.' + d.result.module; }
+        if( s == 'search' && j == 0 ) { return d.package + '.' + d.module; }
         if( s == 'search' && j == 1 ) {
-            switch (d.result.type) {
-                case 'function': return d.result.name;
-                case 'table': return d.result.name;
+            switch (d.type) {
+                case 'function': return d.name;
+                case 'table': return d.name;
             }
         }
         return '';
     }
     this.menu.liveSearchResultCellFn = function(s, f, i, j, d) {
-        if( s == 'search' && j == 0 ) { return 'M.ciniki_systemdocs_main.module.open(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.result.package + '\',\'' + d.result.module + '\');'; }
+        if( s == 'search' && j == 0 ) { return 'M.ciniki_systemdocs_main.module.open(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.package + '\',\'' + d.module + '\');'; }
     }
     this.menu.liveSearchResultRowFn = function(s, f, i, j, d) { 
-        switch (d.result.type) {
-            case 'function': return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.result.id + '\');';
-            case 'table': return 'M.ciniki_systemdocs_main.table.open(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.result.id + '\');';
+        switch (d.type) {
+            case 'function': return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.id + '\');';
+            case 'table': return 'M.ciniki_systemdocs_main.table.open(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.id + '\');';
         }
     };
 //      this.main.liveSearchSubmitFn = function(s, search_str) {
@@ -45,17 +45,17 @@ function ciniki_systemdocs_main() {
     this.menu.listFn = function(s, i, d) { return d.fn; }
     this.menu.cellValue = function(s, i, j, d) {
         if( s == '_' ) {
-            if( j == 0 ) { return d.package.name; }
+            if( j == 0 ) { return d.name; }
             if( j == 1 ) { return 'Errors'; }
         }
         if( s == 'modules' ) {
-            if( j == 0 ) { return d.module.package; }
-            if( j == 1 ) { return d.module.name; }
+            if( j == 0 ) { return d.package; }
+            if( j == 1 ) { return d.name; }
         }
     };
     this.menu.rowFn = function(s, i, d) {
-        if( s == '_' ) { return 'M.ciniki_systemdocs_main.errors.open(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.package.name + '\');'; }
-        if( s == 'modules' ) { return 'M.ciniki_systemdocs_main.module.open(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.module.package + '\',\'' + d.module.name + '\');'; }
+        if( s == '_' ) { return 'M.ciniki_systemdocs_main.errors.open(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.name + '\');'; }
+        if( s == 'modules' ) { return 'M.ciniki_systemdocs_main.module.open(\'M.ciniki_systemdocs_main.menu.show();\',\'' + d.package + '\',\'' + d.name + '\');'; }
     };
     this.menu.open = function(cb) {
         this.data = {};
@@ -133,12 +133,12 @@ function ciniki_systemdocs_main() {
     this.modules.noData = function(s) { return this.sections[s].noData; }
     this.modules.cellValue = function(s, i, j, d) {
         if( s == 'modules' ) {
-            if( j == 0 ) { return d.module.proper_name; }
-            if( j == 1 ) { return d.module.public; }
+            if( j == 0 ) { return d.proper_name; }
+            if( j == 1 ) { return d.public; }
         }
     };
     this.modules.rowFn = function(s, i, d) {
-        if( s == 'modules' ) { return 'M.ciniki_systemdocs_main.module.open(\'M.ciniki_systemdocs_main.modules.show();\',\'' + d.module.package + '\',\'' + d.module.name + '\');'; }
+        if( s == 'modules' ) { return 'M.ciniki_systemdocs_main.module.open(\'M.ciniki_systemdocs_main.modules.show();\',\'' + d.package + '\',\'' + d.name + '\');'; }
     };
     this.modules.open = function(cb, package) {
         this.data = {};
@@ -172,12 +172,12 @@ function ciniki_systemdocs_main() {
     this.tables.noData = function(s) { return this.sections[s].noData; }
     this.tables.cellValue = function(s, i, j, d) {
         if( s == 'tables' ) {
-            if( j == 0 ) { return d.table.name; }
-            if( j == 1 ) { return d.table.version; }
+            if( j == 0 ) { return d.name; }
+            if( j == 1 ) { return d.version; }
         }
     };
     this.tables.rowFn = function(s, i, d) {
-        if( s == 'tables' ) { return 'M.ciniki_systemdocs_main.table.open(\'M.ciniki_systemdocs_main.tables.show();\',\'' + d.table.id + '\');'; }
+        if( s == 'tables' ) { return 'M.ciniki_systemdocs_main.table.open(\'M.ciniki_systemdocs_main.tables.show();\',\'' + d.id + '\');'; }
     };
     this.tables.addButton('update', 'Update', 'M.ciniki_systemdocs_main.updateDocs();');
     this.tables.addClose('Back');
@@ -235,23 +235,23 @@ function ciniki_systemdocs_main() {
     this.module.noData = function(s) { return this.sections[s].noData; }
     this.module.cellValue = function(s, i, j, d) {
         if( s == 'public' && j == 1 ) {
-            return d.function.publish;
+            return d.publish;
         }
         switch (s) {
             case 'overview': return this.data.overview;
             case 'notes': return this.data.notes;
             case 'description': return this.data.description;
-            case 'tables': return d.table.name;
-            case 'scripts': return d.function.name;
-            case 'public': return d.function.package + '.' + d.function.module + '.' + d.function.file;
-            case 'private': return d.function.name;
-            case 'cron': return d.function.name;
-            case 'web': return d.function.name;
+            case 'tables': return d.name;
+            case 'scripts': return d.name;
+            case 'public': return d.package + '.' + d.module + '.' + d.file;
+            case 'private': return d.name;
+            case 'cron': return d.name;
+            case 'web': return d.name;
         }
     }
     this.module.rowFn = function(s, i, d) {
-        if( s == 'tables' ) { return 'M.ciniki_systemdocs_main.table.open(\'M.ciniki_systemdocs_main.module.show();\',\'' + d.table.id + '\');'; }
-        if( d != null && d.function != null ) { return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.module.show();\',\'' + d.function.id + '\');'; }
+        if( s == 'tables' ) { return 'M.ciniki_systemdocs_main.table.open(\'M.ciniki_systemdocs_main.module.show();\',\'' + d.id + '\');'; }
+        if( d != null ) { return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.module.show();\',\'' + d.id + '\');'; }
     };
     this.module.open = function(cb, package, module) {
         M.api.getJSONCb('ciniki.systemdocs.module', {'package':package, 'module':module}, function(rsp) {
@@ -318,8 +318,8 @@ function ciniki_systemdocs_main() {
     this.table.cellValue = function(s, i, j, d) {
         if( s == 'fields' ) {
             switch (j) {
-                case 0: return '<span class="maintext">' + d.field.name + '</span><span class="subtext">' + d.field.type + '</span>';
-                case 1: return d.field.description;
+                case 0: return '<span class="maintext">' + d.name + '</span><span class="subtext">' + d.type + '</span>';
+                case 1: return d.description;
             }
         }
         switch (s) {
@@ -400,25 +400,25 @@ function ciniki_systemdocs_main() {
     this.function.cellValue = function(s, i, j, d) {
         if( s == 'args' ) {
             switch (j) {
-                case 0: return '<span class="maintext">' + d.argument.name + '</span><span class="subtext">' + d.argument.options + '</span>';
-                case 1: return d.argument.description;
+                case 0: return '<span class="maintext">' + d.name + '</span><span class="subtext">' + d.options + '</span>';
+                case 1: return d.description;
             }
         }
         if( s == 'calls' ) {
             switch (j) {
-                case 0: return d.function.call;
+                case 0: return d.call;
             }
         }
         if( s == 'errors' ) {
             switch (j) {
-                case 0: return d.error.code;
-                case 1: return '<span class="maintext">' + d.error.msg + '</span><span class="subtext">' + d.error.pmsg + '</span>';
+                case 0: return d.code;
+                case 1: return '<span class="maintext">' + d.msg + '</span><span class="subtext">' + d.pmsg + '</span>';
             }
         }
         if( s == 'extended_errors' ) {
             switch (j) {
-                case 0: return d.error.code;
-                case 1: return '<span class="maintext">' + d.error.name + '</span><span class="subtext">' + d.error.msg + '</span>';
+                case 0: return d.code;
+                case 1: return '<span class="maintext">' + d.name + '</span><span class="subtext">' + d.msg + '</span>';
             }
         }
         switch (s) {
@@ -427,8 +427,8 @@ function ciniki_systemdocs_main() {
         }
     }
     this.function.rowFn = function(s, i, d) {
-        if( s == 'calls' ) { return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.function.open(null,' + this.function_id + ');\',\'' + d.function.id + '\');'; }
-        if( s == 'extended_errors' ) { return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.function.open(null,' + this.function_id + ');\',\'' + d.error.function_id + '\');'; }
+        if( s == 'calls' ) { return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.function.open(null,' + this.function_id + ');\',\'' + d.id + '\');'; }
+        if( s == 'extended_errors' ) { return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.function.open(null,' + this.function_id + ');\',\'' + d.function_id + '\');'; }
         return null;
     };
     this.function.open = function(cb, fid) {
@@ -484,12 +484,12 @@ function ciniki_systemdocs_main() {
     this.errors.noData = function(s) { return this.sections[s].noData; }
     this.errors.cellValue = function(s, i, j, d) {
         switch (j) {
-            case 0: return d.error.code;
-            case 1: return '<span class="maintext">' + d.error.msg + '</span><span class="subtext">' + d.error.pmsg + '</span>';
+            case 0: return d.code;
+            case 1: return '<span class="maintext">' + d.msg + '</span><span class="subtext">' + d.pmsg + '</span>';
         }
     };
     this.errors.rowFn = function(s, i, d) {
-        return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.errors.show();\',\'' + d.error.function_id + '\');';
+        return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.errors.show();\',\'' + d.function_id + '\');';
     };
     this.errors.open = function(cb, package) {
         M.api.getJSONCb('ciniki.systemdocs.errors', {'package':package}, function(rsp) {
@@ -523,11 +523,11 @@ function ciniki_systemdocs_main() {
     this.toolstableblankfields.noData = function(s) { return this.sections[s].noData; }
     this.toolstableblankfields.cellValue = function(s, i, j, d) {
         switch (j) {
-            case 0: return d.table.name;
+            case 0: return d.name;
         }
     };
     this.toolstableblankfields.rowFn = function(s, i, d) {
-        return 'M.ciniki_systemdocs_main.table.open(\'M.ciniki_systemdocs_main.toolstableblankfields.open();\',\'' + d.table.id + '\');';
+        return 'M.ciniki_systemdocs_main.table.open(\'M.ciniki_systemdocs_main.toolstableblankfields.open();\',\'' + d.id + '\');';
     };
     this.toolstableblankfields.open = function(cb) {
         M.api.getJSONCb('ciniki.systemdocs.toolsTableBlankFields', {}, function(rsp) {
@@ -561,11 +561,11 @@ function ciniki_systemdocs_main() {
     this.toolstableunknownfields.noData = function(s) { return this.sections[s].noData; }
     this.toolstableunknownfields.cellValue = function(s, i, j, d) {
         switch (j) {
-            case 0: return d.table.name;
+            case 0: return d.name;
         }
     };
     this.toolstableunknownfields.rowFn = function(s, i, d) {
-        return 'M.ciniki_systemdocs_main.table.open(\'M.ciniki_systemdocs_main.toolstableunknownfields.show();\',\'' + d.table.id + '\');';
+        return 'M.ciniki_systemdocs_main.table.open(\'M.ciniki_systemdocs_main.toolstableunknownfields.show();\',\'' + d.id + '\');';
     };
     this.toolstableunknownfields.open = function(cb) {
         M.api.getJSONCb('ciniki.systemdocs.toolsTableUnknownFields', {}, function(rsp) {
@@ -599,18 +599,18 @@ function ciniki_systemdocs_main() {
     this.toolsduperrors.cellValue = function(s, i, j, d) {
         if( s == 'errors' ) {
             switch (j) {
-                case 0: return '<span class="maintext">' + d.error.code + '</span><span class="subtext">' + d.error.package + '</span>';
-                case 1: return '<span class="maintext">' + d.error.package + '-api/' + d.error.module + '/' + d.error.type + '/' + d.error.file + '</span><span class="subtext">' + d.error.msg + '</span>';
+                case 0: return '<span class="maintext">' + d.code + '</span><span class="subtext">' + d.package + '</span>';
+                case 1: return '<span class="maintext">' + d.package + '-api/' + d.module + '/' + d.type + '/' + d.file + '</span><span class="subtext">' + d.msg + '</span>';
             }
         } else {
             switch (j) {
-                case 0: return d.error.package;
-                case 1: return d.error.code;
+                case 0: return d.package;
+                case 1: return d.code;
             }
         }
     };
     this.toolsduperrors.rowFn = function(s, i, d) {
-        return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.toolsduperrors.show();\',\'' + d.error.function_id + '\');';
+        return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.toolsduperrors.show();\',\'' + d.function_id + '\');';
     };
     this.toolsduperrors.open = function(cb) {
         M.api.getJSONCb('ciniki.systemdocs.toolsDupErrors', {}, function(rsp) {
@@ -653,8 +653,8 @@ function ciniki_systemdocs_main() {
     this.toolsgaperrors.noData = function(s) { return this.sections[s].noData; }
     this.toolsgaperrors.cellValue = function(s, i, j, d) {
         switch (j) {
-            case 0: return d.error.package;
-            case 1: return d.error.code;
+            case 0: return d.package;
+            case 1: return d.code;
         }
     };
     this.toolsgaperrors.open = function(cb) {
@@ -698,11 +698,11 @@ function ciniki_systemdocs_main() {
     this.toolsnooverview.noData = function(s) { return this.sections[s].noData; }
     this.toolsnooverview.cellValue = function(s, i, j, d) {
         switch (j) {
-            case 0: return d.module.package + '.' + d.module.name;
+            case 0: return d.package + '.' + d.name;
         }
     };
     this.toolsnooverview.rowFn = function(s, i, d) {
-        return 'M.ciniki_systemdocs_main.module.open(\'M.ciniki_systemdocs_main.toolsnooverview.show();\',\'' + d.module.package + '\',\'' + d.module.name + '\');';
+        return 'M.ciniki_systemdocs_main.module.open(\'M.ciniki_systemdocs_main.toolsnooverview.show();\',\'' + d.package + '\',\'' + d.name + '\');';
     };
     this.toolsnooverview.open = function(cb) {
         M.api.getJSONCb('ciniki.systemdocs.toolsNoOverview', {}, function(rsp) {
@@ -735,11 +735,11 @@ function ciniki_systemdocs_main() {
     this.toolsimpropercheckaccess.noData = function(s) { return this.sections[s].noData; }
     this.toolsimpropercheckaccess.cellValue = function(s, i, j, d) {
         switch (j) {
-            case 0: return d.function.package + '.' + d.function.module + '.' + d.function.file;
+            case 0: return d.package + '.' + d.module + '.' + d.file;
         }
     };
     this.toolsimpropercheckaccess.rowFn = function(s, i, d) {
-        return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.toolsimpropercheckaccess.show();\',\'' + d.function.id + '\');';
+        return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.toolsimpropercheckaccess.show();\',\'' + d.id + '\');';
     };
     this.toolsimpropercheckaccess.open = function(cb) {
         M.api.getJSONCb('ciniki.systemdocs.toolsImproperCheckAccess', {}, function(rsp) {
@@ -772,11 +772,11 @@ function ciniki_systemdocs_main() {
     this.toolsnoargdesc.noData = function(s) { return this.sections[s].noData; }
     this.toolsnoargdesc.cellValue = function(s, i, j, d) {
         switch (j) {
-            case 0: return d.function.package + '-api/' + d.function.module + '/' + d.function.type + '/' + d.function.file;
+            case 0: return d.package + '-api/' + d.module + '/' + d.type + '/' + d.file;
         }
     };
     this.toolsnoargdesc.rowFn = function(s, i, d) {
-        return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.toolsnoargdesc.show();\',\'' + d.function.id + '\');';
+        return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.toolsnoargdesc.show();\',\'' + d.id + '\');';
     };
     this.toolsnoargdesc.open = function(cb) {
         M.api.getJSONCb('ciniki.systemdocs.toolsNoArgDesc', {}, function(rsp) {
@@ -809,11 +809,11 @@ function ciniki_systemdocs_main() {
     this.toolsnoapikeyarg.noData = function(s) { return this.sections[s].noData; }
     this.toolsnoapikeyarg.cellValue = function(s, i, j, d) {
         switch (j) {
-            case 0: return d.function.package + '-api/' + d.function.module + '/' + d.function.type + '/' + d.function.file;
+            case 0: return d.package + '-api/' + d.module + '/' + d.type + '/' + d.file;
         }
     };
     this.toolsnoapikeyarg.rowFn = function(s, i, d) {
-        return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.toolsnoapikeyarg.show();\',\'' + d.function.id + '\');';
+        return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.toolsnoapikeyarg.show();\',\'' + d.id + '\');';
     };
     this.toolsnoapikeyarg.open = function(cb) {
         M.api.getJSONCb('ciniki.systemdocs.toolsNoAPIKeyArg', {}, function(rsp) {
@@ -846,11 +846,11 @@ function ciniki_systemdocs_main() {
     this.toolsnoreturnvalue.noData = function(s) { return this.sections[s].noData; }
     this.toolsnoreturnvalue.cellValue = function(s, i, j, d) {
         switch (j) {
-            case 0: return d.function.package + '-api/' + d.function.module + '/' + d.function.type + '/' + d.function.file;
+            case 0: return d.package + '-api/' + d.module + '/' + d.type + '/' + d.file;
         }
     };
     this.toolsnoreturnvalue.rowFn = function(s, i, d) {
-        return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.toolsnoreturnvalue.show();\',\'' + d.function.id + '\');';
+        return 'M.ciniki_systemdocs_main.function.open(\'M.ciniki_systemdocs_main.toolsnoreturnvalue.show();\',\'' + d.id + '\');';
     };
     this.toolsnoreturnvalue.open = function(cb) {
         M.api.getJSONCb('ciniki.systemdocs.toolsNoReturnValue', {}, function(rsp) {

@@ -65,10 +65,9 @@ function ciniki_systemdocs_toolsDupErrors($ciniki) {
     $strsql .= "ORDER BY ciniki_systemdocs_api_function_errors.package, "
         . "ciniki_systemdocs_api_function_errors.code ASC "
         . "";
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'errors', 'fname'=>'eid', 'name'=>'error', 
-            'fields'=>array('function_id', 'package', 'module', 'type', 'file', 'code', 'msg', 'pmsg', 'dup')),
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'errors', 'fname'=>'eid', 'fields'=>array('function_id', 'package', 'module', 'type', 'file', 'code', 'msg', 'pmsg', 'dup')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.28', 'msg'=>'Unable to find any errors', 'err'=>$rc['err']));

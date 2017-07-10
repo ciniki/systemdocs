@@ -57,10 +57,10 @@ function ciniki_systemdocs_modules($ciniki) {
     }
     $strsql .= "ORDER BY f.package, f.module "
         . "";
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'packages', 'fname'=>'package', 'name'=>'package', 'fields'=>array('name'=>'package')),
-        array('container'=>'modules', 'fname'=>'module', 'name'=>'module', 'fields'=>array('name'=>'module', 'package', 'proper_name', 'public')),
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'packages', 'fname'=>'package', 'fields'=>array('name'=>'package')),
+        array('container'=>'modules', 'fname'=>'module', 'fields'=>array('name'=>'module', 'package', 'proper_name', 'public')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.24', 'msg'=>'Unable to find any modules', 'err'=>$rc['err']));

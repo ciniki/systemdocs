@@ -52,10 +52,9 @@ function ciniki_systemdocs_toolsTableUnknownFields($ciniki) {
     $strsql .= "ORDER BY ciniki_systemdocs_api_tables.package, "
         . "ciniki_systemdocs_api_tables.name "
         . "";
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'tables', 'fname'=>'id', 'name'=>'table', 
-            'fields'=>array('id', 'package', 'name')),
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'tables', 'fname'=>'id', 'fields'=>array('id', 'package', 'name')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.36', 'msg'=>'Unable to find any tables', 'err'=>$rc['err']));

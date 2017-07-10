@@ -54,10 +54,9 @@ function ciniki_systemdocs_toolsNoOverview($ciniki) {
     $strsql .= "ORDER BY ciniki_systemdocs_api_functions.package, "
         . "ciniki_systemdocs_api_functions.module, ciniki_systemdocs_api_functions.file "
         . "";
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'modules', 'fname'=>'mid', 'name'=>'module', 
-            'fields'=>array('package', 'name'=>'module', 'overview')),
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'modules', 'fname'=>'mid', 'fields'=>array('package', 'name'=>'module', 'overview')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.33', 'msg'=>'Unable to find any modules', 'err'=>$rc['err']));
@@ -67,7 +66,7 @@ function ciniki_systemdocs_toolsNoOverview($ciniki) {
     }
 
     foreach($rc['modules'] as $mnum => $module) {
-        if( $module['module']['overview'] != '' ) {
+        if( $module['overview'] != '' ) {
             unset($rc['modules'][$mnum]);
         }
     }

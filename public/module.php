@@ -90,10 +90,9 @@ function ciniki_systemdocs_module($ciniki) {
         . "WHERE package = '" . ciniki_core_dbQuote($ciniki, $args['package']) . "' "
         . "AND module = '" . ciniki_core_dbQuote($ciniki, $args['module']) . "' "
         . "";
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'tables', 'fname'=>'id', 'name'=>'table',
-            'fields'=>array('id', 'name')),
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'tables', 'fname'=>'id', 'fields'=>array('id', 'name')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;
@@ -111,18 +110,16 @@ function ciniki_systemdocs_module($ciniki) {
         . "AND module = '" . ciniki_core_dbQuote($ciniki, $args['module']) . "' "
 //      . "AND type <> 'scripts' "
         . "";
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'types', 'fname'=>'type', 'name'=>'type',
-            'fields'=>array('name'=>'type')),
-        array('container'=>'functions', 'fname'=>'id', 'name'=>'function',
-            'fields'=>array('id', 'name', 'package', 'module', 'type', 'file', 'suffix', 'publish')),
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
+        array('container'=>'types', 'fname'=>'type', 'fields'=>array('name'=>'type')),
+        array('container'=>'functions', 'fname'=>'id', 'fields'=>array('id', 'name', 'package', 'module', 'type', 'file', 'suffix', 'publish')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
     if( isset($rc['types']) ) {
         foreach($rc['types'] as $tnum => $type) {
-            $rsp[$type['type']['name']] = $type['type']['functions'];
+            $rsp[$type['name']] = $type['functions'];
         }
     }
 

@@ -2,7 +2,7 @@
 //
 // Description
 // -----------
-// This function will recursively get all the errors possible for a function.
+// This function will recursively get all the function calls required for a function.
 //
 // Arguments
 // ---------
@@ -12,11 +12,8 @@
 // 
 // Returns
 // -------
-// <errors>
-//  <error package="ciniki" code="122" module="core" type="private" file="dbConnect" />
-// </errors>
 //
-function ciniki_systemdocs_getErrorsRecursive($ciniki, $function_id, $extended_only_flag) {
+function ciniki_systemdocs_getFunctionsRecursive($ciniki, $function_id, $extended_only_flag) {
 
     if( $extended_only_flag == 'yes' ) {
         $function_ids = array();
@@ -26,6 +23,7 @@ function ciniki_systemdocs_getErrorsRecursive($ciniki, $function_id, $extended_o
     $cur_function_ids = array($function_id);
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbQuoteIDs');
+    $functions = array();
     while(count($cur_function_ids) > 0 ) {
         $strsql = "SELECT ciniki_systemdocs_api_functions.id "
             . "FROM ciniki_systemdocs_api_function_calls, ciniki_systemdocs_api_functions "
@@ -50,38 +48,29 @@ function ciniki_systemdocs_getErrorsRecursive($ciniki, $function_id, $extended_o
     }
 
     if( count($function_ids) == 0 ) {
-        return array('stat'=>'ok', 'errors'=>array());
+        return array('stat'=>'ok', 'functions'=>array());
     }
 
     //
-    // Get the errors possible
+    // Get the function information
     //
-    $strsql = "SELECT CONCAT_WS('-', ciniki_systemdocs_api_functions.package, code) AS eid, "
-        . "ciniki_systemdocs_api_functions.id AS function_id, "
-        . "ciniki_systemdocs_api_functions.package, "
-        . "ciniki_systemdocs_api_functions.module, "
-        . "ciniki_systemdocs_api_functions.type, "
-        . "ciniki_systemdocs_api_functions.file, "
-        . "ciniki_systemdocs_api_functions.name, "
-        . "ciniki_systemdocs_api_function_errors.code, "
-        . "ciniki_systemdocs_api_function_errors.msg, "
-        . "ciniki_systemdocs_api_function_errors.pmsg "
-        . "FROM ciniki_systemdocs_api_functions, ciniki_systemdocs_api_function_errors "
-        . "WHERE ciniki_systemdocs_api_function_errors.function_id IN (" . ciniki_core_dbQuoteIDs($ciniki, $function_ids) . ") "
-        . "AND ciniki_systemdocs_api_function_errors.function_id = ciniki_systemdocs_api_functions.id "
+    $strsql = "SELECT id, name, package, module, type, file, suffix, publish "
+        . "FROM ciniki_systemdocs_api_functions "
+        . "WHERE id IN (" . ciniki_core_dbQuoteIDs($ciniki, $function_ids) . ") "
+        . "ORDER BY package, module, file "
         . "";
-    $strsql .= "ORDER BY ciniki_systemdocs_api_functions.package, "
-        . "ciniki_systemdocs_api_function_errors.code ASC "
-        . "";
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
-    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.systemdocs', array(
-        array('container'=>'errors', 'fname'=>'eid', 'name'=>'error', 
-            'fields'=>array('function_id', 'package', 'module', 'code', 'type', 'file', 'name', 'msg', 'pmsg')),
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'strike.documentation', array(
+        array('container'=>'functions', 'fname'=>'id', 'fields'=>array('id', 'name', 'package', 'module', 'type', 'file', 'suffix', 'publish')),
         ));
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.systemdocs.2', 'msg'=>'Unable to find any errors', 'err'=>$rc['err']));
+        return $rc;
+    }
+    if( isset($rc['functions']) ) {
+        $functions = $rc['functions'];
+    } else {
+        $functions = array();
     }
 
-    return $rc;
+    return array('stat'=>'ok', 'functions'=>$functions);
 }
 ?>
