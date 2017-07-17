@@ -1,0 +1,7 @@
+#
+# Add the new module column
+#
+ALTER TABLE ciniki_systemdocs_api_functions ADD COLUMN calltree text not null AFTER returns;
+ALTER TABLE ciniki_systemdocs_api_functions ADD COLUMN indirectcalls text not null AFTER calltree;
+ALTER TABLE ciniki_systemdocs_api_functions COMMENT='v1.02';
+

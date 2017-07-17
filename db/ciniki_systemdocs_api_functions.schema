@@ -27,6 +27,9 @@
 #
 # returns:          What is returned from the function, typically described as an XML structure.
 #
+# calltree:         The serialized hash array of the calls for the function.
+# indirectcalls:    The serialized hash array with the list of indirect function calls.
+#
 # fsize:            The size of the file in bytes.
 # flines:           The number of lines in the file.
 # blines:           The number of blank lines in the file.
@@ -51,6 +54,8 @@ create table ciniki_systemdocs_api_functions (
     notes text not null,
     html_notes text not null,
     returns text not null,
+    calltree mediumtext not null,
+    indirectcalls mediumtext not null,
     fsize int not null,
     flines int not null,
     blines int not null,
@@ -61,4 +66,4 @@ create table ciniki_systemdocs_api_functions (
     primary key (id),
     unique index (package, module, type, file, suffix),
     index (status, publish)
-) ENGINE='InnoDB', COMMENT='v1.01';
+) ENGINE='InnoDB', COMMENT='v1.02';
