@@ -1,0 +1,6 @@
+#
+# Add the new module column
+#
+ALTER TABLE ciniki_systemdocs_api_function_args ADD COLUMN flags tinyint unsigned not null AFTER sequence;
+ALTER TABLE ciniki_systemdocs_api_function_args COMMENT='v1.02';
+

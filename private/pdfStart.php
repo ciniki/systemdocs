@@ -67,7 +67,10 @@ function ciniki_systemdocs_pdfStart($ciniki, $business_id, $args) {
         public $top_margin = 15;
         public $footer_height = 12;
         public $bottom_margin = 15;
-        public $header_height = 0;
+        public $section_title = '';
+        public $ssection_title = '';
+        public $sssection_title = '';
+        public $header_text = '';
         public $footer_text = '';
         public $usable_width = 180;
         public $fresh_page = 'yes';     // Flag to track if on a fresh page and if title should be at top or bumped down.
@@ -89,6 +92,10 @@ function ciniki_systemdocs_pdfStart($ciniki, $business_id, $args) {
         public $calltree_skip = array();
 
         public function Header() {
+//            if( $this->section_title != '' ) {
+//                $this->SetFont('helvetica', 'B', 14);
+//                $this->Cell(180, 8, $this->section_title, 'B', false, 'L', 0, '', 0, false, 'T', 'M');
+//            }
         }
 
         // Page footer
@@ -98,40 +105,46 @@ function ciniki_systemdocs_pdfStart($ciniki, $business_id, $args) {
             if( $this->pagenumbers == 'yes' ) {
                 $this->SetY(-15);
                 $this->SetFont('helvetica', '', 10);
-                $this->Cell(150, 8, $this->footer_text, 0, false, 'L', 0, '', 0, false, 'T', 'M');
-                $this->Cell(30, 8, $this->pageNo(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
+                $this->Cell(150, 8, $this->footer_text, 'T', false, 'L', 0, '', 0, false, 'T', 'M');
+                $this->Cell(30, 8, $this->pageNo(), 'T', false, 'R', 0, '', 0, false, 'T', 'M');
             }
         }
 
         public function addTitle($depth, $title, $toc='no') {
             if( $depth == 1 ) {
+                $this->section_title = $title;
+                $this->ssection_title = '';
+                $this->sssection_title = '';
                 $this->s++;
                 $this->ss = 0;
                 $this->sss = 0;
                 $this->AddPage();
                 $this->SetFont('helvetica', 'B', '18');
-                $this->MultiCell($this->usable_width, 16, $this->s . '. ' . $title, 0, 'L', false, 1, '', '', true, 0, false, true, 0, 'T');
+                $this->MultiCell($this->usable_width, 14, $this->s . '. ' . $title, 0, 'L', false, 1, '', '', true, 0, false, true, 0, 'T');
                 if( $toc == 'yes' && $this->toc == 'yes' ) { 
                     $this->Bookmark($this->s . '. ' . $title, 0, 0, '', '');
                 }
             } elseif( $depth == 2 ) {
+                $this->ssection_title = $title;
+                $this->sssection_title = '';
                 $this->ss++;
                 $this->sss = 0;
                 if( $this->getY() > ($this->getPageHeight() - $this->top_margin - $this->bottom_margin - 40) ) {
                     $this->AddPage();
                 }
                 $this->SetFont('helvetica', 'B', '16');
-                $this->MultiCell($this->usable_width, 14, $this->s . '.' . $this->ss . '. ' . $title, 0, 'L', false, 1, '', '', true, 0, false, true, 0, 'T');
+                $this->MultiCell($this->usable_width, 12, $this->s . '.' . $this->ss . '. ' . $title, 0, 'L', false, 1, '', '', true, 0, false, true, 0, 'T');
                 if( $toc == 'yes' && $this->toc == 'yes' ) { 
                     $this->Bookmark($this->s . '.' . $this->ss . '. ' . $title, 1, 0, '', '');
                 }
             } elseif( $depth == 3 ) {
+                $this->sssection_title = $title;
                 if( $this->getY() > ($this->getPageHeight() - $this->top_margin - $this->bottom_margin - 40) ) {
                     $this->AddPage();
                 }
                 $this->sss++;
                 $this->SetFont('helvetica', 'B', '14');
-                $this->MultiCell($this->usable_width, 12, $this->s . '.' . $this->ss . '.' . $this->sss . '. ' . $title, 0, 'L', false, 1, '', '', true, 0, false, true, 0, 'T');
+                $this->MultiCell($this->usable_width, 10, $this->s . '.' . $this->ss . '.' . $this->sss . '. ' . $title, 0, 'L', false, 1, '', '', true, 0, false, true, 0, 'T');
                 if( $toc == 'yes' && $this->toc == 'yes' ) { 
                     $this->Bookmark($this->s . '.' . $this->ss . '.' . $this->sss . '. ' . $title, 2, 0, '', '');
                 }
@@ -140,13 +153,14 @@ function ciniki_systemdocs_pdfStart($ciniki, $business_id, $args) {
                     $this->AddPage();
                 }
                 $this->SetFont('helvetica', 'B', '12');
-                $this->MultiCell($this->usable_width, 10, $title, 0, 'L', false, 1, '', '', true, 0, false, true, 0, 'T');
+                $this->MultiCell($this->usable_width, 8, $title, 0, 'L', false, 1, '', '', true, 0, false, true, 0, 'T');
             }
         }
 
         public function addHtml($depth, $content) { 
-            $this->SetFont('helvetica', '', '12');
-            $this->writeHTMLCell($this->usable_width, 12, '', '', $content, 0, 1, false, true, 'L');
+            $this->SetFont('helvetica', '', '10');
+            $this->writeHTMLCell($this->usable_width, 10, '', '', '<style>p, ul, dt {color: #808080;}</style>' . $content, 0, 1, false, true, 'L');
+//            $this->writeHTMLCell($this->usable_width, 10, '', '', preg_replace('/<p>/', '<p style="color: #808080;">', $content), 0, 1, false, true, 'L');
         }
     }
 
@@ -158,7 +172,7 @@ function ciniki_systemdocs_pdfStart($ciniki, $business_id, $args) {
     $pdf->top_margin = 15;
     $pdf->left_margin = 18;
     $pdf->right_margin = 18;
-    $pdf->SetMargins($pdf->left_margin, $pdf->top_margin, $pdf->right_margin);
+    $pdf->SetMargins($pdf->left_margin, $pdf->top_margin + $pdf->header_height, $pdf->right_margin);
     $pdf->SetFooterMargin($pdf->footer_height);
     $pdf->SetHeaderMargin($pdf->header_height);
     $pdf->SetFooterMargin(0);

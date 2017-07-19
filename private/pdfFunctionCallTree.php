@@ -63,10 +63,11 @@ function ciniki_systemdocs_pdfFunctionCallTree($ciniki, $business_id, &$pdf, $de
             && $args['calltree_descriptions'][$call['id']]['html_description'] != ''
             ) {
 //            $html = '<p style="padding-bottom: 0px;">' . $w[0] . '.' . $cdepth . ':' . $call['name'] . '</p>' 
-              $html = preg_replace("/<p>/m", '<p style="line-height: 15px;color:#808080; margin:0px;"><span style="color:#000000; padding-bottom: 5px;">' . $call['name'] . "</span><br />", $args['calltree_descriptions'][$call['id']]['html_description']);
+              $html = preg_replace("/<p>/m", '<p style="line-height: 15px;color:#808080; margin:0px;"><span style="color:#000000; padding-bottom: 5px;"><b>' . $call['name'] . "</b></span><br />", $args['calltree_descriptions'][$call['id']]['html_description']);
             $pdf->writeHTMLCell($w[1], '', '', '', $html, 1, 1, false, true);
         } else {
-            $pdf->Cell($w[1], 8, $prefix . $call['type'] . '/' . $call['name'], 1, 1, 'L', false, $call['name']);
+//            $pdf->Cell($w[1], 8, $prefix . $call['type'] . '/' . $call['name'], 1, 1, 'L', false, $call['name']);
+            $pdf->writeHTMLCell($w[1], 8, '', '', '<b>' . $call['type'] . '/' . $call['name'], 1, 1, false, true);
         }
 
         //

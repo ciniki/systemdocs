@@ -17,7 +17,7 @@ function ciniki_systemdocs_pdfFunction($ciniki, $business_id, &$pdf, $depth, $fu
         // Get the list of function details and args 
         //
         $strsql = "SELECT f.id, f.name, f.package, f.module, f.type, f.file, f.suffix, f.publish, f.html_description, f.calltree, f.indirectcalls, "
-            . "a.id AS aid, a.name AS aname, a.html_description AS ahtml_description "
+            . "a.id AS aid, a.name AS aname, a.flags AS aflags, a.html_description AS ahtml_description "
             . "FROM ciniki_systemdocs_api_functions AS f "
             . "LEFT JOIN ciniki_systemdocs_api_function_args AS a ON ("
                 . "f.id = a.function_id "
@@ -32,7 +32,7 @@ function ciniki_systemdocs_pdfFunction($ciniki, $business_id, &$pdf, $depth, $fu
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
         $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'strike.documentation', array(
             array('container'=>'functions', 'fname'=>'name', 'fields'=>array('id', 'name', 'package', 'module', 'type', 'file', 'suffix', 'publish', 'html_description', 'calltree', 'indirectcalls')),
-            array('container'=>'args', 'fname'=>'aid', 'fields'=>array('id'=>'aid', 'name'=>'aname', 'html_description'=>'ahtml_description')),
+            array('container'=>'args', 'fname'=>'aid', 'fields'=>array('id'=>'aid', 'flags'=>'aflags', 'name'=>'aname', 'html_description'=>'ahtml_description')),
             ));
         if( $rc['stat'] != 'ok' ) {
             return $rc;
@@ -54,6 +54,7 @@ function ciniki_systemdocs_pdfFunction($ciniki, $business_id, &$pdf, $depth, $fu
 
     if( isset($function['html_description']) && $function['html_description'] != '' ) {
         $pdf->addHtml($depth, trim($function['html_description']));
+        $pdf->Ln(5);
     }
 
     //
@@ -63,22 +64,43 @@ function ciniki_systemdocs_pdfFunction($ciniki, $business_id, &$pdf, $depth, $fu
         if( $pdf->getY() > ($pdf->getPageHeight() - $pdf->top_margin - $pdf->bottom_margin - 50) ) {
             $pdf->AddPage();
         }
-        $pdf->addTitle($depth + 1, 'Arguments');
-        $html = $pdf->table_def;
-        $html .= "<thead><tr>"
-            . '<th bgcolor="' . $pdf->table_hbg . '" style="' . $pdf->table_hstyle . 'width: 30%;"><b>Argument</b></th>'
-            . '<th bgcolor="' . $pdf->table_hbg . '" style="' . $pdf->table_hstyle . 'width: 70%;"><b>Description</b></th>'
-            . '</tr></thead>';
-
+        $args_html = '';
+        $additional_args_html = '';
         foreach($function['args'] as $arg) {
-            $html .= '<tr nobr="true"><td style="' . $pdf->table_cstyle . 'width: 30%;">' . $arg['name'] . '</td>'
-                . '<td style="' . $pdf->table_cstyle . 'width: 70%;">' . strip_tags($arg['html_description']) . '</td></tr>';
+            if( ($arg['flags']&0x01) == 0x01 ) {
+                $additional_args_html .= '<tr nobr="true"><td style="' . $pdf->table_cstyle . 'width: 30%;">' . $arg['name'] . '</td>'
+                    . '<td style="' . $pdf->table_cstyle . 'width: 70%;">' . $arg['html_description'] . '</td></tr>';
+            } else {
+                $args_html .= '<tr nobr="true"><td style="' . $pdf->table_cstyle . 'width: 30%;">' . $arg['name'] . '</td>'
+                    . '<td style="' . $pdf->table_cstyle . 'width: 70%;">' . $arg['html_description'] . '</td></tr>';
+            }
         }
-        $html .= "</table>";
-
-        $pdf->SetFont('helvetica', '', 10);
-        $pdf->writeHTML($html, true, false, true, false, '');
-        $pdf->Ln(5);
+        if( $args_html != '' ) {
+            $html = $pdf->table_def;
+            $pdf->addTitle($depth + 1, 'Arguments');
+            $html .= "<thead><tr>"
+                . '<th bgcolor="' . $pdf->table_hbg . '" style="' . $pdf->table_hstyle . 'width: 30%;"><b>Argument</b></th>'
+                . '<th bgcolor="' . $pdf->table_hbg . '" style="' . $pdf->table_hstyle . 'width: 70%;"><b>Description</b></th>'
+                . '</tr></thead>';
+            $html .= $args_html;
+            $html .= "</table>";
+            $pdf->SetFont('helvetica', '', 10);
+            $pdf->writeHTML($html, true, false, true, false, '');
+            $pdf->Ln(5);
+        }
+        if( $additional_args_html != '' ) {
+            $pdf->addTitle($depth + 1, 'Additional Arguments');
+            $html = $pdf->table_def;
+            $html .= "<thead><tr>"
+                . '<th bgcolor="' . $pdf->table_hbg . '" style="' . $pdf->table_hstyle . 'width: 30%;"><b>Argument</b></th>'
+                . '<th bgcolor="' . $pdf->table_hbg . '" style="' . $pdf->table_hstyle . 'width: 70%;"><b>Description</b></th>'
+                . '</tr></thead>';
+            $html .= $additional_args_html;
+            $html .= "</table>";
+            $pdf->SetFont('helvetica', '', 10);
+            $pdf->writeHTML($html, true, false, true, false, '');
+            $pdf->Ln(5);
+        }
     }
 
     //
@@ -94,7 +116,8 @@ function ciniki_systemdocs_pdfFunction($ciniki, $business_id, &$pdf, $depth, $fu
             return $rc;
         }
         if( $rc['is_content'] == 'yes' ) {
-            $pdf->Ln();
+            $pdf->setFont('helvetica', '', 10);
+            $pdf->Ln(5);
         }
     }
 

@@ -50,7 +50,7 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
         //
         // Get the function args
         //
-        $strsql = "SELECT id, sequence, name, options, description "
+        $strsql = "SELECT id, sequence, flags, name, options, description "
             . "FROM ciniki_systemdocs_api_function_args "
             . "WHERE function_id = '" . ciniki_core_dbQuote($ciniki, $db_function['id']) . "' "
             . "";
@@ -191,9 +191,10 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
                 $rc = ciniki_systemdocs_processMarkdown($ciniki, $mod_arg['description']);
                 $mod_arg['html_description'] = $rc['html_content'];
                 $strsql = "INSERT INTO ciniki_systemdocs_api_function_args (function_id, "
-                    . "sequence, name, options, description, html_description) VALUES ("
+                    . "sequence, flags, name, options, description, html_description) VALUES ("
                     . "'" . ciniki_core_dbQuote($ciniki, $function_id) . "', "
                     . "'" . ciniki_core_dbQuote($ciniki, $mod_arg['sequence']) . "', "
+                    . "'" . ciniki_core_dbQuote($ciniki, (isset($mod_arg['flags']) ? $mod_arg['flags'] : 0)) . "', "
                     . "'" . ciniki_core_dbQuote($ciniki, $mod_arg['name']) . "', "
                     . "'" . ciniki_core_dbQuote($ciniki, $mod_arg['options']) . "', "
                     . "'" . ciniki_core_dbQuote($ciniki, $mod_arg['description']) . "', "
@@ -211,6 +212,9 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
                 $strsql = "";
                 if( $mod_arg['sequence'] != $db_arg['sequence'] ) {
                     $strsql .= ", sequence = '" . ciniki_core_dbQuote($ciniki, $mod_arg['sequence']) . "' ";
+                }
+                if( isset($mod_arg['flags']) && $mod_arg['flags'] != $db_arg['flags'] ) {
+                    $strsql .= ", flags = '" . ciniki_core_dbQuote($ciniki, $mod_arg['flags']) . "' ";
                 }
                 if( $mod_arg['options'] != $db_arg['options'] ) {
                     $strsql .= ", options = '" . ciniki_core_dbQuote($ciniki, $mod_arg['options']) . "' ";
@@ -259,9 +263,6 @@ function ciniki_systemdocs_updateModuleFunction($ciniki, $package, $module, $typ
         //
         $db_updated = 0;
         foreach($mod_function['calls'] as $mod_call) {
-            if( $file == 'fundRecalc' ) {
-                error_log(print_r($mod_call, true));
-            }
             // If the function doesn't exist in the database, or the call doesn't exist, insert
             if( $db_function == NULL || !isset($db_function['calls'][$mod_call['call']]) ) {
                 $strsql = "INSERT INTO ciniki_systemdocs_api_function_calls (function_id, "

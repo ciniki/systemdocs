@@ -64,7 +64,7 @@ function ciniki_systemdocs_pdfModule($ciniki, $business_id, &$pdf, $depth, $pack
     // Get the list of functions for this module
     //
     $strsql = "SELECT f.id, f.name, f.package, f.module, f.type, f.file, f.suffix, f.publish, f.html_description, f.calltree, f.indirectcalls, "
-        . "a.id AS aid, a.name AS aname, a.html_description AS ahtml_description "
+        . "a.id AS aid, a.name AS aname, a.flags AS aflags, a.html_description AS ahtml_description "
         . "FROM ciniki_systemdocs_api_functions AS f "
         . "LEFT JOIN ciniki_systemdocs_api_function_args AS a ON ("
             . "f.id = a.function_id "
@@ -78,7 +78,7 @@ function ciniki_systemdocs_pdfModule($ciniki, $business_id, &$pdf, $depth, $pack
     $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'strike.documentation', array(
         array('container'=>'types', 'fname'=>'type', 'fields'=>array('name'=>'type')),
         array('container'=>'functions', 'fname'=>'id', 'fields'=>array('id', 'name', 'package', 'module', 'type', 'file', 'suffix', 'publish', 'html_description', 'calltree', 'indirectcalls')),
-        array('container'=>'args', 'fname'=>'aid', 'fields'=>array('id'=>'aid', 'name'=>'aname', 'html_description'=>'ahtml_description')),
+        array('container'=>'args', 'fname'=>'aid', 'fields'=>array('id'=>'aid', 'name'=>'aname', 'flags'=>'aflags', 'html_description'=>'ahtml_description')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;

@@ -90,7 +90,13 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
     $info = array();
     $num_fields = 0;
     for($i=0;$i<count($lines);$i++) {
+        //
+        // Check the line starts with a comment
+        //
         if( preg_match('/^\s*\/\//', $lines[$i]) ) {
+            //
+            // Remove the comment // from the beginning
+            //
             $cur_line = preg_replace('/^\s*\/\/\s?/', '', $lines[$i]);
             if( preg_match('/^\s*description/i', $cur_line) && preg_match('/[-=][-=]+/', $lines[$i+1]) ) {
                 $section = 'description';
@@ -104,6 +110,10 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
                 $section = 'info';
                 $i++;
                 continue;
+            } elseif( preg_match('/^\s*additional arguments/i', $cur_line) && preg_match('/[-=][-=]+/', $lines[$i+1]) ) {
+                $section = 'additionalarguments';
+                $i++;
+                continue;
             } elseif( preg_match('/^\s*arguments/i', $cur_line) && preg_match('/[-=][-=]+/', $lines[$i+1]) ) {
                 $section = 'arguments';
                 $i++;
@@ -115,7 +125,7 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
             }   
 
             if( $section == 'description' ) {
-                $rsp['description'] .= $cur_line;
+                $rsp['description'] .= $cur_line . "\n";
             }
             elseif( $section == 'notes' ) {
                 $rsp['notes'] .= $cur_line;
@@ -135,13 +145,20 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
                     }
                 }
             }
-            elseif( $section == 'arguments' ) {
+            elseif( $section == 'arguments' || $section == 'additionalarguments' ) {
                 if( preg_match('/^[^\s]+:/', $cur_line) ) {
                     $split_line = preg_split('/:/', $cur_line, 2);
                     $cur_arg = $split_line[0];
                     $cur_arg_line = 0;
                     $args[$cur_arg] = array('name'=>$cur_arg, 'description'=>'', 'options'=>'');
-                    if( preg_match('/^\s*\(optional\)/', $split_line[1]) ) {
+                    if( $section == 'additionalarguments' ) {
+                        $args[$cur_arg]['flags'] = 0x01; 
+                    } else {
+                        $args[$cur_arg]['flags'] = 0; 
+                    }
+                    if( $section == 'additionalarguments' ) {
+                        $args[$cur_arg]['options'] = 'additional';
+                    } elseif( preg_match('/^\s*\(optional\)/', $split_line[1]) ) {
                         $args[$cur_arg]['options'] = 'optional';
                         $split_line[1] = preg_replace('/^\s*\(optional\)\s*/i', '', $split_line[1]);
                     }
@@ -326,9 +343,11 @@ function ciniki_systemdocs_parseFunctionCode($ciniki, $package, $module, $type, 
     foreach($rsp['args'] as $name => $arg) {
         if( $name == 'api_key' && preg_match('/^\s*$/', $arg['description']) ) {
             $rsp['args'][$name]['description'] = "The unique key assigned to the interface the user is connecting from.";
-        } elseif( $name == 'auth_token' && preg_match('/^\s*$/', $arg['description']) ) {
+        } 
+        elseif( $name == 'auth_token' && preg_match('/^\s*$/', $arg['description']) ) {
             $rsp['args'][$name]['description'] = "The token returned after the user authenticates.";
-        } elseif( $name == 'ciniki' && preg_match('/^\s*$/', $arg['description']) ) {
+        } 
+        elseif( $name == 'ciniki' && preg_match('/^\s*$/', $arg['description']) ) {
             $rsp['args'][$name]['description'] = "The ciniki variable which must be passed to every function as it contains config and session information.";
         }
     }

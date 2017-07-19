@@ -39,6 +39,7 @@ function ciniki_systemdocs_processMarkdown($ciniki, $content) {
     foreach($lines as $lnum => $line) {
         // Check for list item
         // or for hex number or number unordered list
+        // 1 - The first number
         if( preg_match('/^\s*[+-]\s*(.*)$/', $line, $matches) ) {
             if( $list_level == 0 ) {
                 if( $paragraph > 0 ) {
@@ -52,6 +53,7 @@ function ciniki_systemdocs_processMarkdown($ciniki, $content) {
                 $lines[$lnum] = '<li>' . $matches[1];
             }
         }
+        // 0x01 - The first flag
         elseif( preg_match('/^\s*((0x[0-9]+|[0-9]+)\s*-\s*(.*))$/', $line, $matches) ) {
             if( $list_level == 0 ) {
                 if( $paragraph > 0 ) {
@@ -60,12 +62,41 @@ function ciniki_systemdocs_processMarkdown($ciniki, $content) {
                 }
                 $lines[$lnum] = "<dl>\n" . '<dt>' . $matches[2] . '</dt><dd>' . $matches[3];
                 $list_level++;
-                $list_type == 'dl';
+                $list_type = 'dl';
             } else {
                 $lines[$lnum] = '</dd><dt>' . $matches[2] . '</dt><dd>' . $matches[3];
             }
         }
+        // Definition lists
+        // Label text :: The first item in the list
+        elseif( preg_match('/^\s*((.*)\s::\s(.*))$/', $line, $matches) ) {
+            if( $list_level == 0 ) {
+                if( $paragraph > 0 ) {
+                    $lines[$lnum-1] .= "</p>";
+                    $paragraph = 0;
+                }
+                $lines[$lnum] = "<dl>\n" . '<dt>' . $matches[2] . '</dt><dd>' . $matches[3];
+                $list_level++;
+                $list_type = 'dl';
+            } else {
+                $lines[$lnum] = '</dd><dt>' . $matches[2] . '</dt><dd>' . $matches[3];
+            }
+        }
+        // Check for tables
         // Check for text line
+        elseif( preg_match('/^\s*((.*)\s\|\s\s*(.*))$/', $line, $matches) ) {
+            if( $list_level == 0 ) {
+                if( $paragraph > 0 ) {
+                    $lines[$lnum-1] .= "</p>";
+                    $paragraph = 0;
+                }
+                $lines[$lnum] = '<table><tr><td>' . $matches[2] . '</td><td>' . $matches[3];
+                $list_level++;
+                $list_type = 'table';
+            } else {
+                $lines[$lnum] = '</td></tr><tr><td>' . $matches[2] . '</td><td>' . $matches[3];
+            }
+        }
         elseif( $paragraph == 0 && $list_level == 0 && preg_match('/[a-zA-Z0-9]/', $line) ) {
             $lines[$lnum] = '<p>' . $line;
             $paragraph = 1;
@@ -74,6 +105,8 @@ function ciniki_systemdocs_processMarkdown($ciniki, $content) {
         elseif( $list_level > 0 && preg_match('/^\s*$/', $line) ) {
             if( $list_type == 'dl' ) {
                 $lines[$lnum] = '</dd></dl>';
+            } elseif( $list_type == 'table' ) {
+                $lines[$lnum] = '</td></tr></table>';
             } else {
                 $lines[$lnum] = '</ul>';
             }
@@ -94,6 +127,8 @@ function ciniki_systemdocs_processMarkdown($ciniki, $content) {
     if( $list_level > 0 ) {
         if( $list_type == 'dl' ) {
             $lines[$lnum+1] = '</dd></dl>';
+        } elseif( $list_type == 'table' ) {
+            $lines[$lnum+1] = '</td></tr></table>';
         } else {
             $lines[$lnum+1] = '</ul>';
         }
