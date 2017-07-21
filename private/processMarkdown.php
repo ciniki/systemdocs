@@ -97,8 +97,11 @@ function ciniki_systemdocs_processMarkdown($ciniki, $content) {
                 $lines[$lnum] = '</td></tr><tr><td>' . $matches[2] . '</td><td>' . $matches[3];
             }
         }
-        elseif( $paragraph == 0 && $list_level == 0 && preg_match('/[a-zA-Z0-9]/', $line) ) {
-            $lines[$lnum] = '<p>' . $line;
+        //
+        // Check for **test**<space><space><newline>text
+        //
+        elseif( $paragraph == 0 && $list_level == 0 && preg_match('/^\s*\*\*(.*)\*\*\s*$/', $line, $matches) && isset($lines[$lnum+1]) && preg_match('/[a-zA-Z0-9]/', $lines[$lnum+1])) {
+            $lines[$lnum] = '<p><strong>' . $matches[1] . '</strong><br/>';
             $paragraph = 1;
         }
         // Check for blank line, end of list
@@ -117,6 +120,12 @@ function ciniki_systemdocs_processMarkdown($ciniki, $content) {
             $lines[$lnum] = '</p>';
             $paragraph = 0;
         }
+        // Check if text line and paragraph should start
+        elseif( $paragraph == 0 && $list_level == 0 && preg_match('/[a-zA-Z0-9]/', $line) ) {
+            $lines[$lnum] = '<p>' . $line;
+            $paragraph = 1;
+        }
+
         //
         // Check for emphasis
         // *em*, or **strong**

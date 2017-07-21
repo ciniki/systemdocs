@@ -20,19 +20,22 @@
 // Arguments
 // ---------
 // ciniki:
-// function_calls:      The calls made by a function.
+// depth:               The current depth of the call tree.
+// call:                The function name that is making the calls in function_calls argument.
+// function_calls:      The calls made by the function named in call.
 // all_calls:           The complete list of all calls from the database.
+// indirect_calls:      The list of indirect calls so a master list of required functions is available for functions.
 // 
 // Returns
 // -------
 //
-function ciniki_systemdocs_buildCallTree($ciniki, $depth, $function_calls, $all_calls, &$indirect_calls) {
+function ciniki_systemdocs_buildCallTree($ciniki, $depth, $calling_name, $function_calls, $all_calls, &$indirect_calls) {
 
     $calltree = array();
 
     foreach($function_calls as $call) {
         $c = array('id'=>$call['id'], 'type'=>$call['type'], 'name'=>$call['called_name']);
-        
+
         //
         // Add to the indirect list of not already there
         //
@@ -40,8 +43,15 @@ function ciniki_systemdocs_buildCallTree($ciniki, $depth, $function_calls, $all_
             $indirect_calls[$call['id']] = array('id'=>$call['id'], 'type'=>$call['type'], 'name'=>$call['called_name']);
         }
 
+        //
+        // Skip if recursive
+        //
+        if( $calling_name == $call['called_name'] ) {
+            continue;
+        }
+
         if( $depth < 10 && isset($all_calls[$c['id']]['calls']) ) {
-            $rc = ciniki_systemdocs_buildCallTree($ciniki, $depth+1, $all_calls[$call['id']]['calls'], $all_calls, $indirect_calls);
+            $rc = ciniki_systemdocs_buildCallTree($ciniki, $depth+1, $call['called_name'], $all_calls[$call['id']]['calls'], $all_calls, $indirect_calls);
             if( $rc['stat'] != 'ok' ) {
                 return $rc;
             }

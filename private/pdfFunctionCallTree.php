@@ -13,6 +13,10 @@
 //
 function ciniki_systemdocs_pdfFunctionCallTree($ciniki, $business_id, &$pdf, $depth, $cdepth, $calls, &$referenced_calls, $args) {
 
+    if( $calls === null ) {
+        return array('stat'=>'ok');
+    }
+
     $title_outputed = 'no';
 
     $w = array(0, $pdf->usable_width);

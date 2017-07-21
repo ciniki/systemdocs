@@ -14,7 +14,6 @@
 function ciniki_systemdocs_updateFunctionCallTrees($ciniki) {
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'buildCallTree'); 
-
     //
     // Load the list of function calls and join to the functions to the called functions id.
     //
@@ -58,7 +57,7 @@ function ciniki_systemdocs_updateFunctionCallTrees($ciniki) {
         $calltree = array(); 
         $indirect_calls = array(); 
         if( isset($calls[$function['id']]['calls']) ) {
-            $rc = ciniki_systemdocs_buildCallTree($ciniki, $depth, $calls[$function['id']]['calls'], $calls, $indirect_calls);
+            $rc = ciniki_systemdocs_buildCallTree($ciniki, $depth, $function['name'], $calls[$function['id']]['calls'], $calls, $indirect_calls);
             if( $rc['stat'] != 'ok' ) {
                 return $rc;
             }
@@ -78,11 +77,11 @@ function ciniki_systemdocs_updateFunctionCallTrees($ciniki) {
         $update_sql = "";
         $s_calltree = serialize($calltree);
         if( $function['calltree'] != $s_calltree ) {
-            $update_sql = "\n, calltree = '" . ciniki_core_dbQuote($ciniki, $s_calltree) . "' ";
+            $update_sql .= "\n, calltree = '" . ciniki_core_dbQuote($ciniki, $s_calltree) . "' ";
         }
         $s_indirect_calls = serialize($indirect_calls);
         if( $function['indirectcalls'] != $s_indirect_calls ) {
-            $update_sql = "\n, indirectcalls = '" . ciniki_core_dbQuote($ciniki, $s_indirect_calls) . "' ";
+            $update_sql .= "\n, indirectcalls = '" . ciniki_core_dbQuote($ciniki, $s_indirect_calls) . "' ";
         }
         if( $update_sql != '' ) {
             $strsql = "UPDATE ciniki_systemdocs_api_functions SET last_updated = UTC_TIMESTAMP() " . $update_sql 
