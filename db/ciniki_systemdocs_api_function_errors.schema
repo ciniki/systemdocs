@@ -10,6 +10,7 @@
 # function_id:      The database id for each function.
 #
 # package:          The package that contains the function, typically 'ciniki'.
+# module:           The module the error code is for.
 # code:             The error code number.
 # msg:              The error message, which will be displayed by the UI.
 # pmsg:             The programmers error message, which typically contains more cryptic information, or results from mysql, etc.
