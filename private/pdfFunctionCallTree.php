@@ -11,7 +11,7 @@
 // Returns
 // -------
 //
-function ciniki_systemdocs_pdfFunctionCallTree($ciniki, $business_id, &$pdf, $depth, $cdepth, $calls, &$referenced_calls, $args) {
+function ciniki_systemdocs_pdfFunctionCallTree($ciniki, $tnid, &$pdf, $depth, $cdepth, $calls, &$referenced_calls, $args) {
 
     if( $calls === null ) {
         return array('stat'=>'ok');
@@ -91,7 +91,7 @@ function ciniki_systemdocs_pdfFunctionCallTree($ciniki, $business_id, &$pdf, $de
         // Check if subtrees
         //
         if( $follow == 'yes' && isset($call['calls']) ) {
-            $rc = ciniki_systemdocs_pdfFunctionCallTree($ciniki, $business_id, $pdf, $depth, $cdepth+1, $call['calls'], $referenced_calls, $args);
+            $rc = ciniki_systemdocs_pdfFunctionCallTree($ciniki, $tnid, $pdf, $depth, $cdepth+1, $call['calls'], $referenced_calls, $args);
             if( $rc['stat'] != 'ok' ) {
                 return $rc;
             }

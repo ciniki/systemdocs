@@ -10,7 +10,7 @@
 // Returns
 // -------
 //
-function ciniki_systemdocs_pdfTables($ciniki, $business_id, &$pdf, $depth, $tables, $args) {
+function ciniki_systemdocs_pdfTables($ciniki, $tnid, &$pdf, $depth, $tables, $args) {
 
     if( isset($args['title']) && $args['title'] != '' ) {
         $pdf->addTitle($depth, $args['title'], 'yes');

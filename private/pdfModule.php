@@ -10,7 +10,7 @@
 // Returns
 // -------
 //
-function ciniki_systemdocs_pdfModule($ciniki, $business_id, &$pdf, $depth, $package, $module, $args) {
+function ciniki_systemdocs_pdfModule($ciniki, $tnid, &$pdf, $depth, $package, $module, $args) {
 
     //
     // Get any detail information for the module
@@ -110,7 +110,7 @@ function ciniki_systemdocs_pdfModule($ciniki, $business_id, &$pdf, $depth, $pack
     // Add the tables
     //
     if( isset($mod['tables']) ) {
-        $rc = ciniki_systemdocs_pdfTables($ciniki, $business_id, $pdf, $depth+1, $mod['tables'], array('title'=>'Database Tables'));
+        $rc = ciniki_systemdocs_pdfTables($ciniki, $tnid, $pdf, $depth+1, $mod['tables'], array('title'=>'Database Tables'));
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }
@@ -121,7 +121,7 @@ function ciniki_systemdocs_pdfModule($ciniki, $business_id, &$pdf, $depth, $pack
     //
     if( isset($functions['public']) ) {
         $pdf->AddPage();
-        $rc = ciniki_systemdocs_pdfFunctions($ciniki, $business_id, $pdf, $depth+1, $functions['public'], array('title'=>'Public Methods'));
+        $rc = ciniki_systemdocs_pdfFunctions($ciniki, $tnid, $pdf, $depth+1, $functions['public'], array('title'=>'Public Methods'));
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }
@@ -131,7 +131,7 @@ function ciniki_systemdocs_pdfModule($ciniki, $business_id, &$pdf, $depth, $pack
     // Add the private methods
     //
     if( isset($functions['private']) ) {
-        $rc = ciniki_systemdocs_pdfFunctions($ciniki, $business_id, $pdf, $depth+1, $functions['private'], array('title'=>'Private Functions'));
+        $rc = ciniki_systemdocs_pdfFunctions($ciniki, $tnid, $pdf, $depth+1, $functions['private'], array('title'=>'Private Functions'));
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }
@@ -141,7 +141,7 @@ function ciniki_systemdocs_pdfModule($ciniki, $business_id, &$pdf, $depth, $pack
     // Add the hooks
     //
     if( isset($functions['hooks']) ) {
-        $rc = ciniki_systemdocs_pdfFunctions($ciniki, $business_id, $pdf, $depth+1, $functions['hooks'], array('title'=>'Available Hooks'));
+        $rc = ciniki_systemdocs_pdfFunctions($ciniki, $tnid, $pdf, $depth+1, $functions['hooks'], array('title'=>'Available Hooks'));
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }
@@ -152,7 +152,7 @@ function ciniki_systemdocs_pdfModule($ciniki, $business_id, &$pdf, $depth, $pack
     //
 //    if( isset($functions['cron']) ) {
 //        $pdf->addTxt($depth + 1, 'Cron ');
-//        $rc = ciniki_systemdocs_pdfFunctions($ciniki, $business_id, $pdf, $depth+1, $functions['hooks']);
+//        $rc = ciniki_systemdocs_pdfFunctions($ciniki, $tnid, $pdf, $depth+1, $functions['hooks']);
 //        if( $rc['stat'] != 'ok' ) {
 //            return $rc;
 //        }
@@ -163,7 +163,7 @@ function ciniki_systemdocs_pdfModule($ciniki, $business_id, &$pdf, $depth, $pack
     //
     if( isset($functions['web']) ) {
         $pdf->AddPage();
-        $rc = ciniki_systemdocs_pdfFunctions($ciniki, $business_id, $pdf, $depth + 1, $functions['web'], array('title'=>'Website Functions'));
+        $rc = ciniki_systemdocs_pdfFunctions($ciniki, $tnid, $pdf, $depth + 1, $functions['web'], array('title'=>'Website Functions'));
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }
@@ -202,7 +202,7 @@ function ciniki_systemdocs_pdfModule($ciniki, $business_id, &$pdf, $depth, $pack
         //
         if( isset($rc['errors']) ) {
             $pdf->AddPage();
-            $rc = ciniki_systemdocs_pdfErrors($ciniki, $business_id, $pdf, $depth + 1, $rc['errors'], array('title'=>'Error Codes'));
+            $rc = ciniki_systemdocs_pdfErrors($ciniki, $tnid, $pdf, $depth + 1, $rc['errors'], array('title'=>'Error Codes'));
             if( $rc['stat'] != 'ok' ) {
                 return $rc;
             }

@@ -10,7 +10,7 @@
 // Returns
 // -------
 //
-function ciniki_systemdocs_pdfEnd($ciniki, $business_id, &$pdf, $args) {
+function ciniki_systemdocs_pdfEnd($ciniki, $tnid, &$pdf, $args) {
 
     //
     // Add the Table of Contents if specified

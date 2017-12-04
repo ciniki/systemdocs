@@ -10,14 +10,14 @@
 // Returns
 // -------
 //
-function ciniki_systemdocs_pdfFunctions($ciniki, $business_id, &$pdf, $depth, $functions, $args) {
+function ciniki_systemdocs_pdfFunctions($ciniki, $tnid, &$pdf, $depth, $functions, $args) {
 
     if( isset($args['title']) && $args['title'] != '' ) {
         $pdf->addTitle($depth, $args['title'], 'yes');
     }
 
     foreach($functions as $function) {
-        $rc = ciniki_systemdocs_pdfFunction($ciniki, $business_id, $pdf, $depth + 1, $function, $args);
+        $rc = ciniki_systemdocs_pdfFunction($ciniki, $tnid, $pdf, $depth + 1, $function, $args);
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }

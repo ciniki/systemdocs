@@ -35,7 +35,7 @@
 //                          <arg name="ciniki" description="The documentation for this argument">
 //                      </args>
 //                      <apiargs>
-//                          <arg name="business_id" flags="optional" description="The documentation for this argument" />
+//                          <arg name="tnid" flags="optional" description="The documentation for this argument" />
 //                      <apiargs>
 //                      <calls>
 //                          <method name="ciniki.core.dbInit" />

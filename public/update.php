@@ -30,7 +30,7 @@ function ciniki_systemdocs_update($ciniki) {
 
     //
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'systemdocs', 'private', 'checkAccess');
     $rc = ciniki_systemdocs_checkAccess($ciniki, 'ciniki.systemdocs.update');

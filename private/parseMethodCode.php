@@ -26,7 +26,7 @@
 //              <arg name="ciniki">
 //          </args>
 //          <apiargs>
-//              <arg name="business_id" description="API args are only returned for public methods" />
+//              <arg name="tnid" description="API args are only returned for public methods" />
 //          </apiargs>
 //          <calls>
 //              <method name="ciniki.core.dbInit" package="ciniki" module="core"/>

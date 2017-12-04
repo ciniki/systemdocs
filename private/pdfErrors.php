@@ -10,7 +10,7 @@
 // Returns
 // -------
 //
-function ciniki_systemdocs_pdfErrors($ciniki, $business_id, &$pdf, $depth, $errors, $args) {
+function ciniki_systemdocs_pdfErrors($ciniki, $tnid, &$pdf, $depth, $errors, $args) {
 
     if( isset($args['title']) && $args['title'] != '' ) {
         $pdf->addTitle($depth, $args['title'], 'yes');

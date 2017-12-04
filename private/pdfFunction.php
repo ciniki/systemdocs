@@ -10,7 +10,7 @@
 // Returns
 // -------
 //
-function ciniki_systemdocs_pdfFunction($ciniki, $business_id, &$pdf, $depth, $function, $args) {
+function ciniki_systemdocs_pdfFunction($ciniki, $tnid, &$pdf, $depth, $function, $args) {
 
     if( is_string($function) ) {
         //
@@ -108,7 +108,7 @@ function ciniki_systemdocs_pdfFunction($ciniki, $business_id, &$pdf, $depth, $fu
     //
     $referenced_calls = array();
     if( isset($function['calltree']) ) {
-        $rc = ciniki_systemdocs_pdfFunctionCallTree($ciniki, $business_id, $pdf, $depth + 1, 0, unserialize($function['calltree']), $referenced_calls, array(
+        $rc = ciniki_systemdocs_pdfFunctionCallTree($ciniki, $tnid, $pdf, $depth + 1, 0, unserialize($function['calltree']), $referenced_calls, array(
             'title'=>'Call Tree',
             'calltree_descriptions'=>(isset($args['calltree_descriptions']) ? $args['calltree_descriptions'] : array()),
             ));

@@ -1,5 +1,5 @@
 //
-// This app will handle the listing, additions and deletions of events.  These are associated business.
+// This app will handle the listing, additions and deletions of events.  These are associated tenant.
 //
 function ciniki_systemdocs_main() {
     //
