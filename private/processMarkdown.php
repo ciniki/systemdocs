@@ -36,11 +36,20 @@ function ciniki_systemdocs_processMarkdown($ciniki, $content) {
     $list_level = 0;
     $list_type = '';
     $paragraph = 0;
+    $pre = 0;
     foreach($lines as $lnum => $line) {
+/*
+        //
+        // Check for subtitles
+        //
+        if( preg_match('/^\s*\#\#\s+(.*)$/', $line, $matches) ) {
+            $lines[$lnum] = '<h3>' . $matches[1] . '</h3>';
+        } 
         // Check for list item
         // or for hex number or number unordered list
         // 1 - The first number
-        if( preg_match('/^\s*[+-]\s*(.*)$/', $line, $matches) ) {
+        else*/
+        if( $pre == 0 && preg_match('/^\s*[+-]\s*(.*)$/', $line, $matches) ) {
             if( $list_level == 0 ) {
                 if( $paragraph > 0 ) {
                     $lines[$lnum-1] .= "</p>";
@@ -53,8 +62,21 @@ function ciniki_systemdocs_processMarkdown($ciniki, $content) {
                 $lines[$lnum] = '<li>' . $matches[1];
             }
         }
+        elseif( $pre == 0 && preg_match('/^\s*[0-9]\.\s+(.*)$/', $line, $matches) ) {
+            if( $list_level == 0 ) {
+                if( $paragraph > 0 ) {
+                    $lines[$lnum-1] .= "</p>";
+                    $paragraph = 0;
+                }
+                $lines[$lnum] = "<ol>\n" . '<li>' . $matches[1];
+                $list_level++;
+                $list_type = 'ol';
+            } else {
+                $lines[$lnum] = '<li>' . $matches[1];
+            }
+        }
         // 0x01 - The first flag
-        elseif( preg_match('/^\s*((0x[0-9]+|[0-9]+)\s*-\s*(.*))$/', $line, $matches) ) {
+        elseif( $pre == 0 && preg_match('/^\s*((0x[0-9]+|[0-9]+)\s*-\s*(.*))$/', $line, $matches) ) {
             if( $list_level == 0 ) {
                 if( $paragraph > 0 ) {
                     $lines[$lnum-1] .= "</p>";
@@ -69,7 +91,7 @@ function ciniki_systemdocs_processMarkdown($ciniki, $content) {
         }
         // Definition lists
         // Label text :: The first item in the list
-        elseif( preg_match('/^\s*((.*)\s::\s(.*))$/', $line, $matches) ) {
+        elseif( $pre == 0 && preg_match('/^\s*((.*)\s::\s(.*))$/', $line, $matches) ) {
             if( $list_level == 0 ) {
                 if( $paragraph > 0 ) {
                     $lines[$lnum-1] .= "</p>";
@@ -84,7 +106,7 @@ function ciniki_systemdocs_processMarkdown($ciniki, $content) {
         }
         // Check for tables
         // Check for text line
-        elseif( preg_match('/^\s*((.*)\s\|\s\s*(.*))$/', $line, $matches) ) {
+        elseif( $pre == 0 && preg_match('/^\s*((.*)\s\|\s\s*(.*))$/', $line, $matches) ) {
             if( $list_level == 0 ) {
                 if( $paragraph > 0 ) {
                     $lines[$lnum-1] .= "</p>";
@@ -95,6 +117,19 @@ function ciniki_systemdocs_processMarkdown($ciniki, $content) {
                 $list_type = 'table';
             } else {
                 $lines[$lnum] = '</td></tr><tr><td>' . $matches[2] . '</td><td>' . $matches[3];
+            }
+        }
+        elseif( preg_match('/^```/', $line, $matches) ) {
+            if( $paragraph == 1 ) {
+                $lines[$lnum-1] .= '</p>';
+                $paragraph = 0;
+            }
+            if( $pre == 1 ) {
+                $lines[$lnum] = '</pre>';
+                $pre = 0;
+            } else {
+                $lines[$lnum] = '<pre>';
+                $pre = 1;
             }
         }
         //
@@ -121,7 +156,7 @@ function ciniki_systemdocs_processMarkdown($ciniki, $content) {
             $paragraph = 0;
         }
         // Check if text line and paragraph should start
-        elseif( $paragraph == 0 && $list_level == 0 && preg_match('/[a-zA-Z0-9]/', $line) ) {
+        elseif( $pre == 0 && $paragraph == 0 && $list_level == 0 && preg_match('/[a-zA-Z0-9]/', $line) ) {
             $lines[$lnum] = '<p>' . $line;
             $paragraph = 1;
         }
@@ -130,8 +165,10 @@ function ciniki_systemdocs_processMarkdown($ciniki, $content) {
         // Check for emphasis
         // *em*, or **strong**
         //
-        $lines[$lnum] = preg_replace('/\*\*([^\*]+)\*\*/', '<strong>$1</strong>', $lines[$lnum]);
-        $lines[$lnum] = preg_replace('/\*([^\*]+)\*/', '<em>$1</em>', $lines[$lnum]);
+        if( $pre == 0 ) {
+            $lines[$lnum] = preg_replace('/\*\*([^\*]+)\*\*/', '<strong>$1</strong>', $lines[$lnum]);
+            $lines[$lnum] = preg_replace('/\*([^\*]+)\*/', '<em>$1</em>', $lines[$lnum]);
+        }
     }
     if( $list_level > 0 ) {
         if( $list_type == 'dl' ) {
