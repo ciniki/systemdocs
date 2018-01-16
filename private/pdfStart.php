@@ -146,7 +146,7 @@ function ciniki_systemdocs_pdfStart($ciniki, $tnid, $args) {
                 $this->SetFont('helvetica', 'B', '14');
                 $this->MultiCell($this->usable_width, 10, $this->s . '.' . $this->ss . '.' . $this->sss . '. ' . $title, 0, 'L', false, 1, '', '', true, 0, false, true, 0, 'T');
                 if( $toc == 'yes' && $this->toc == 'yes' ) { 
-                    $this->Bookmark($this->s . '.' . $this->ss . '.' . $this->sss . '. ' . $title, 2, 0, '', '');
+//                    $this->Bookmark($this->s . '.' . $this->ss . '.' . $this->sss . '. ' . $title, 2, 0, '', '');
                 }
             } else {
                 if( $this->getY() > ($this->getPageHeight() - $this->top_margin - $this->bottom_margin - 40) ) {
@@ -159,7 +159,8 @@ function ciniki_systemdocs_pdfStart($ciniki, $tnid, $args) {
 
         public function addHtml($depth, $content) { 
             $this->SetFont('helvetica', '', '10');
-            $this->writeHTMLCell($this->usable_width, 10, '', '', '<style>p, ul, dt {color: #808080;}</style>' . $content, 0, 1, false, true, 'L');
+            $content = preg_replace("/<\/dd>/m", '<br></dd>', $content, -1, $c);
+            $this->writeHTMLCell($this->usable_width, 10, '', '', '<style>p, ul, dt {color: #000000;} dd {color: #808080;}</style>' . $content, 0, 1, false, true, 'L');
 //            $this->writeHTMLCell($this->usable_width, 10, '', '', preg_replace('/<p>/', '<p style="color: #808080;">', $content), 0, 1, false, true, 'L');
         }
     }
