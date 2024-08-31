@@ -44,17 +44,6 @@ function ciniki_systemdocs_pdfStart($ciniki, $tnid, $args) {
     }
 
     //
-    // Load INTL settings
-    //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'intlSettings');
-    $rc = ciniki_tenants_intlSettings($ciniki, $tnid);
-    if( $rc['stat'] != 'ok' ) {
-        return $rc;
-    }
-    $intl_currency_fmt = numfmt_create($rc['settings']['intl-default-locale'], NumberFormatter::CURRENCY);
-    $intl_currency = $rc['settings']['intl-default-currency'];
-
-    //
     // Create a custom class for this document
     //
     class MYPDF extends TCPDF {
